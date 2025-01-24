@@ -1,14 +1,22 @@
 <template>
-    <button :type="type" :class="classes">
-    <span
-        class="absolute top-1/2 left-1/2 size-[max(100%,2.75rem)] -translate-x-1/2 -translate-y-1/2 [@media(pointer:fine)]:hidden"
-        aria-hidden="true"
-    />
+    <modal-link :type="type" :class="classes" v-if="modal">
+        <span
+            class="absolute top-1/2 left-1/2 size-[max(100%,2.75rem)] -translate-x-1/2 -translate-y-1/2 [@media(pointer:fine)]:hidden"
+            aria-hidden="true"
+        />
+        <slot/>
+    </modal-link>
+    <button :type="type" :class="classes" v-else>
+        <span
+            class="absolute top-1/2 left-1/2 size-[max(100%,2.75rem)] -translate-x-1/2 -translate-y-1/2 [@media(pointer:fine)]:hidden"
+            aria-hidden="true"
+        />
         <slot/>
     </button>
 </template>
 
 <script>
+import { Modal, ModalLink } from '@inertiaui/modal-vue'
 export default {
     props: {
         color: {
@@ -31,6 +39,13 @@ export default {
             type: String,
             default: '',
         },
+        modal: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    components: {
+        ModalLink
     },
     data: () => ({
         styles: {

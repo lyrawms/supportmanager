@@ -111,7 +111,7 @@ const logout = () => {
 
 
                         <div class="flex flex-1 items-center justify-center px-2 lg:ml-6 gap-4 lg:justify-end">
-                            <primary-button color="amber">
+                            <primary-button color="amber" modal :href="route('issues.create')">
                                 <font-awesome-icon :icon="faPlus" class="me-2"/>
                                 Create issue
                             </primary-button>

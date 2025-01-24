@@ -22,3 +22,6 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+// Include the routes file for the Issues domain
+require __DIR__.'/../app/Domains/Issues/Routes/web.php';

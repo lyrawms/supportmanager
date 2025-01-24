@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\ViewModels\ViewModel;
+
+class {{ viewmodel }} extends ViewModel
+{
+    /**
+     * Define a component that inertia should render
+     * @var string
+     */
+    public string $component = '{{ domain }}/{{ component }}';
+
+    /**
+     * Define the props that should be passed to the component
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [];
+    }
+}
