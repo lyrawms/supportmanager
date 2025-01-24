@@ -8,7 +8,9 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {faGear, faCheck, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faGear, faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+
 defineProps({
     title: String,
 });
@@ -34,8 +36,8 @@ const logout = () => {
 
         <Banner/>
 
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div class="min-h-screen bg-stone-100">
+            <nav class="bg-white border-b border-stone-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -46,7 +48,7 @@ const logout = () => {
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
-                                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-hidden focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-stone-500 bg-white hover:text-stone-700 focus:outline-hidden focus:bg-stone-50 active:bg-stone-50 transition ease-in-out duration-150">
                                                 {{ $page.props.auth.user.current_team.name }}
 
                                                 <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
@@ -65,30 +67,31 @@ const logout = () => {
                                             <DropdownLink
                                                 class="rounded-t-md"
                                                 :href="route('teams.show', $page.props.auth.user.current_team)">
-                                                <FontAwesomeIcon :icon="faGear" class="me-2 text-zinc-400"/>
+                                                <FontAwesomeIcon :icon="faGear" class="me-2 text-stone-400"/>
                                                 Team Settings
                                             </DropdownLink>
 
-                                            <div class="border-t border-gray-200"/>
+                                            <div class="border-t border-stone-200"/>
 
                                             <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
                                                 <form @submit.prevent="switchToTeam(team)">
                                                     <DropdownLink as="button">
                                                         <div class="flex items-center">
                                                             <div class="flex-grow">{{ team.name }}</div>
-                                                            <FontAwesomeIcon v-if="team.id == $page.props.auth.user.current_team_id"
-                                                                           :icon="faCheck" class="ms-2 text-green-500 size-5"/>
+                                                            <FontAwesomeIcon
+                                                                v-if="team.id == $page.props.auth.user.current_team_id"
+                                                                :icon="faCheck" class="ms-2 text-amber-500 size-5"/>
                                                         </div>
                                                     </DropdownLink>
                                                 </form>
                                             </template>
 
-                                            <div class="border-t border-gray-200"/>
+                                            <div class="border-t border-stone-200"/>
 
                                             <DropdownLink v-if="$page.props.jetstream.canCreateTeams"
                                                           class="rounded-b-md"
                                                           :href="route('teams.create')">
-                                                <FontAwesomeIcon :icon="faPlus" class="me-2 text-zinc-400"/>
+                                                <FontAwesomeIcon :icon="faPlus" class="me-2 text-stone-400"/>
                                                 Create New Team
                                             </DropdownLink>
                                         </div>
@@ -96,7 +99,7 @@ const logout = () => {
                                 </Dropdown>
                             </div>
 
-                            <div class="mx-6 border-r border-gray-200"/>
+                            <div class="mx-6 border-r border-stone-200"/>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:mr-10 sm:flex">
@@ -106,41 +109,76 @@ const logout = () => {
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <div class="ms-3 relative">
-                                <!-- Teams Dropdown -->
+
+                        <div class="flex flex-1 items-center justify-center px-2 lg:ml-6 gap-4 lg:justify-end">
+                            <primary-button color="amber">
+                                <font-awesome-icon :icon="faPlus" class="me-2"/>
+                                Create issue
+                            </primary-button>
+                            <div class="grid w-full max-w-lg grid-cols-1 lg:max-w-xs">
+                                <input type="search" name="search"
+                                       class="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-stone-900 outline outline-1 -outline-offset-1 outline-stone-300 placeholder:text-stone-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-amber-600 sm:text-sm/6"
+                                       placeholder="Search">
+                                <font-awesome-icon :icon="faSearch" class="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-stone-400"/>
 
                             </div>
+                        </div>
+                        <div class="flex items-center lg:hidden">
+                            <!-- Mobile menu button -->
+                            <button type="button"
+                                    class="relative inline-flex items-center justify-center rounded-md p-2 text-stone-400 hover:bg-stone-100 hover:text-stone-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500"
+                                    aria-controls="mobile-menu" aria-expanded="false">
+                                <span class="absolute -inset-0.5"></span>
+                                <span class="sr-only">Open main menu</span>
+                                <!--
+                                  Icon when menu is closed.
 
-                            <!-- Settings Dropdown -->
-                            <div class="ms-3 relative">
+                                  Menu open: "hidden", Menu closed: "block"
+                                -->
+                                <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                     stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                                </svg>
+                                <!--
+                                  Icon when menu is open.
+
+                                  Menu open: "block", Menu closed: "hidden"
+                                -->
+                                <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                     stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="hidden lg:ml-4 lg:flex lg:items-center">
+                            <button type="button"
+                                    class="relative shrink-0 rounded-full bg-white p-1 text-stone-400 hover:text-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+                                <span class="absolute -inset-1.5"></span>
+                                <span class="sr-only">View notifications</span>
+                                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                     stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/>
+                                </svg>
+                            </button>
+
+                            <!-- Profile dropdown -->
+                            <div class="relative ml-4 shrink-0">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos"
-                                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-hidden focus:border-gray-300 transition">
-                                            <img class="size-8 rounded-full object-cover"
+                                        <button type="button"
+                                                class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                                id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                            <img class="size-8 rounded-full"
                                                  :src="$page.props.auth.user.profile_photo_url"
                                                  :alt="$page.props.auth.user.name">
                                         </button>
-
-                                        <span v-else class="inline-flex rounded-md">
-                                            <button type="button"
-                                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-hidden focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                                     stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                                                </svg>
-                                            </button>
-                                        </span>
                                     </template>
 
                                     <template #content>
                                         <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
+                                        <div class="block px-4 py-2 text-xs text-stone-400">
                                             Manage Account
                                         </div>
 
@@ -153,7 +191,7 @@ const logout = () => {
                                             API Tokens
                                         </DropdownLink>
 
-                                        <div class="border-t border-gray-200"/>
+                                        <div class="border-t border-stone-200"/>
 
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
@@ -169,7 +207,7 @@ const logout = () => {
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-stone-400 hover:text-stone-500 hover:bg-stone-100 focus:outline-hidden focus:bg-stone-100 focus:text-stone-500 transition duration-150 ease-in-out"
                                 @click="showingNavigationDropdown = ! showingNavigationDropdown">
                                 <svg
                                     class="size-6"
@@ -207,7 +245,7 @@ const logout = () => {
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
+                    <div class="pt-4 pb-1 border-t border-stone-200">
                         <div class="flex items-center px-4">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 me-3">
                                 <img class="size-10 rounded-full object-cover"
@@ -215,10 +253,10 @@ const logout = () => {
                             </div>
 
                             <div>
-                                <div class="font-medium text-base text-gray-800">
+                                <div class="font-medium text-base text-stone-800">
                                     {{ $page.props.auth.user.name }}
                                 </div>
-                                <div class="font-medium text-sm text-gray-500">
+                                <div class="font-medium text-sm text-stone-500">
                                     {{ $page.props.auth.user.email }}
                                 </div>
                             </div>
@@ -244,9 +282,9 @@ const logout = () => {
 
                             <!-- Team Management -->
                             <template v-if="$page.props.jetstream.hasTeamFeatures">
-                                <div class="border-t border-gray-200"/>
+                                <div class="border-t border-stone-200"/>
 
-                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                <div class="block px-4 py-2 text-xs text-stone-400">
                                     Manage Team
                                 </div>
 
@@ -264,9 +302,9 @@ const logout = () => {
 
                                 <!-- Team Switcher -->
                                 <template v-if="$page.props.auth.user.all_teams.length > 1">
-                                    <div class="border-t border-gray-200"/>
+                                    <div class="border-t border-stone-200"/>
 
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                    <div class="block px-4 py-2 text-xs text-stone-400">
                                         Switch Teams
                                     </div>
 
