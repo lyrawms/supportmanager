@@ -33,7 +33,7 @@ export default {
         },
         type: {
             type: String,
-            default: 'button',
+            default: 'submit',
         },
         className: {
             type: String,
