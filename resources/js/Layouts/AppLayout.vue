@@ -2,14 +2,14 @@
 import {ref} from 'vue';
 import {Head, Link, router} from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
-import Banner from '@/Components/Banner.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
+import Banner from '@/Components/Elements/Banner.vue';
+import Dropdown from '@/Components/Elements/Dropdown.vue';
+import DropdownLink from '@/Components/Elements/DropdownLink.vue';
+import NavLink from '@/Components/Elements/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {faGear, faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 
 defineProps({
     title: String,
