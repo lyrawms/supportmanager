@@ -13,10 +13,12 @@
                                 <slot v-bind="{ close }"></slot>
                             </div>
                             <div class="bg-gray-50 px-4 py-3 sm:px-6 gap-2 flex justify-between items-center">
-                                <slot name="secondary"></slot>
-                                <div class="sm:flex sm:flex-row-reverse justify-self-end">
+                                <slot name="secondary">
+                                    <div></div>
+                                </slot>
+                                <div class="sm:flex sm:flex-row-reverse justify-self-end gap-2">
                                     <slot name="cta" v-bind="{ close }"></slot>
-                                    <PrimaryButton @click="close" plain>
+                                    <PrimaryButton @click="close">
                                         Cancel
                                     </PrimaryButton>
                                 </div>

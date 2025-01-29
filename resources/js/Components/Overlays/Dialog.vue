@@ -2,19 +2,8 @@
     <HeadlessModal
         ref="modalRef"
         v-slot="{
-            afterLeave,
             close,
-            config,
-            emit,
-            getChildModal,
-            getParentModal,
-            id,
-            index,
-            modalContext,
-            onTopOfStack,
             isOpen,
-            reload,
-            setOpen,
         }"
     >
         <BaseDialog :open="isOpen" @close="close" :width="width">

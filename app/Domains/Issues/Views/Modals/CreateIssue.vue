@@ -6,6 +6,8 @@
             <div class="mt-2">
                 <p class="text-sm text-gray-500">Are you sure you want to deactivate your account? All of your data will be permanently removed from our servers forever. This action cannot be undone.</p>
             </div>
+
+            Nour is stoer
         </div>
 
         <template #cta>
@@ -14,14 +16,14 @@
             </PrimaryButton>
         </template>
 
-        <template #secondary>
+        <!--<template #secondary>
             <checkbox-group>
                 <checkbox-field>
                     <input-label>Create another issue</input-label>
                     <Checkbox name="discoverability" v-model="valueOfCheckbox" color="amber" />
                 </checkbox-field>
             </checkbox-group>
-        </template>
+        </template>-->
     </Dialog>
 </template>
 
