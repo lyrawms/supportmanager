@@ -19,6 +19,7 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
+            'uuid' => $this->faker->uuid(),
             'title' => $this->faker->sentence(),
             'description' => $this->faker->optional()->paragraph(),
             'intercom_link' => $this->faker->optional()->url(),
