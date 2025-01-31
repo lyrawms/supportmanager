@@ -33,8 +33,8 @@ createInertiaApp({
         } catch (e) {
             try {
                 return await resolvePageComponent(
-                    `../../app/Domains/${domain}/Views/Modals/${pagePath}.vue`,
-                    import.meta.glob('../../app/Domains/**/Views/Modals/**/*.vue')
+                    `../../app/Domains/${domain}/Views/${pagePath}.vue`,
+                    import.meta.glob('../../app/Domains/**/Views/**/*.vue')
                 );
             } catch (e) {
 

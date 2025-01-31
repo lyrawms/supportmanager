@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Domains\Issues\ViewModels;
+namespace App\Domains\Tasks\ViewModels;
 
 use App\Http\ViewModels\ViewModel;
 
-class CreateIssueViewModel extends ViewModel
+class CreateTasksViewModel extends ViewModel
 {
     /**
      * Define a component that inertia should render
      * @var string
      */
-    public string $component = 'Issues/CreateIssue';
+    public string $component = 'Tasks/Modals/CreateTasks';
 
     /**
      * Define the props that should be passed to the component
