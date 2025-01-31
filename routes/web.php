@@ -23,5 +23,5 @@ Route::middleware([
     })->name('dashboard');
 });
 
-// Include the routes file for the Issues domain
-require __DIR__.'/../app/Domains/Issues/Routes/web.php';
+// Include the routes file for the Tasks domain
+require __DIR__ . '/../app/Domains/Tasks/Routes/web.php';

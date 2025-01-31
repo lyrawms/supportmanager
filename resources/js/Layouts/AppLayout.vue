@@ -106,12 +106,15 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
+                                <NavLink :href="route('tasks.index')" :active="route().current('tasks.index')">
+                                    Tasks
+                                </NavLink>
                             </div>
                         </div>
 
 
                         <div class="flex flex-1 items-center justify-center px-2 lg:ml-6 gap-4 lg:justify-end">
-                            <primary-button color="amber" modal :href="route('issues.create')">
+                            <primary-button color="amber" modal :href="route('tasks.create')">
                                 <font-awesome-icon :icon="faPlus" class="me-2"/>
                                 Create issue
                             </primary-button>
