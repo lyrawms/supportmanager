@@ -3,7 +3,7 @@
 namespace App\Domains\Tasks\Services;
 
 use App\Domains\Tasks\Repositories\TaskRepository;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskService
 {
@@ -14,7 +14,7 @@ class TaskService
         $this->taskRepository = new TaskRepository();
     }
 
-    public function getAllTasks(): Collection
+    public function getAllTasks(): LengthAwarePaginator
     {
         return $this->taskRepository->getAll();
 
