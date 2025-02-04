@@ -22,7 +22,7 @@ class TaskFactory extends Factory
 //            'uuid' => $this->faker->uuid(),
             'title' => $this->faker->sentence(),
             'description' => $this->faker->optional()->paragraph(),
-            'intercom_link' => $this->faker->optional()->url(),
+            'intercom_link' => 'https://youtu.be/AzMo-FgRp64?si=OKjOLsg4XLJg72An',
             'created_at' => $createdAt = now(),
             'updated_at' => now(),
             'finished_at' => $this->faker->optional()->dateTime(),

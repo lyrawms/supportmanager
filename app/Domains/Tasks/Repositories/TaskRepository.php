@@ -11,4 +11,6 @@ public function getAll(): LengthAwarePaginator
 {
     return Task::paginate(10);
 }
+
+
 }

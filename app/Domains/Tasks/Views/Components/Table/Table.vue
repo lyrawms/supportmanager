@@ -98,13 +98,13 @@
                                     {{ task.deadline }}
                                 </td>
                                 <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">
-                                        View<span class="sr-only">, {{ task.name }}</span>
-                                    </a>
+                                    <primary-button :href="route('tasks.show', task.uuid )" modal color="amber">
+                                        View
+                                    </primary-button>
                                 </td>
                                 <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900">
-                                        Done<span class="sr-only">, {{ task.name }}</span>
+                                        Done
                                     </a>
                                 </td>
                             </tr>
@@ -119,9 +119,12 @@
 
 <script>
 import {ref} from "vue";
+import { Link } from '@inertiajs/vue3';
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 
 export default {
     name: "Table",
+    components: {PrimaryButton, Link},
     props: {
         tasks: {
             type: Array,
