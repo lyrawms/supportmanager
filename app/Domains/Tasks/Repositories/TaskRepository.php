@@ -3,12 +3,12 @@
 namespace App\Domains\Tasks\Repositories;
 
 use App\Models\Task;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository
 {
-public function getAll(): Collection
+public function getAll(): LengthAwarePaginator
 {
-    return Task::all();
+    return Task::paginate(10);
 }
 }
