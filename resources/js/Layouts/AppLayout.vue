@@ -342,7 +342,7 @@ const logout = () => {
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="bg-white mt-8 rounded-md p-4">
                 <slot/>
             </main>
         </div>

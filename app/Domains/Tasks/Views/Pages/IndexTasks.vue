@@ -6,19 +6,24 @@
             </h2>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-            </div>
-        </div>
+        <template #default>
+            <TasksTable :tasks="tasks"/>
+        </template>
     </AppLayout>
 </template>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
+import {default as TasksTable} from "../Components/Table/Table.vue";
 
 export default {
     name: "Index",
-    components: {AppLayout}
+    components: {TasksTable, AppLayout},
+    props: {
+        tasks: {
+            type: Array,
+            required: true
+        }
+    }
 }
 </script>
 
