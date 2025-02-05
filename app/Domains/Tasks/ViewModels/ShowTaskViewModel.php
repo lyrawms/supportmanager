@@ -2,9 +2,8 @@
 
 namespace App\Domains\Tasks\ViewModels;
 
-use App\Domains\Tasks\Repositories\TaskRepository;
+use App\Domains\Tasks\Models\Task;
 use App\Http\ViewModels\ViewModel;
-use App\Models\Task;
 
 class ShowTaskViewModel extends ViewModel
 {

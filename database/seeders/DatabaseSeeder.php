@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Domains\Tasks\Models\Seeders\TaskSeeder;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,10 +16,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
-        User::factory()->withPersonalTeam()->create([
-            'name' => 'Test User',
-            'email' => 'test@test.nl',
-            'password' => bcrypt('password'),
+//        User::factory()->withPersonalTeam()->create([
+//            'name' => 'Test User',
+//            'email' => 'test@test.nl',
+//            'password' => bcrypt('password'),
+//        ]);
+
+        $this->call([
+            // UserSeeder::class,
+            // TeamSeeder::class,
+            // TeamUserSeeder::class,
+            TaskSeeder::class,
         ]);
     }
 }

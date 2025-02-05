@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Tasks\Models;
 
+use App\Domains\Tasks\Models\Factories\TaskFactory;
 use App\Support\Traits\GenerateUuid;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,6 +26,11 @@ class Task extends Model
         'deadline',
         'creator_id',
     ];
+
+    protected static function newFactory(): Factories\TaskFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    {
+        return TaskFactory::new();
+    }
 }
 
 ;

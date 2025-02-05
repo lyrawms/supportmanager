@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\Tasks\Models\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class TaskFactory extends Factory
 {
 
+    protected $model = \App\Domains\Tasks\Models\Task::class;
+
     /**
      * Define the model's default state.
      *
@@ -19,7 +21,6 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-//            'uuid' => $this->faker->uuid(),
             'title' => $this->faker->sentence(),
             'description' => $this->faker->optional()->paragraph(),
             'intercom_link' => 'https://youtu.be/AzMo-FgRp64?si=OKjOLsg4XLJg72An',
