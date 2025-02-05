@@ -7,8 +7,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository
 {
-public function getAll(): LengthAwarePaginator
-{
-    return Task::paginate(10);
-}
+    public function getAll(): LengthAwarePaginator
+    {
+        return Task::orderBy('deadline', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+    }
 }
