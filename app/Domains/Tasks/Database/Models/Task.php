@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Tasks\Database\Models;
 
+use App\Domains\Tasks\Database\Factories\TaskFactory;
+use App\Models\User;
 use App\Support\Traits\GenerateUuid;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,6 +37,11 @@ class Task extends Model
     public function type()
     {
         return $this->hasOne(Type::class, 'type_id');
+    }
+
+    protected static function newFactory()
+    {
+        return TaskFactory::new();
     }
 }
 

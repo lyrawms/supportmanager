@@ -2,7 +2,7 @@
 
 namespace App\Domains\Tasks\Repositories;
 
-use App\Models\Task;
+use App\Domains\Tasks\Database\Models\Task;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository

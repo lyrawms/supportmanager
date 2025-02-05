@@ -1,9 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Domains\Tasks\Database\Seeders;
 
-use App\Models\Type;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Domains\Tasks\Database\Models\Type;
 use Illuminate\Database\Seeder;
 
 class TypeSeeder extends Seeder

@@ -1,7 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\Tasks\Database\Factories;
 
+use App\Domains\Tasks\Database\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -9,11 +10,9 @@ use Illuminate\Support\Carbon;
 class TaskFactory extends Factory
 {
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Task::class;
+
+
     public function definition(): array
     {
         return [

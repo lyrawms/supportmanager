@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Tasks\Database\Models;
 
-use App\Support\Traits\GenerateUuid;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Domains\Tasks\Database\Factories\TypeFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,5 +28,11 @@ class Type extends Model
     {
         return $this->belongsTo(User::class, 'creator_id');
     }
+
+    protected static function newFactory()
+    {
+        return TypeFactory::new();
+    }
+
 
 }

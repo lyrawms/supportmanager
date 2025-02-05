@@ -1,10 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Domains\Tasks\Database\Seeders;
 
-use App\Models\Task;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Domains\Tasks\Database\Models\Task;
 use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder
