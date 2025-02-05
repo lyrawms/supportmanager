@@ -25,7 +25,15 @@ class Task extends Model
         'status',
         'deadline',
         'creator_id',
+
     ];
+
+    public function User()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
 }
+
+
 
 ;

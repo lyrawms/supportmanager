@@ -19,7 +19,6 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->optional()->paragraph(),
