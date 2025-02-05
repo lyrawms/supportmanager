@@ -75,4 +75,9 @@ class User extends Authenticatable
 
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=fd9a00&background=fef3c6';
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'creator_id');
+    }
 }
