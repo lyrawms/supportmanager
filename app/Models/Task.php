@@ -28,9 +28,14 @@ class Task extends Model
 
     ];
 
-    public function User()
+    public function creator()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function type()
+    {
+        return $this->hasOne(Type::class, 'type_id');
     }
 }
 

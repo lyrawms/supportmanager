@@ -6,9 +6,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\{{ domainNamespacedModel }}>
- */
 class TaskFactory extends Factory
 {
 
