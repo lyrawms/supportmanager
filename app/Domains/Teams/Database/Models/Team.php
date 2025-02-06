@@ -47,7 +47,7 @@ class Team extends JetstreamTeam
         ];
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): TeamFactory
     {
         return TeamFactory::new();
     }

@@ -14,6 +14,9 @@ use Laravel\Jetstream\Jetstream;
 
 class JetstreamServiceProvider extends ServiceProvider
 {
+
+
+
     /**
      * Register any application services.
      */
@@ -27,6 +30,8 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Jetstream::useTeamModel(\App\Domains\Teams\Database\Models\Team::class);
+
         $this->configurePermissions();
 
         Jetstream::createTeamsUsing(CreateTeam::class);

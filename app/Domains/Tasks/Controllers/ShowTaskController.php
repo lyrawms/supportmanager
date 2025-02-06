@@ -2,7 +2,7 @@
 
 namespace App\Domains\Tasks\Controllers;
 
-use App\Domains\Tasks\Models\Task;
+use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
 use Inertia\Inertia;
 use Inertia\Response;
