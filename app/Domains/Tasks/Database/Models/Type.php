@@ -29,6 +29,7 @@ class Type extends Model
         return $this->belongsTo(User::class, 'creator_id');
     }
 
+
     protected static function newFactory()
     {
         return TypeFactory::new();

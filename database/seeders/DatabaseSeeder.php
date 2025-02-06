@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Database\Models\Type;
+use App\Domains\Tasks\Database\Seeders\TaskSeeder;
+use App\Domains\Tasks\Database\Seeders\TypeSeeder;
+use App\Domains\Users\Database\Seeders\UserSeeder;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,28 +20,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        User::factory()->withPersonalTeam()->create([
-            'name' => 'Test User',
-            'email' => 'test@test.nl',
-            'password' => bcrypt('password'),
+        $this->call([
+            UserSeeder::class,
+            TypeSeeder::class,
+            TaskSeeder::class,
         ]);
 
-
-        for ($i = 0; $i < 10; $i++) {
-            $user = User::factory(1)->create();
-            $type = Type::factory(1)->create([
-                'creator_id' => $user->first()->id,
-            ]);
-            Task::factory(5)->create([
-                'creator_id' => $user->first()->id,
-                'type_id' => $type->first()->id,
-            ]);
-
-            Task::factory(5)->create([
-                'creator_id' => $user->first()->id,
-                'type_id' => Type::factory(),
-            ]);
-        }
 
     }
 }

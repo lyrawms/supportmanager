@@ -3,6 +3,7 @@
 namespace App\Domains\Tasks\Database\Seeders;
 
 use App\Domains\Tasks\Database\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder
@@ -12,6 +13,12 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        Task::factory(10)->create();
+        User::all()->each(function (User $user) {
+            $type = $user->types()->inRandomOrder()->first();
+            Task::factory(5)->create([
+                'creator_id' => $user->id,
+                'type_id' => $type->id,
+            ]);
+        });
     }
 }
