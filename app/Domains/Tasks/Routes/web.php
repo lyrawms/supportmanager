@@ -13,7 +13,7 @@ Route::middleware(['auth', 'verified'])->get('/tasks/index', IndexTaskController
 Route::middleware(['auth', 'verified'])->get('/tasks/create', CreateTaskController::class)
     ->name('tasks.create');
 
-Route::middleware(['auth', 'verified'])->get('/tasks/show/{task:uuid}', ShowTaskController::class)
+Route::middleware(['auth', 'verified'])->get('/tasks/show/{uuid}', ShowTaskController::class)
     ->name('tasks.show');
 
 

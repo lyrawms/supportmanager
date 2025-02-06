@@ -84,7 +84,7 @@
                                 {{ task.deadline }}
                             </td>
                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
-                                <primary-button :href="route('tasks.show', task.uuid )" modal color="amber">
+                                <primary-button :href="route('tasks.show', {uuid:task.uuid} )" modal color="amber">
                                     View
                                 </primary-button>
                             </td>

@@ -2,15 +2,15 @@
 
 namespace App\Domains\Tasks\Controllers;
 
-use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ShowTaskController
 {
-    public function __invoke(Task $task, ShowTaskViewModel $viewModel): Response
+    public function __invoke(Request $request, ShowTaskViewModel $viewModel): Response
     {
-        return Inertia::render($viewModel->component, $viewModel->toArray($task));
+        return Inertia::render($viewModel->component, $viewModel->toArray($request->uuid));
     }
 }

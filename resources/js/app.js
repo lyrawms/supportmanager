@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import {renderApp} from '@inertiaui/modal-vue'
+import momentPlugin from "./plugins/moment";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -14,6 +15,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({render: renderApp(App, props)})
             .use(plugin)
+            .use(momentPlugin)
             .use(ZiggyVue)
             .mount(el);
     },

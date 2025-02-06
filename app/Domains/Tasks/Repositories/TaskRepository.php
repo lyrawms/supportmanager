@@ -13,4 +13,12 @@ class TaskRepository
             ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
+
+    public function getTaskWithRelationships(String $uuid): Task
+    {
+        return Task::with('creator')
+            ->with('type')
+            ->where('uuid', $uuid)
+            ->firstOrFail();
+    }
 }
