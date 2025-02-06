@@ -3,7 +3,7 @@
 namespace App\Domains\Tasks\Database\Factories;
 
 use App\Domains\Tasks\Database\Models\Task;
-use App\Models\User;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

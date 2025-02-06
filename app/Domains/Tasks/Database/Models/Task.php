@@ -3,7 +3,7 @@
 namespace App\Domains\Tasks\Database\Models;
 
 use App\Domains\Tasks\Database\Factories\TaskFactory;
-use App\Models\User;
+use App\Domains\Users\Database\Models\User;
 use App\Support\Traits\GenerateUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

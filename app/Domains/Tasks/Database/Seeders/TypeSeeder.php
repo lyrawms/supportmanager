@@ -3,7 +3,7 @@
 namespace App\Domains\Tasks\Database\Seeders;
 
 use App\Domains\Tasks\Database\Models\Type;
-use App\Models\User;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Database\Seeder;
 
 class TypeSeeder extends Seeder

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Users\Database\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Database\Models\Type;
+use App\Domains\Users\Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -67,6 +68,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    protected static function newFactory()
+    {
+        return UserFactory::new();
     }
 
     protected function defaultProfilePhotoUrl()

@@ -3,7 +3,7 @@
 namespace App\Domains\Tasks\Database\Models;
 
 use App\Domains\Tasks\Database\Factories\TypeFactory;
-use App\Models\User;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

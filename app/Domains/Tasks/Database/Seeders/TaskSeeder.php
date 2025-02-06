@@ -3,7 +3,7 @@
 namespace App\Domains\Tasks\Database\Seeders;
 
 use App\Domains\Tasks\Database\Models\Task;
-use App\Models\User;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder

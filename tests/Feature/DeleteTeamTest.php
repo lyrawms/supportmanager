@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Team;
-use App\Models\User;
+use App\Domains\Teams\Database\Models\Team;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

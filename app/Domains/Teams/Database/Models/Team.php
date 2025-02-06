@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Teams\Database\Models;
 
+
+use App\Domains\Teams\Database\Factories\TeamFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
@@ -43,5 +45,10 @@ class Team extends JetstreamTeam
         return [
             'personal_team' => 'boolean',
         ];
+    }
+
+    protected static function newFactory()
+    {
+        return TeamFactory::new();
     }
 }
