@@ -8,8 +8,8 @@
                     <p>{{ task.description }}</p>
                 </div>
                 <div class="w-2/5 rounded-2xl">
-                    <div class=" border-amber-100 border-6 p-4 rounded-2xl space-y-6">
-                        <div class="border-stone-200 shadow-md rounded-2xl p-4 space-y-2">
+                    <div class=" bg-amber-200 p-4 rounded-2xl space-y-6">
+                        <div class="border-stone-200 bg-white shadow-lg rounded-2xl p-4 space-y-2">
                             <div>
                                 <p>Deadline</p>
                                 <p class="text-stone-500">{{
@@ -28,7 +28,7 @@
                                 <p class=" text-stone-500">{{ task.sla }} Days</p>
                             </div>
                         </div>
-                        <div class="p-4 shadow-md rounded-2xl">
+                        <div class="p-4 shadow-lg rounded-2xl bg-white space-y-1">
                             <div>
                                 <p>Intercom</p>
                                 <a v-if="task.intercom_link" :href="task.intercom_link" target="_blank"
@@ -41,13 +41,13 @@
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                             <div>
-                                <p>Type</p>
-                                <p v-if="task.type_id" class="text-stone-500" :style="{ color: task.type.color}">
+                                <p class="pb-1">Type</p>
+                                <p v-if="task.type_id" :style="{ color: getMostReadableColor(task.type.color) ,backgroundColor: task.type.color }" class="flex w-min rounded-2xl px-2 text-center py-0.5">
                                     {{ task.type.title }}</p>
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                         </div>
-                        <div class="p-4">
+                        <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
                             <div>
                                 <p>Creator</p>
                                 <p v-if="task.creator_id" class="text-stone-500">{{ task.creator.name }}</p>
@@ -60,12 +60,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pt-4 px-9">
+                    <div class="pt-3 px-8">
                         <div>
-                            <p class="text-sm text-stone-500">Created at: {{
+                            <p class="text-xs text-stone-500">Created at: {{
                                     $moment(task.created_at).isAfter($moment().subtract(1, 'week')) ? $moment(task.created_at).calendar() : $moment(task.created_at).format('DD/MM/YYYY')
                                 }} </p>
-
+                        </div>
+                        <div>
+                            <p class="text-xs text-stone-500">Updated at: {{
+                                    $moment(task.updated_at).isAfter($moment().subtract(1, 'week')) ? $moment(task.updated_at).calendar() : $moment(task.updated_at).format('DD/MM/YYYY')
+                                }} </p>
                         </div>
                     </div>
                 </div>
@@ -98,8 +102,14 @@ import CheckboxField from "@/Components/Forms/CheckboxField.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import InputDescription from "@/Components/Forms/InputDescription.vue";
+import tinycolor from "tinycolor2";
 
 export default {
+    methods: {
+        getMostReadableColor(color) {
+            return tinycolor.mostReadable(color, [], {includeFallbackColors: true});
+        }
+    },
     components: {
         Modal,
         ModalLink,
