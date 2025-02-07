@@ -342,8 +342,10 @@ const logout = () => {
             </header>
 
             <!-- Page Content -->
-            <main class="bg-white mt-8 rounded-md p-4">
-                <slot/>
+            <main class="mt-8 max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="relative -mx-1 bg-white shadow-xs rounded-lg border border-stone-200">
+                    <slot/>
+                </div>
             </main>
         </div>
     </div>

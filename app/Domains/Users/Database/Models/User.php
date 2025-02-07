@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Users\Database\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Domains\Tasks\Database\Models\Task;
+use App\Domains\Tasks\Database\Models\Type;
+use App\Domains\Users\Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -15,7 +17,6 @@ class User extends Authenticatable
 {
     use HasApiTokens;
 
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
@@ -66,6 +67,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 
     protected function defaultProfilePhotoUrl()
     {
@@ -76,8 +81,13 @@ class User extends Authenticatable
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=fd9a00&background=fef3c6';
     }
 
-    public function tasks()
+    public function tasks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Task::class, 'creator_id');
+    }
+
+    public function types(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Type::class, 'creator_id');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Actions\Jetstream;
 
-use App\Models\Team;
-use App\Models\User;
+use App\Domains\Teams\Database\Models\Team;
+use App\Domains\Users\Database\Models\User;
 use Closure;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Gate;

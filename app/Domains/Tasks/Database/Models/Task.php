@@ -1,9 +1,9 @@
 <?php
+namespace App\Domains\Tasks\Database\Models;
 
-namespace App\Models;
-
+use App\Domains\Tasks\Database\Factories\TaskFactory;
+use App\Domains\Users\Database\Models\User;
 use App\Support\Traits\GenerateUuid;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,9 +28,19 @@ class Task extends Model
 
     ];
 
-    public function User()
+    public function creator()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
+    }
+
+    protected static function newFactory(): TaskFactory
+    {
+        return TaskFactory::new();
     }
 }
 

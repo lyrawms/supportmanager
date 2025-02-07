@@ -12,7 +12,7 @@
                             <div class="bg-white px-4 pb-4 pt-5 sm:p-6">
                                 <slot v-bind="{ close }"></slot>
                             </div>
-                            <div class="bg-gray-50 px-4 py-3 sm:px-6 gap-2 flex justify-between items-center">
+                            <div class="bg-stone-50 px-4 py-3 sm:px-6 gap-2 flex justify-between items-center">
                                 <slot name="secondary">
                                     <div></div>
                                 </slot>

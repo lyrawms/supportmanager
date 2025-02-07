@@ -16,14 +16,13 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('intercom_link')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamps();
             $table->timestamp('finished_at')->nullable();
-            $table->softDeletes(); // Adds deleted_at for soft deletes
-            $table->integer('sla')->nullable(); // Service Level Agreement (SLA)
-            $table->string('status')->default('open'); // Status of the task
-            $table->timestamp('deadline')->nullable();
-            $table->foreignId('creator_id')->constrained('users')->cascadeOnDelete();
+            $table->softDeletes();
+            $table->integer('sla');
+            $table->string('status')->default('open');
+            $table->timestamp('deadline');
+            $table->foreignId('creator_id')->constrained('users');
         });
     }
 

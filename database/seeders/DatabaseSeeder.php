@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Domains\Tasks\Database\Seeders\TaskSeeder;
+use App\Domains\Tasks\Database\Seeders\TypeSeeder;
+use App\Domains\Users\Database\Seeders\UserSeeder;
 use Illuminate\Database\Seeder;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,12 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->withPersonalTeam()->create();
-
-        User::factory()->withPersonalTeam()->create([
-            'name' => 'Test User',
-            'email' => 'test@test.nl',
-            'password' => bcrypt('password'),
+        $this->call([
+            UserSeeder::class,
+            TypeSeeder::class,
+            TaskSeeder::class,
         ]);
     }
 }

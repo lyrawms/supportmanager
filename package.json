@@ -25,6 +25,8 @@
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@headlessui/vue": "^1.7.23",
         "@inertiaui/modal-vue": "file:vendor/inertiaui/modal/vue",
-        "@tailwindcss/vite": "^4.0.0"
+        "@tailwindcss/vite": "^4.0.0",
+        "tinycolor2": "^1.6.0",
+        "vue-moment": "^4.1.0"
     }
 }
