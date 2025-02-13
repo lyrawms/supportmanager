@@ -1,5 +1,5 @@
 <template>
-    <Combobox v-model="selectedType">
+    <Combobox v-model="selected">
         <ComboboxInput v-model="query"/>
         <ComboboxOptions>
             <ComboboxOption
@@ -16,10 +16,16 @@
 
 
 import {Combobox, ComboboxInput, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
-import {router} from "@inertiajs/vue3";
 
 export default {
     name: "ComboBox",
+    props: {
+        selectedType: {
+            type: Object,
+            required: false,
+            default: null,
+        },
+    },
 
     components: {
         Combobox,
@@ -27,25 +33,32 @@ export default {
         ComboboxOptions,
         ComboboxOption,
     },
-    data() {
-        return {
-            selectedTasks: null,
+    data: () => ({
+            selectedType: this.selectedType,
             types: [],
             query: "",
             debounceTimer: null
-        }
 
-    },
+
+    }),
     methods: {
         fetchTypes() {
-            router.get("/types", {limit: 5, search: this.query}, {
-                preserveState: true,
-                only: ['types'],
-                onSuccess: (response) => {
-                    this.types = response.types;
-                    this.loading = false;
+            fetch(`/types/index-search?query=${this.query}`, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
                 },
-            });
+                credentials: "include", // Important for Sanctum auth
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.types = data.types;
+                    console.log("Types fetched:", this.types);
+                })
+                .catch(error => {
+                    console.error("Error fetching types:", error);
+                });
         },
         handleInput() {
             clearTimeout(this.debounceTimer);

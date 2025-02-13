@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 
 class ShowTaskViewModel extends ViewModel
 {
-    public string $component = 'Tasks/ShowTask';
+    public string $component = 'Tasks/Modals/ShowTask';
 
     protected TaskService $taskService;
 

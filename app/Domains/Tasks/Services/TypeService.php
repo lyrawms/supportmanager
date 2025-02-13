@@ -3,21 +3,23 @@
 namespace App\Domains\Tasks\Services;
 
 use App\Domains\Tasks\Repositories\TypeRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class TypeService
 {
     protected TypeRepository $typeRepository;
 
-    public function __construct(TypeRepository $typeRepository)
+    public function __construct()
     {
-        $this->typeRepository = $typeRepository;
+        $this->typeRepository = new TypeRepository;
     }
 
-    public function getSmallListOfTypes(int $limit, string $search): array
+    public function getSmallListOfTypes(?string $search): Collection
     {
-
-        if (!$search.emptyString()) {
-            return $this->typeRepository->getTypesBySearch($limit, $search);
+        if (!empty($search)) {
+            return $this->typeRepository->getTypesBySearch($search);
+        } else {
+            return $this->typeRepository->getSmallListOfTypes();
         }
     }
 

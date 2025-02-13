@@ -22,7 +22,6 @@ class TaskService
 
     public function getTaskWithRelationships(String $uuid): Task
     {
-
         return $this->taskRepository->getTaskWithRelationships($uuid);
     }
 }

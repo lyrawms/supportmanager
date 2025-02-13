@@ -41,12 +41,12 @@
                 <p v-else class="text-stone-500"> None</p>
               </div>
               <div>
-                <primary-button @click="toggleComboBoxType" class="pb-1">Type</primary-button>
+                <a @click="toggleComboBoxType" class="pb-1 cursor-pointer">Type</a>
                 <p v-if="task.type_id && !showComboBoxType"
                    :style="{ color: getMostReadableColor(task.type.color) ,backgroundColor: task.type.color }"
                    class="flex w-min rounded-2xl px-2 text-center py-0.5">
                   {{ task.type.title }}</p>
-                <ComboBox v-else-if="showComboBoxType"></ComboBox>
+                <ComboBox :selectedType="task.type" v-else-if="showComboBoxType && task.type_id"/>
                 <p v-else-if="!task.type_id" class="text-stone-500"> None</p>
               </div>
             </div>
@@ -106,7 +106,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
-import ComboBox from "@/Components/Elements/ComboBox.vue";
+import ComboBox from "../Components/ComboBox.vue";
 
 export default {
   methods: {
