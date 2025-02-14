@@ -21,4 +21,12 @@ class TaskRepository
             ->where('uuid', $uuid)
             ->firstOrFail();
     }
+
+    public function updateTaskType(String $taskUuid, Int $typeUuid): Int
+    {
+        $task = Task::where('uuid', $taskUuid)->firstOrFail();
+        $task->type_id = $typeUuid;
+        $task->save();
+        return $task->type_id;
+    }
 }

@@ -24,4 +24,9 @@ class TaskService
     {
         return $this->taskRepository->getTaskWithRelationships($uuid);
     }
+
+    public function updateTaskType(String $taskUuid, Int $typeUuid): Int
+    {
+        return $this->taskRepository->updateTaskType($taskUuid, $typeUuid);
+    }
 }
