@@ -42,15 +42,15 @@
                             </div>
                             <div>
                                 <a @click="handleTypeClick" class="pb-1 cursor-pointer">Type</a>
-                                <p v-if="task.type_id && !showComboBoxType"
-                                   :style="{ color: getMostReadableColor(task.type.color) ,backgroundColor: task.type.color }"
+                                <p v-if="displayedType && !showComboBoxType"
+                                   :style="{ color: getMostReadableColor(displayedType.color) ,backgroundColor: displayedType.color }"
                                    class="flex w-min rounded-2xl px-2 text-center py-0.5">
-                                    {{ task.type.title }}</p>
+                                    {{ displayedType.title }}</p>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBox :currentAssignedType="task.type" :taskUuid="task.uuid"
+                                    <ComboBox :currentAssignedType="displayedType.type" :taskUuid="displayedType.uuid"
                                               @updateTaskType="assignNewType"/>
                                 </p>
-                                <p v-else-if="!task.type_id" class="text-stone-500"> None</p>
+                                <p v-else-if="displayedType" class="text-stone-500"> None</p>
                             </div>
                         </div>
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
@@ -145,6 +145,7 @@ export default {
                     .then(response => response.json())
                     .then(data => {
                         console.log("Task type updated:", data);
+                        this.newSavedType = data;
 
                     })
                     .catch(error => {
@@ -154,6 +155,11 @@ export default {
         },
         assignNewType(type) {
             this.newType = type;
+        }
+    },
+    computed: {
+        displayedType() {
+            return this.newSavedType || this.task.type;
         }
     },
     components: {
@@ -178,7 +184,8 @@ export default {
     data: () => ({
         valueOfCheckbox: false,
         showComboBoxType: false,
-        newType: null
+        newType: null,
+        newSavedType: null,
     }),
 
 }

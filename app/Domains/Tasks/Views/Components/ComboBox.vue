@@ -135,7 +135,6 @@ export default {
     },
     watch: {
         selected() {
-            console.log("Selected:", this.selected);
             this.$emit('updateTaskType', this.selected)
         }
     }
