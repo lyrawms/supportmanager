@@ -3,6 +3,7 @@
 namespace App\Domains\Tasks\Repositories;
 
 use App\Domains\Tasks\Database\Models\Task;
+use App\Domains\Tasks\Database\Models\Type;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository
@@ -22,11 +23,12 @@ class TaskRepository
             ->firstOrFail();
     }
 
-    public function updateTaskType(String $taskUuid, Int $typeUuid): Int
+    public function updateTaskType(String $taskUuid, String $typeUuid)
     {
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
-        $task->type_id = $typeUuid;
+        $type = Type::where('uuid', $typeUuid)->firstOrFail();
+        $task->type()->associate($type);
         $task->save();
-        return $task->type_id;
+        return $type;
     }
 }

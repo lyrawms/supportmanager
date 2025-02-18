@@ -41,13 +41,14 @@
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                             <div>
-                                <a @click="toggleComboBoxType" class="pb-1 cursor-pointer">Type</a>
+                                <a @click="handleTypeClick" class="pb-1 cursor-pointer">Type</a>
                                 <p v-if="task.type_id && !showComboBoxType"
                                    :style="{ color: getMostReadableColor(task.type.color) ,backgroundColor: task.type.color }"
                                    class="flex w-min rounded-2xl px-2 text-center py-0.5">
                                     {{ task.type.title }}</p>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBox :currentAssignedType="task.type" :taskUuid="task.uuid" />
+                                    <ComboBox :currentAssignedType="task.type" :taskUuid="task.uuid"
+                                              @updateTaskType="assignNewType"/>
                                 </p>
                                 <p v-else-if="!task.type_id" class="text-stone-500"> None</p>
                             </div>
@@ -109,15 +110,50 @@ import Checkbox from "@/Components/Forms/Checkbox.vue";
 import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
 import ComboBox from "../Components/ComboBox.vue";
+import {router} from "@inertiajs/vue3";
 
 export default {
     methods: {
+        handleTypeClick() {
+            this.toggleComboBoxType();
+            this.updateTaskType(this.newType);
+        },
         getMostReadableColor(color) {
             return tinycolor.mostReadable(color, [], {includeFallbackColors: true});
         },
         toggleComboBoxType() {
             this.showComboBoxType = !this.showComboBoxType;
+        },
 
+        updateTaskType(type) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            if (!this.showComboBoxType && (type.uuid || type.uuid !== this.task.type.uuid)) {
+                fetch('/task/update-type', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        taskUuid: this.task.uuid,
+                        typeUuid: type.uuid,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Task type updated:", data);
+
+                    })
+                    .catch(error => {
+                        console.error("Error updating task type:", error);
+                    });
+            }
+        },
+        assignNewType(type) {
+            this.newType = type;
         }
     },
     components: {
@@ -142,6 +178,7 @@ export default {
     data: () => ({
         valueOfCheckbox: false,
         showComboBoxType: false,
+        newType: null
     }),
 
 }

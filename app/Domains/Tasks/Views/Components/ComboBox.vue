@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <Combobox>
+        <Combobox v-model="selected">
             <div class="relative mt-1">
                 <div
                     class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
@@ -81,6 +81,7 @@ export default {
             required: true
         }
     },
+    emits: ['updateTaskType'],
 
     components: {
         ComboboxButton,
@@ -121,28 +122,6 @@ export default {
                     console.error("Error fetching types:", error);
                 });
         },
-        updateTaskType() {
-            fetch('/task/update-type', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    taskUuid: this.taskUuid,
-                    typeUuid: this.selected.uuid,
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Task type updated:", data);
-                })
-                .catch(error => {
-                    console.error("Error updating task type:", error);
-                });
-        },
         handleInput(event) {
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
@@ -150,16 +129,14 @@ export default {
                 this.fetchTypes();
             }, 800);
         },
-        Poep() {
-            console.log("Poep");
-        }
     },
     mounted() {
         this.fetchTypes();
     },
     watch: {
-        selected(newValue, oldValue) {
-
+        selected() {
+            console.log("Selected:", this.selected);
+            this.$emit('updateTaskType', this.selected)
         }
     }
 }

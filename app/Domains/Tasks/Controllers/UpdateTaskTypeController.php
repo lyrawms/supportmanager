@@ -3,6 +3,7 @@
 namespace App\Domains\Tasks\Controllers;
 
 use App\Domains\Tasks\Services\TaskService;
+use Illuminate\Http\Request;
 
 class UpdateTaskTypeController
 {
@@ -13,14 +14,11 @@ class UpdateTaskTypeController
         $this->taskService = new TaskService();
     }
 
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $taskUuid = request()->uuid;
-        $typeUuid = request()->type_uuid;
+        $taskUuid = $request->input('taskUuid');
+        $typeUuid = $request->input('typeUuid');
 
-        $this->taskService->updateTaskType($taskUuid, $typeUuid);
-
-        return redirect()->route('tasks.show', ['uuid' => $taskUuid]);
-
+        return $this->taskService->updateTaskType($taskUuid, $typeUuid);
     }
 }
