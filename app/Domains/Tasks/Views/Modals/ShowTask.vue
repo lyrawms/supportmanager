@@ -42,12 +42,12 @@
                             </div>
                             <div>
                                 <a @click="handleTypeClick" class="pb-1 cursor-pointer">Type</a>
-                                <p v-if="displayedType && !showComboBoxType"
-                                   :style="{ color: getMostReadableColor(displayedType.color) ,backgroundColor: displayedType.color }"
+                                <p v-if="currentType && !showComboBoxType"
+                                   :style="{ color: getMostReadableColor(currentType.color) ,backgroundColor: currentType.color }"
                                    class="flex w-min rounded-2xl px-2 text-center py-0.5">
-                                    {{ displayedType.title }}</p>
+                                    {{ currentType.title }}</p>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBox :currentAssignedType="displayedType.type" :taskUuid="displayedType.uuid"
+                                    <ComboBox :currentAssignedType="currentType" :taskUuid="task.uuid"
                                               @updateTaskType="assignNewType"/>
                                 </p>
                                 <p v-else-if="displayedType" class="text-stone-500"> None</p>
@@ -126,8 +126,9 @@ export default {
         },
 
         updateTaskType(type) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            if (!this.showComboBoxType && (type.uuid || type.uuid !== this.task.type.uuid)) {
+            if (!this.showComboBoxType && (type.uuid || type.uuid !== this.c.uuid)) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                this.currentType = this.newType
                 fetch('/task/update-type', {
                     method: 'POST',
                     headers: {
@@ -145,7 +146,6 @@ export default {
                     .then(response => response.json())
                     .then(data => {
                         console.log("Task type updated:", data);
-                        this.newSavedType = data;
 
                     })
                     .catch(error => {
@@ -155,11 +155,7 @@ export default {
         },
         assignNewType(type) {
             this.newType = type;
-        }
-    },
-    computed: {
-        displayedType() {
-            return this.newSavedType || this.task.type;
+            console.log("New type assigned:", this.newType);
         }
     },
     components: {
@@ -184,9 +180,12 @@ export default {
     data: () => ({
         valueOfCheckbox: false,
         showComboBoxType: false,
-        newType: null,
-        newSavedType: null,
+        currentType: {},
+        newType: {},
     }),
+    mounted() {
+        this.currentType = this.task.type;
+    }
 
 }
 </script>

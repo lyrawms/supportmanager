@@ -100,7 +100,7 @@ export default {
     }),
     methods: {
         fetchTypes() {
-            fetch(`/types/index-search?query=${this.query}`, {
+            fetch(`/types/index-search?query=${this.query}&currentAssignedType=${this.currentAssignedType.uuid}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",
@@ -112,7 +112,6 @@ export default {
                 .then(data => {
                     this.types = data.types;
                     if (this.currentAssignedType && this.query === "") {
-                        this.types[0] = this.currentAssignedType;
                         this.selected = this.currentAssignedType;
                         console.log(this.task)
                     }
@@ -125,7 +124,7 @@ export default {
         handleInput(event) {
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
-                this.query = event.target.value;
+                this.query = event.target.value || this.currentAssignedType.uuid;
                 this.fetchTypes();
             }, 800);
         },

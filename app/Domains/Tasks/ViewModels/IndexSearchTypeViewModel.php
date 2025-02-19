@@ -16,10 +16,10 @@ class IndexSearchTypeViewModel extends ViewModel
     }
 
 
-    public function toArray($search = null): array
+    public function toArray($query = null, $currentAssignedType = null): array
     {
         return [
-            'types' => $this->typeService->getSmallListOfTypes($search)->toArray(),
+            'types' => $this->typeService->getSmallListOfTypes($query, $currentAssignedType)->toArray(),
         ];
     }
 }

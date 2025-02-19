@@ -13,7 +13,7 @@ class IndexSearchTypeController
 {
     public function __invoke(IndexSearchTypeViewModel $viewModel, Request $request): JsonResponse|Response
     {
-        return response()->json($viewModel->toArray($request->query('query')));
+        return response()->json($viewModel->toArray($request->input('query'), $request->input('currentAssignedType')));
     }
 
 }

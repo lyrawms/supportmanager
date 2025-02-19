@@ -14,12 +14,12 @@ class TypeService
         $this->typeRepository = new TypeRepository;
     }
 
-    public function getSmallListOfTypes(?string $search): Collection
+    public function getSmallListOfTypes(?string $query, ?string $currentAssignedType): Collection
     {
-        if (!empty($search)) {
-            return $this->typeRepository->getTypesBySearch($search);
+        if (!empty($query)) {
+            return $this->typeRepository->getTypesBySearch($query);
         } else {
-            return $this->typeRepository->getSmallListOfTypes();
+            return $this->typeRepository->getSmallListOfTypes($currentAssignedType);
         }
     }
 
