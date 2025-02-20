@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Collection;
 class TypeRepository
 {
 
-    public function getTypesBySearch(string $string)
+    public function getTypesBySearch(string $string, string $currentAssignedType): Collection
     {
         return Type::where('title', 'like', '%' . $string . '%')
+            ->where('uuid', '!=', $currentAssignedType)
             ->orderBy('title', 'asc')
             ->limit(5)
             ->get();

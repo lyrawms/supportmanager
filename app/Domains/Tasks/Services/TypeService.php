@@ -17,7 +17,7 @@ class TypeService
     public function getSmallListOfTypes(?string $query, ?string $currentAssignedType): Collection
     {
         if (!empty($query)) {
-            return $this->typeRepository->getTypesBySearch($query);
+            return $this->typeRepository->getTypesBySearch($query, $currentAssignedType);
         } else {
             return $this->typeRepository->getSmallListOfTypes($currentAssignedType);
         }

@@ -40,17 +40,17 @@
                                 <p v-if="task.priority" class="text-stone-500">{{ task.priority }}</p>
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
-                            <div>
-                                <a @click="handleTypeClick" class="pb-1 cursor-pointer">Type</a>
+                            <div class="space-y-1">
+                                <a @click="handleTypeClick" class="cursor-pointer underline">Type</a>
                                 <p v-if="currentType && !showComboBoxType"
                                    :style="{ color: getMostReadableColor(currentType.color) ,backgroundColor: currentType.color }"
-                                   class="flex w-min rounded-2xl px-2 text-center py-0.5">
+                                   class="flex w-min rounded-2xl px-2 py-1">
                                     {{ currentType.title }}</p>
                                 <p v-else-if="showComboBoxType">
                                     <ComboBox :currentAssignedType="currentType" :taskUuid="task.uuid"
                                               @updateTaskType="assignNewType"/>
                                 </p>
-                                <p v-else-if="displayedType" class="text-stone-500"> None</p>
+                                <p v-else-if="!currentType" class="text-stone-500 my-1"> None</p>
                             </div>
                         </div>
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
@@ -110,7 +110,6 @@ import Checkbox from "@/Components/Forms/Checkbox.vue";
 import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
 import ComboBox from "../Components/ComboBox.vue";
-import {router} from "@inertiajs/vue3";
 
 export default {
     methods: {
@@ -126,7 +125,7 @@ export default {
         },
 
         updateTaskType(type) {
-            if (!this.showComboBoxType && (type.uuid || type.uuid !== this.c.uuid)) {
+            if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 this.currentType = this.newType
                 fetch('/task/update-type', {
@@ -155,7 +154,6 @@ export default {
         },
         assignNewType(type) {
             this.newType = type;
-            console.log("New type assigned:", this.newType);
         }
     },
     components: {

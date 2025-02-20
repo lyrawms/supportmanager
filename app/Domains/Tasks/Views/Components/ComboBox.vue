@@ -7,12 +7,13 @@
                 >
                     <ComboboxInput
                         :displayValue="selected ? (type) => type.title : () => ''"
-                        class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 focus:ring-0"
+                        class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 focus:ring-0"
                         @change="handleInput"
 
                     />
                     <ComboboxButton
                         class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        @click="handleButtonClick"
                     >
                         <span class="rotate-90 text-gray-700">
                             < >
@@ -94,13 +95,14 @@ export default {
         selected: null,
         types: [],
         query: "",
-        debounceTimer: null
+        debounceTimer: null,
+        firstFetchCheck: false,
 
 
     }),
     methods: {
         fetchTypes() {
-            fetch(`/types/index-search?query=${this.query}&currentAssignedType=${this.currentAssignedType.uuid}`, {
+            fetch(`/types/index-search?query=${this.query}&currentAssignedType=${this.currentAssignedType ? this.currentAssignedType.uuid : null}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",
@@ -111,11 +113,6 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.types = data.types;
-                    if (this.currentAssignedType && this.query === "") {
-                        this.selected = this.currentAssignedType;
-                        console.log(this.task)
-                    }
-                    console.log("Types fetched:", this.types);
                 })
                 .catch(error => {
                     console.error("Error fetching types:", error);
@@ -124,17 +121,30 @@ export default {
         handleInput(event) {
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
-                this.query = event.target.value || this.currentAssignedType.uuid;
+                this.query = event.target.value;
                 this.fetchTypes();
             }, 800);
         },
+        firstFetch() {
+            this.fetchTypes();
+        },
+        handleButtonClick() {
+            this.firstFetchCheck = !this.firstFetchCheck;
+            if (this.firstFetchCheck) {
+                this.fetchTypes();
+            }
+        }
     },
     mounted() {
-        this.fetchTypes();
+        if (this.currentAssignedType && this.query === "") {
+            this.selected = this.currentAssignedType;
+        }
     },
     watch: {
         selected() {
-            this.$emit('updateTaskType', this.selected)
+            if (this.selected !== this.currentAssignedType) {
+                this.$emit('updateTaskType', this.selected)
+            }
         }
     }
 }
