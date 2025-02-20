@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('task', function (Blueprint $table) {
-            Schema::table('tasks', function (Blueprint $table) {
-                $table->foreignId('type_id')->nullable()->after('creator_id')->constrained('types')->nullOnDelete();
-
-            });
+        Schema::table('types', function (Blueprint $table) {
+            $table->string('uuid')->unique()->after('id');
         });
     }
 
@@ -24,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('task', function (Blueprint $table) {
-            //
+        Schema::table('types', function (Blueprint $table) {
+
         });
     }
 };

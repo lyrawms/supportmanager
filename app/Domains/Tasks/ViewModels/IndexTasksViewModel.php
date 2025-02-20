@@ -7,12 +7,7 @@ use App\Http\ViewModels\ViewModel;
 
 class IndexTasksViewModel extends ViewModel
 {
-
-    /**
-     * Define a component that inertia should render
-     * @var string
-     */
-    public string $component = 'Tasks/IndexTasks';
+    public string $component = 'Tasks/Pages/IndexTasks';
 
     protected TaskService $taskService;
 

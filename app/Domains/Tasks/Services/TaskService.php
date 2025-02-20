@@ -22,7 +22,11 @@ class TaskService
 
     public function getTaskWithRelationships(String $uuid): Task
     {
-
         return $this->taskRepository->getTaskWithRelationships($uuid);
+    }
+
+    public function updateTaskType(String $taskUuid, String $typeUuid)
+    {
+        return $this->taskRepository->updateTaskType($taskUuid, $typeUuid);
     }
 }

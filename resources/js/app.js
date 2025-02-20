@@ -1,10 +1,10 @@
 import './bootstrap';
 import '../css/app.css';
 
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import {createApp, h} from 'vue';
+import {createInertiaApp} from '@inertiajs/vue3';
+import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
+import {ZiggyVue} from '../../vendor/tightenco/ziggy';
 import {renderApp} from '@inertiaui/modal-vue'
 import momentPlugin from "./plugins/moment";
 
@@ -12,7 +12,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    setup({ el, App, props, plugin }) {
+    setup({el, App, props, plugin}) {
         return createApp({render: renderApp(App, props)})
             .use(plugin)
             .use(momentPlugin)
@@ -29,21 +29,15 @@ createInertiaApp({
         try {
             // Try to resolve from domain-specific folders
             return await resolvePageComponent(
-                `../../app/Domains/${domain}/Views/Pages/${pagePath}.vue`,
-                import.meta.glob('../../app/Domains/**/Views/Pages/**/*.vue')
+                `../../app/Domains/${domain}/Views/${pagePath}.vue`,
+                import.meta.glob('../../app/Domains/**/Views/**/*.vue')
             );
         } catch (e) {
-            try {
-                return await resolvePageComponent(
-                    `../../app/Domains/${domain}/Views/Modals/${pagePath}.vue`,
-                    import.meta.glob('../../app/Domains/**/Views/Modals/**/*.vue')
-                );
-            } catch (e) {
-                return await resolvePageComponent(
-                    `./Pages/${name}.vue`,
-                    import.meta.glob('./Pages/**/*.vue')
-                );
-            }
+            return await resolvePageComponent(
+                `./Pages/${name}.vue`,
+                import.meta.glob('./Pages/**/*.vue')
+            );
+
         }
     },
 });

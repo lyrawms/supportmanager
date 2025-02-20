@@ -1,8 +1,10 @@
 <?php
 
 use App\Domains\Tasks\Controllers\CreateTaskController;
+use App\Domains\Tasks\Controllers\IndexSearchTypeController;
 use App\Domains\Tasks\Controllers\IndexTaskController;
 use App\Domains\Tasks\Controllers\ShowTaskController;
+use App\Domains\Tasks\Controllers\UpdateTaskTypeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,8 +15,16 @@ Route::middleware(['auth', 'verified'])->get('/tasks/index', IndexTaskController
 Route::middleware(['auth', 'verified'])->get('/tasks/create', CreateTaskController::class)
     ->name('tasks.create');
 
-Route::middleware(['auth', 'verified'])->get('/tasks/show/{uuid}', ShowTaskController::class)
+Route::middleware(['auth', 'verified'])->get('/tasks/show', ShowTaskController::class)
     ->name('tasks.show');
+
+Route::middleware(['auth:sanctum'])->get('/types/index-search', IndexSearchTypeController::class)
+    ->name('types.index');
+
+Route::middleware(['auth:sanctum'])->post('/task/update-type', UpdateTaskTypeController::class)
+    ->name('task.update-type');
+
+
 
 
 
