@@ -47,7 +47,7 @@
                                    class="flex w-min rounded-2xl px-2 py-1">
                                     {{ currentType.title }}</p>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBox :currentAssignedType="currentType" :taskUuid="task.uuid"
+                                    <ComboBoxType :currentAssignedType="currentType" :taskUuid="task.uuid"
                                               @updateTaskType="assignNewType"/>
                                 </p>
                                 <p v-else-if="!currentType" class="text-stone-500 my-1"> None</p>
@@ -109,7 +109,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
-import ComboBox from "../Components/ComboBox.vue";
+import ComboBoxType from "../Components/ComboBoxType.vue";
 
 export default {
     methods: {
@@ -157,7 +157,8 @@ export default {
         }
     },
     components: {
-        ComboBox,
+        ComboBoxType,
+        ComboBox: ComboBoxType,
         Modal,
         ModalLink,
         Dialog,

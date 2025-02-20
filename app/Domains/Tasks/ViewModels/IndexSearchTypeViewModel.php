@@ -7,7 +7,6 @@ use App\Http\ViewModels\ViewModel;
 
 class IndexSearchTypeViewModel extends ViewModel
 {
-//    public string $component = 'Tasks/Components/ComboBox';
 
     protected TypeService $typeService;
     public function __construct()

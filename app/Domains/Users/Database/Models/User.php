@@ -90,4 +90,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Type::class, 'creator_id');
     }
+
+    public function assignedTasks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Task::class, 'assignee_id');
+    }
 }

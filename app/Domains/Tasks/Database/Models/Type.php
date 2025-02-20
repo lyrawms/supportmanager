@@ -20,9 +20,9 @@ class Type extends Model
         'creator_id'
     ];
 
-    public function task()
+    public function tasks()
     {
-        return $this->belongsTo(Task::class);
+        return $this->hasMany(Task::class);
     }
 
     public function creator()
