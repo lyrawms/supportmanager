@@ -3,22 +3,17 @@
 namespace App\Domains\Tasks\Controllers;
 
 use App\Domains\Tasks\Services\TaskService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UpdateTaskTypeController
+class UpdateTaskTypeController  extends Controller
 {
-    protected TaskService $taskService;
-
-    public function __construct()
-    {
-        $this->taskService = new TaskService();
-    }
-
     public function __invoke(Request $request)
     {
+        $taskService = new TaskService();
         $taskUuid = $request->input('taskUuid');
         $typeUuid = $request->input('typeUuid');
 
-        return $this->taskService->updateTaskType($taskUuid, $typeUuid);
+        return $taskService->updateTaskType($taskUuid, $typeUuid);
     }
 }
