@@ -4,7 +4,6 @@ namespace App\Domains\Tasks\Repositories;
 
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Database\Models\Type;
-use App\Domains\Users\Database\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository
@@ -20,7 +19,6 @@ class TaskRepository
     {
         return Task::with('creator')
             ->with('type')
-            ->with('assignee')
             ->where('uuid', $uuid)
             ->firstOrFail();
     }
@@ -32,14 +30,5 @@ class TaskRepository
         $task->type()->associate($type);
         $task->save();
         return $type;
-    }
-
-    public function updateTaskUser(String $taskUuid, String $userUuid)
-    {
-        $task = Task::where('uuid', $taskUuid)->firstOrFail();
-        $user = User::where('uuid', $userUuid)->firstOrFail();
-        $task->assignee()->associate($user);
-        $task->save();
-        return $user;
     }
 }

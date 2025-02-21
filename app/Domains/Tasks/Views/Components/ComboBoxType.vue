@@ -6,7 +6,7 @@
                     class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
                 >
                     <ComboboxInput
-                        :displayValue="selected ? () => selected.title ?? selected.name : () => ''"
+                        :displayValue="selected ? (type) => type.title : () => ''"
                         class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 focus:ring-0"
                         @change="handleInput"
 
@@ -25,16 +25,16 @@
                     class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
                 >
                     <div
-                        v-if="subjects.length === 0 && query !== ''"
+                        v-if="types.length === 0 && query !== ''"
                         class="cursor-default select-none px-4 py-2 text-gray-700"
                     >
                         Nothing found.
                     </div>
 
                     <ComboboxOption
-                        v-for="subjectLoop in subjects"
-                        :key="subjectLoop.uuid"
-                        :value="subjectLoop"
+                        v-for="type in types"
+                        :key="type.uuid"
+                        :value="type"
                         v-slot="{selected, active}"
                     >
 
@@ -49,7 +49,7 @@
                     class="block truncate"
                     :class="{ 'font-medium': selected, 'font-normal': !selected }"
                 >
-                  {{ subjectLoop.title ?? subjectLoop.name }}
+                  {{ type.title }}
                 </span>
                             <span
                                 v-if="selected"
@@ -73,20 +73,16 @@ import {Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions
 export default {
     name: "ComboBox",
     props: {
-        currentAssignedSubject: {
+        currentAssignedType: {
             type: Object,
             default: null,
             required: false
         },
         taskUuid: {
             required: true
-        },
-        subject: {
-            required: true,
-            type: String
         }
     },
-    emits: [`updateTask${this.subjectUppercase}`],
+    emits: ['updateTaskType'],
 
     components: {
         ComboboxButton,
@@ -97,19 +93,16 @@ export default {
     },
     data: () => ({
         selected: null,
-        subjects: [],
+        types: [],
         query: "",
         debounceTimer: null,
         firstFetchCheck: false,
-        subjectUppercase: this.subject.charAt(0).toUpperCase() + this.subject.slice(1),
-        subjectLowercase: this.subject.charAt(0).toLowerCase() + this.subject.slice(1),
-        subjectPlural: this.subject + 's',
 
 
     }),
     methods: {
-        fetchSubjects() {
-            fetch(`/${this.subjectPlural}/index-search?query=${this.query}&currentAssigned${this.subjectUppercase}=${this.currentAssignedSubject ? this.currentAssignedSubject.uuid : null}`, {
+        fetchTypes() {
+            fetch(`/types/index-search?query=${this.query}&currentAssignedType=${this.currentAssignedType ? this.currentAssignedType.uuid : null}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",
@@ -119,7 +112,7 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
-                    this.subjects = data.types ?? data.users;
+                    this.types = data.types;
                 })
                 .catch(error => {
                     console.error("Error fetching types:", error);
@@ -129,25 +122,28 @@ export default {
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
                 this.query = event.target.value;
-                this.fetchSubjects();
+                this.fetchTypes();
             }, 800);
+        },
+        firstFetch() {
+            this.fetchTypes();
         },
         handleButtonClick() {
             this.firstFetchCheck = !this.firstFetchCheck;
             if (this.firstFetchCheck) {
-                this.fetchSubjects();
+                this.fetchTypes();
             }
         }
     },
     mounted() {
-        if (this.currentAssignedSubject && this.query === "") {
-            this.selected = this.currentAssignedSubject;
+        if (this.currentAssignedType && this.query === "") {
+            this.selected = this.currentAssignedType;
         }
     },
     watch: {
         selected() {
-            if (this.selected !== this.currentAssignedSubject) {
-                this.$emit(`updateTask${this.subjectUppercase}`, this.selected)
+            if (this.selected !== this.currentAssignedType) {
+                this.$emit('updateTaskType', this.selected)
             }
         }
     }
