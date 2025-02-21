@@ -25,7 +25,7 @@ class Task extends Model
         'status',
         'deadline',
         'creator_id',
-
+        'assignee_id',
     ];
 
     public function creator()

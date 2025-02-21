@@ -5,6 +5,7 @@ namespace App\Domains\Users\Database\Models;
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Database\Models\Type;
 use App\Domains\Users\Database\Factories\UserFactory;
+use App\Support\Traits\GenerateUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
-
+    use GenerateUuid;
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
