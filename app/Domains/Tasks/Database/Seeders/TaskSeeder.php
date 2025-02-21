@@ -18,7 +18,6 @@ class TaskSeeder extends Seeder
             Task::factory(5)->create([
                 'creator_id' => $user->id,
                 'type_id' => $type->id,
-                'assignee_id' => rand(1, 3) === 1 ? $user->id : null,
             ]);
         });
     }

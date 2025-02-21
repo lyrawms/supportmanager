@@ -47,25 +47,21 @@
                                    class="flex w-min rounded-2xl px-2 py-1">
                                     {{ currentType.title }}</p>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBox :currentAssignedSubject="currentType" :taskUuid="task.uuid"
-                                              @updateTaskType="assignNewType" subject="type"/>
+                                    <ComboBoxType :currentAssignedType="currentType" :taskUuid="task.uuid"
+                                              @updateTaskType="assignNewType"/>
                                 </p>
                                 <p v-else-if="!currentType" class="text-stone-500 my-1"> None</p>
                             </div>
                         </div>
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
                             <div>
-                                <a @click="handleUserClick" class="cursor-pointer underline">Assignee</a>
-                                <p v-if="currentUser && !showComboBoxUser" class="text-stone-500">{{ currentUser.name }}</p>
-                                <p v-else-if="showComboBoxUser">
-                                    <ComboBoxUser :currentAssignedUser="currentUser" :taskUuid="task.uuid"
-                                                  @updateTaskUser="assignNewUser"/>
-                                </p>
-                                <p v-else-if="!currentUser" class="text-stone-500"> None</p>
-                            </div>
-                            <div>
                                 <p>Creator</p>
                                 <p v-if="task.creator_id" class="text-stone-500">{{ task.creator.name }}</p>
+                                <p v-else class="text-stone-500"> None</p>
+                            </div>
+                            <div>
+                                <p>Assignee</p>
+                                <p v-if="task.assignee_id" class="text-stone-500">{{ task.assignee.name }}</p>
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                         </div>
@@ -113,8 +109,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
-import ComboBox from "../Components/ComboBox.vue";
-import ComboBoxUser from "../../../Users/Views/Components/ComboBoxUser.vue";
+import ComboBoxType from "../Components/ComboBoxType.vue";
 
 export default {
     methods: {
@@ -122,22 +117,16 @@ export default {
             this.toggleComboBoxType();
             this.updateTaskType(this.newType);
         },
-        handleUserClick() {
-            this.toggleComboBoxUser();
-            this.updateTaskUser(this.newUser);
-        },
         getMostReadableColor(color) {
             return tinycolor.mostReadable(color, [], {includeFallbackColors: true});
         },
         toggleComboBoxType() {
             this.showComboBoxType = !this.showComboBoxType;
         },
-        toggleComboBoxUser() {
-            this.showComboBoxUser = !this.showComboBoxUser;
-        },
 
         updateTaskType(type) {
             if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 this.currentType = this.newType
                 fetch('/task/update-type', {
                     method: 'POST',
@@ -145,7 +134,7 @@ export default {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': this.csrfToken,
+                        'X-CSRF-TOKEN': csrfToken,
                     },
                     credentials: 'include',
                     body: JSON.stringify({
@@ -163,44 +152,13 @@ export default {
                     });
             }
         },
-        updateTaskUser(user) {
-            if (!this.showComboBoxUser && (user.uuid && user.uuid !== (this.currentUser ? this.currentUser.uuid : null))) {
-                this.currentUser = this.newUser
-                fetch('/task/update-user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': this.csrfToken,
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        taskUuid: this.task.uuid,
-                        userUuid: user.uuid,
-                    }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Task user updated:", data);
-
-                    })
-                    .catch(error => {
-                        console.error("Error updating task user:", error);
-                    });
-            }
-        },
         assignNewType(type) {
             this.newType = type;
-        },
-        assignNewUser(user) {
-            this.newUser = user;
         }
     },
     components: {
-        ComboBoxUser,
-        ComboBoxType: ComboBox,
-        ComboBox: ComboBox,
+        ComboBoxType,
+        ComboBox: ComboBoxType,
         Modal,
         ModalLink,
         Dialog,
@@ -221,17 +179,12 @@ export default {
     data: () => ({
         valueOfCheckbox: false,
         showComboBoxType: false,
-        showComboBoxUser: false,
         currentType: {},
-        currentUser: {},
         newType: {},
-        newUser: {},
-        csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-
     }),
     mounted() {
         this.currentType = this.task.type;
-        this.currentUser = this.task.assignee;
     }
+
 }
 </script>
