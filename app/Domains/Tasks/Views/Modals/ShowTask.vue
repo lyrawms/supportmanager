@@ -55,13 +55,13 @@
                         </div>
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
                             <div>
-                                <p>Creator</p>
-                                <p v-if="task.creator_id" class="text-stone-500">{{ task.creator.name }}</p>
+                                <p>Assignee</p>
+                                <p v-if="task.assignee_id" class="text-stone-500">{{ task.assignee?.name }}</p>
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                             <div>
-                                <p>Assignee</p>
-                                <p v-if="task.assignee_id" class="text-stone-500">{{ task.assignee.name }}</p>
+                                <p>Creator</p>
+                                <p v-if="task.creator_id" class="text-stone-500">{{ task.creator?.name }}</p>
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                         </div>
