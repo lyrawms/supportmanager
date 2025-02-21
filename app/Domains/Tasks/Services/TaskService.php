@@ -29,9 +29,4 @@ class TaskService
     {
         return $this->taskRepository->updateTaskType($taskUuid, $typeUuid);
     }
-
-    public function updateTaskUser(String $taskUuid, String $userUuid)
-    {
-        return $this->taskRepository->updateTaskUser($taskUuid, $userUuid);
-    }
 }
