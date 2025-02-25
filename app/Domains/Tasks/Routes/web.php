@@ -4,6 +4,7 @@ use App\Domains\Tasks\Controllers\CreateTaskController;
 use App\Domains\Tasks\Controllers\IndexSearchTypeController;
 use App\Domains\Tasks\Controllers\IndexSearchUserController;
 use App\Domains\Tasks\Controllers\IndexTaskController;
+use App\Domains\Tasks\Controllers\SaveTaskController;
 use App\Domains\Tasks\Controllers\ShowTaskController;
 use App\Domains\Tasks\Controllers\UpdateTaskTypeController;
 use App\Domains\Tasks\Controllers\UpdateTaskUserController;
@@ -17,8 +18,13 @@ Route::middleware(['auth', 'verified'])->get('/tasks/index', IndexTaskController
 Route::middleware(['auth', 'verified'])->get('/tasks/create', CreateTaskController::class)
     ->name('tasks.create');
 
+Route::middleware(['auth', 'verified'])->post('/tasks/create', SaveTaskController::class)
+    ->name('tasks.create');
+
 Route::middleware(['auth', 'verified'])->get('/tasks/show', ShowTaskController::class)
     ->name('tasks.show');
+
+
 
 
 

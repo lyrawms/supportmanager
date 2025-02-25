@@ -42,4 +42,16 @@ class TaskRepository
         $task->save();
         return $user;
     }
+
+    public function saveTask(Array $taskData)
+    {
+        $task = new Task();
+        $task->title = $taskData['title'];
+        $task->description = $taskData['description'];
+        $task->deadline = $taskData['deadline'];
+        $task->intercom_link = $taskData['intercomLink'];
+        $task->sla = $taskData['sla'];
+        $task->reporter = $taskData['reporter'];
+        return $task;
+    }
 }

@@ -34,4 +34,9 @@ class TaskService
     {
         return $this->taskRepository->updateTaskUser($taskUuid, $userUuid);
     }
+
+    public function saveTask(Array $taskData)
+    {
+        return $this->taskRepository->saveTask($taskData);
+    }
 }
