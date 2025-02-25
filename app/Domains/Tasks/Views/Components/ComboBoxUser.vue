@@ -6,7 +6,7 @@
                     class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
                 >
                     <ComboboxInput
-                        :displayValue="selected ? (user) => user.title : () => ''"
+                        :displayValue="selected ? (user) => user.name : () => ''"
                         class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 focus:ring-0"
                         @change="handleInput"
 
@@ -49,7 +49,7 @@
                     class="block truncate"
                     :class="{ 'font-medium': selected, 'font-normal': !selected }"
                 >
-                  {{ user.title }}
+                  {{ user.name }}
                 </span>
                             <span
                                 v-if="selected"

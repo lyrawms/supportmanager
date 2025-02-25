@@ -71,7 +71,7 @@
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
 
 export default {
-    name: "ComboBox",
+    name: "ComboBoxType",
     props: {
         currentAssignedType: {
             type: Object,
