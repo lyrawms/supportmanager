@@ -6,7 +6,7 @@
                     class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
                 >
                     <ComboboxInput
-                        :displayValue="selected ? (type) => type.title : () => ''"
+                        :displayValue="selected ? (user) => user.name : () => ''"
                         class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 focus:ring-0"
                         @change="handleInput"
 
@@ -25,16 +25,16 @@
                     class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
                 >
                     <div
-                        v-if="types.length === 0 && query !== ''"
+                        v-if="users.length === 0 && query !== ''"
                         class="cursor-default select-none px-4 py-2 text-gray-700"
                     >
                         Nothing found.
                     </div>
 
                     <ComboboxOption
-                        v-for="type in types"
-                        :key="type.uuid"
-                        :value="type"
+                        v-for="user in users"
+                        :key="user.uuid"
+                        :value="user"
                         v-slot="{selected, active}"
                     >
 
@@ -49,7 +49,7 @@
                     class="block truncate"
                     :class="{ 'font-medium': selected, 'font-normal': !selected }"
                 >
-                  {{ type.title }}
+                  {{ user.name }}
                 </span>
                             <span
                                 v-if="selected"
@@ -71,10 +71,10 @@
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
 
 export default {
-    name: "ComboBox",
+    name: "ComboBoxUser",
     props: {
-        currentAssignedType: {
-            type: Object,
+        currentAssignedUser: {
+            user: Object,
             default: null,
             required: false
         },
@@ -82,7 +82,7 @@ export default {
             required: true
         }
     },
-    emits: ['updateTaskType'],
+    emits: ['updateTaskUser'],
 
     components: {
         ComboboxButton,
@@ -93,7 +93,7 @@ export default {
     },
     data: () => ({
         selected: null,
-        types: [],
+        users: [],
         query: "",
         debounceTimer: null,
         firstFetchCheck: false,
@@ -101,8 +101,8 @@ export default {
 
     }),
     methods: {
-        fetchTypes() {
-            fetch(`/types/index-search?query=${this.query}&currentAssignedType=${this.currentAssignedType ? this.currentAssignedType.uuid : null}`, {
+        fetchUsers() {
+            fetch(`/users/index-search?query=${this.query}&currentAssignedUser=${this.currentAssignedUser ? this.currentAssignedUser.uuid : null}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",
@@ -112,38 +112,38 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
-                    this.types = data.types;
+                    this.users = data.users;
                 })
                 .catch(error => {
-                    console.error("Error fetching types:", error);
+                    console.error("Error fetching users:", error);
                 });
         },
         handleInput(event) {
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
                 this.query = event.target.value;
-                this.fetchTypes();
+                this.fetchUsers();
             }, 800);
         },
         firstFetch() {
-            this.fetchTypes();
+            this.fetchUsers();
         },
         handleButtonClick() {
             this.firstFetchCheck = !this.firstFetchCheck;
             if (this.firstFetchCheck) {
-                this.fetchTypes();
+                this.fetchUsers();
             }
         }
     },
     mounted() {
-        if (this.currentAssignedType && this.query === "") {
-            this.selected = this.currentAssignedType;
+        if (this.currentAssignedUser && this.query === "") {
+            this.selected = this.currentAssignedUser;
         }
     },
     watch: {
         selected() {
-            if (this.selected !== this.currentAssignedType) {
-                this.$emit('updateTaskType', this.selected)
+            if (this.selected !== this.currentAssignedUser) {
+                this.$emit('updateTaskUser', this.selected)
             }
         }
     }
