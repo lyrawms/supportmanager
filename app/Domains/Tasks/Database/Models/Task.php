@@ -24,7 +24,6 @@ class Task extends Model
         'sla',
         'status',
         'deadline',
-        'creator_id',
         'assignee_id',
 
     ];

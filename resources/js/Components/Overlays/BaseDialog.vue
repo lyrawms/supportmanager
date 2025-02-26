@@ -51,7 +51,7 @@ export default {
         width: {
             type: String,
             default: 'lg'
-            /* sm:max-w-lg, sm:max-w-xl, sm:max-w-2xl, sm:max-w-3xl */
+            /* sm:max-w-lg, sm:max-w-xl, sm:max-w-2xl, sm:max-w-3xl, sm:max-w-4xl, sm:max-w-5xl, sm:max-w-6xl, sm:max-w-7xl  */
         }
     },
     emits: ['close'],
@@ -59,6 +59,6 @@ export default {
         close() {
             this.$emit('close')
         }
-    }
+    },
 }
 </script>
