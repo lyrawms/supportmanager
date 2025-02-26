@@ -43,15 +43,17 @@ class TaskRepository
         return $user;
     }
 
-    public function saveTask(Array $taskData)
+    public function saveTask(Array $taskData, User $creator, $deadline): Task
     {
         $task = new Task();
         $task->title = $taskData['title'];
         $task->description = $taskData['description'];
-        $task->deadline = $taskData['deadline'];
         $task->intercom_link = $taskData['intercomLink'];
         $task->sla = $taskData['sla'];
-        $task->reporter = $taskData['reporter'];
+        $task->creator()->associate($creator);
+        $task->deadline = $deadline;
+
+        $task->save();
         return $task;
     }
 }

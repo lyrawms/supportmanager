@@ -4,6 +4,8 @@ namespace App\Domains\Tasks\Services;
 
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Repositories\TaskRepository;
+use App\Domains\Users\Database\Models\User;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskService
@@ -37,6 +39,8 @@ class TaskService
 
     public function saveTask(Array $taskData)
     {
-        return $this->taskRepository->saveTask($taskData);
+        $creator = User::findOrFail(auth()->id());
+        $deadline = Carbon::now()->addDays($taskData['sla'])->format('Y-m-d H:i:s');
+        return $this->taskRepository->saveTask($taskData, $creator, $deadline);
     }
 }

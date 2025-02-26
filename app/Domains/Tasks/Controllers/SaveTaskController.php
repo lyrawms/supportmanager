@@ -15,11 +15,10 @@ class SaveTaskController extends Controller
     public function __invoke(Request $request)
     {
         $validatedData = $request->validate([
-            'formData.title' => 'required|string',
-            'formData.description' => 'string',
-            'formData.deadline' => 'required|date',
-            'formData.intercomLink' => 'required|string',
-            'formData.sla' => 'required|string',
+            'title' => 'required|string',
+            'description' => 'string',
+            'intercomLink' => 'nullable|url',
+            'sla' => 'required|integer',
         ]);
 
         $taskService = new TaskService();

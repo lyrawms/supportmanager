@@ -26,6 +26,7 @@
         "@headlessui/vue": "^1.7.23",
         "@inertiaui/modal-vue": "file:vendor/inertiaui/modal/vue",
         "@tailwindcss/vite": "^4.0.0",
+        "@tinymce/tinymce-vue": "^5.1.1",
         "tinycolor2": "^1.6.0",
         "vue-moment": "^4.1.0"
     }

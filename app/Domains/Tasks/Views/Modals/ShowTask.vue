@@ -1,12 +1,10 @@
 <template>
-    <Dialog width="3xl">
+    <Dialog width="7xl">
 
         <div class="mt-3 text-center sm:mt-0 sm:text-left">
-            <DialogTitle as="h3" class="text-base font-semibold text-stone-900">{{ task.title }}</DialogTitle>
+            <DialogTitle as="h3" class="text-base font-semibold text-stone-900 p-4">{{ task.title }}</DialogTitle>
             <div class="flex mt-8">
-                <div class="w-3/5" v-html="formData.description"></div>
-<!--dit moet nog aangepast worden -->
-
+                <div class="w-3/5 p-4" v-html="task.description"></div>
                 <div class="w-2/5 rounded-2xl">
                     <div class=" bg-amber-200 p-4 rounded-2xl space-y-6">
                         <div class="border-stone-200 bg-white shadow-lg rounded-2xl p-4 space-y-2">
