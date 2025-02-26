@@ -21,7 +21,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+
 });
 
 // Include the routes file for the Tasks domain
 require __DIR__ . '/../app/Domains/Tasks/Routes/web.php';
+require __DIR__ . '/../app/Domains/Settings/Routes/web.php';
+
