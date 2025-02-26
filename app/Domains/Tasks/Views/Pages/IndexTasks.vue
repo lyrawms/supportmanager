@@ -6,8 +6,6 @@
                     <h2 class="font-semibold text-xl text-stone-800 leading-tight">
                         Tasks
                     </h2>
-                    <p class="mt-2 text-sm text-stone-700">A list of all the users in your account including their name,
-                        title, email and role.</p>
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <primary-button color="amber" modal :href="route('tasks.create')">
