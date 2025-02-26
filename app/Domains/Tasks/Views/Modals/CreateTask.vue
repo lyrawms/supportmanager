@@ -1,5 +1,5 @@
 <template>
-    <Dialog width="7xl">
+    <Dialog width="7xl" v-slot="{ close }">
         <div class="mt-3 text-center sm:mt-0 sm:text-left">
             <DialogTitle as="h3" class="text-2xl font-semibold text-stone-900 mb-6">Create Task</DialogTitle>
             <div class="flex mt-8">
@@ -45,7 +45,8 @@
                                 }}</span>
                         </div>
                         <div class="flex justify-end mt-6">
-                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            <button type="submit"
+                                    class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700">
                                 Submit
                             </button>
                         </div>
@@ -72,10 +73,10 @@ export default {
         Editor
     },
     data: () => ({
-            title: '',
-            description: '',
-            intercomLink: '',
-            sla: '',
+        title: '',
+        description: '',
+        intercomLink: '',
+        sla: '',
         errors: {}
     }),
     methods: {
@@ -100,10 +101,10 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (data.errors) {
-
                         this.errors = data.errors;
                         console.error("Error creating task", data.errors);
-                        console.log(this.errors);
+                    } else if (data) {
+                        console.log("Task created", data);
                     }
 
                 })

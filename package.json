@@ -24,6 +24,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@headlessui/vue": "^1.7.23",
+        "@inertiajs/inertia": "^0.11.1",
         "@inertiaui/modal-vue": "file:vendor/inertiaui/modal/vue",
         "@tailwindcss/vite": "^4.0.0",
         "@tinymce/tinymce-vue": "^5.1.1",

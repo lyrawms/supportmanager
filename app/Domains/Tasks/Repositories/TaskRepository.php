@@ -43,7 +43,7 @@ class TaskRepository
         return $user;
     }
 
-    public function saveTask(Array $taskData, User $creator, $deadline): Task
+    public function saveTask(Array $taskData, User $creator, $deadline): String
     {
         $task = new Task();
         $task->title = $taskData['title'];
@@ -54,6 +54,6 @@ class TaskRepository
         $task->deadline = $deadline;
 
         $task->save();
-        return $task;
+        return $task->uuid;
     }
 }

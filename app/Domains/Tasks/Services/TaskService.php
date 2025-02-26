@@ -2,11 +2,15 @@
 
 namespace App\Domains\Tasks\Services;
 
+use App\Domains\Tasks\Controllers\ShowTaskController;
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Repositories\TaskRepository;
+use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
 use App\Domains\Users\Database\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Http;
 
 class TaskService
 {
@@ -37,7 +41,7 @@ class TaskService
         return $this->taskRepository->updateTaskUser($taskUuid, $userUuid);
     }
 
-    public function saveTask(Array $taskData)
+    public function saveTask(Array $taskData): String
     {
         $creator = User::findOrFail(auth()->id());
         $deadline = Carbon::now()->addDays($taskData['sla'])->format('Y-m-d H:i:s');
