@@ -4,6 +4,8 @@ namespace App\Domains\Tasks\Services;
 
 use App\Domains\Tasks\Repositories\TypeRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class TypeService
 {
@@ -17,9 +19,20 @@ class TypeService
     public function getSmallListOfTypes(?string $query, ?string $currentAssignedType): Collection
     {
         if (!empty($query)) {
-            return $this->typeRepository->getTypesBySearch($query, $currentAssignedType);
+            return $this->typeRepository->getSmallListOfTypesBySearch($query, $currentAssignedType);
         } else {
             return $this->typeRepository->getSmallListOfTypes($currentAssignedType);
+        }
+    }
+
+    public function fetchAllTypesSearch(string $query = null): LengthAwarePaginator | \Illuminate\Support\Collection
+    {
+        if (!empty($query)) {
+            return collect([
+                'data' => $this->typeRepository->getAllTypesSearch($query)
+            ]);
+        } else {
+            return $this->typeRepository->getAllTypes();
         }
     }
 

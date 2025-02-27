@@ -102,7 +102,7 @@ export default {
     }),
     methods: {
         fetchUsers() {
-            fetch(`/users/index-search?query=${this.query}&currentAssignedUser=${this.currentAssignedUser ? this.currentAssignedUser.uuid : null}`, {
+            fetch(`/users/short-list?query=${this.query}&currentAssignedUser=${this.currentAssignedUser ? this.currentAssignedUser.uuid : null}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",

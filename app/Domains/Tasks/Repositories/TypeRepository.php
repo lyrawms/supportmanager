@@ -4,24 +4,37 @@ namespace App\Domains\Tasks\Repositories;
 
 use App\Domains\Tasks\Database\Models\Type;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TypeRepository
 {
 
-    public function getTypesBySearch(string $string, string $currentAssignedType): Collection
+    public function getSmallListOfTypesBySearch(string $query, string $currentAssignedType): Collection
     {
-        return Type::where('title', 'like', '%' . $string . '%')
+        return Type::where('title', 'like', '%' . $query . '%')
             ->where('uuid', '!=', $currentAssignedType)
             ->orderBy('title', 'asc')
             ->limit(5)
             ->get();
     }
-
     public function getSmallListOfTypes(string $currentAssignedType): Collection
     {
         return Type::where('uuid', '!=', $currentAssignedType)
             ->orderBy('title', 'asc')
             ->limit(5)
             ->get();
+    }
+    public function getAllTypesSearch(string $query): Collection
+    {
+        return Type::where('title', 'like', '%' . $query . '%')
+            ->orderBy('title', 'asc')
+            ->limit(50)
+            ->get();
+    }
+
+
+    public function getAllTypes(): LengthAwarePaginator
+    {
+        return Type::orderBy('color', 'desc')->paginate(50);
     }
 }

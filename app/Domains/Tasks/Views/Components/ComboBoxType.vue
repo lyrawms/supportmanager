@@ -102,7 +102,7 @@ export default {
     }),
     methods: {
         fetchTypes() {
-            fetch(`/types/index-search?query=${this.query}&currentAssignedType=${this.currentAssignedType ? this.currentAssignedType.uuid : null}`, {
+            fetch(`/types/short-list?query=${this.query}&currentAssignedType=${this.currentAssignedType ? this.currentAssignedType.uuid : null}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",

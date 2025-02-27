@@ -2,16 +2,15 @@
 
 namespace App\Domains\Tasks\Controllers;
 
-use App\Domains\Tasks\Services\TypeService;
-use App\Domains\Tasks\ViewModels\IndexSearchTypeViewModel;
+use App\Domains\Tasks\ViewModels\FetchShortListTypeViewModel;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Inertia\Response;
 
-class IndexSearchTypeController
+class FetchShortListTypeController extends controller
 {
-    public function __invoke(IndexSearchTypeViewModel $viewModel, Request $request): JsonResponse|Response
+    public function __invoke(FetchShortListTypeViewModel $viewModel, Request $request): JsonResponse|Response
     {
         return response()->json($viewModel->toArray($request->input('query'), $request->input('currentAssignedType')));
     }
