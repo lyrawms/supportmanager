@@ -1,13 +1,14 @@
 <?php
 
 use App\Domains\Tasks\Controllers\CreateTaskController;
-use App\Domains\Tasks\Controllers\IndexSearchTypeController;
-use App\Domains\Tasks\Controllers\IndexSearchUserController;
+use App\Domains\Tasks\Controllers\FetchAllTypesSearchController;
+use App\Domains\Tasks\Controllers\FetchShortListTypeController;
 use App\Domains\Tasks\Controllers\IndexTaskController;
 use App\Domains\Tasks\Controllers\SaveTaskController;
 use App\Domains\Tasks\Controllers\ShowTaskController;
 use App\Domains\Tasks\Controllers\UpdateTaskTypeController;
 use App\Domains\Tasks\Controllers\UpdateTaskUserController;
+use App\Domains\Users\Controllers\FetchShortListUserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,10 +29,14 @@ Route::middleware(['auth', 'verified'])->get('/tasks/show', ShowTaskController::
 
 
 
-Route::middleware(['auth:sanctum'])->get('/types/index-search', IndexSearchTypeController::class)
-    ->name('types.index');
+Route::middleware(['auth:sanctum'])->get('/types/short-list', FetchShortListTypeController::class)
+    ->name('types.small-list');
 
-Route::middleware(['auth:sanctum'])->get('/users/index-search', IndexSearchUserController::class)
+Route::middleware(['auth:sanctum'])->get('/types/index-search', FetchAllTypesSearchController::class)
+    ->name('types.index-search');
+
+
+Route::middleware(['auth:sanctum'])->get('/users/short-list', FetchShortListUserController::class)
     ->name('users.index');
 
 

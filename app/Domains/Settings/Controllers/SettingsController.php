@@ -13,6 +13,6 @@ class SettingsController extends Controller
 {
     public function __invoke(Request $request, SettingsViewModel $viewModel): Response
     {
-        return Inertia::render($viewModel->component, $viewModel->toArray($request->uuid));
+        return Inertia::render($viewModel->component, $viewModel->toArray($request->input('query')));
     }
 }

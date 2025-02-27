@@ -14,7 +14,7 @@ class TypeSeeder extends Seeder
     public function run(): void
     {
         User::all()->each(function (User $user) {
-            Type::factory(3)->create([
+            Type::factory(15)->create([
                 'creator_id' => $user->id,
             ]);
         });

@@ -20,5 +20,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Domains/Tasks/Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Domains/Users/Database/Migrations');
     }
 }

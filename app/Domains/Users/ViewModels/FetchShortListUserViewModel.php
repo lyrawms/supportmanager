@@ -5,7 +5,7 @@ namespace App\Domains\Users\ViewModels;
 use App\Domains\Users\Services\UserService;
 use App\Http\ViewModels\ViewModel;
 
-class IndexSearchUserViewModel extends ViewModel
+class FetchShortListUserViewModel extends ViewModel
 {
     protected UserService $userService;
 
