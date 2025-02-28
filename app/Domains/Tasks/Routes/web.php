@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Tasks\Controllers\CreateTaskController;
+use App\Domains\Tasks\Controllers\CreateTypeController;
 use App\Domains\Tasks\Controllers\FetchAllTypesSearchController;
 use App\Domains\Tasks\Controllers\FetchShortListTypeController;
 use App\Domains\Tasks\Controllers\IndexTaskController;
@@ -24,6 +25,9 @@ Route::middleware(['auth', 'verified'])->post('/tasks/create', SaveTaskControlle
 
 Route::middleware(['auth', 'verified'])->get('/tasks/show', ShowTaskController::class)
     ->name('tasks.show');
+
+Route::middleware(['auth', 'verified'])->get('/types/create', CreateTypeController::class)
+    ->name('types.create');
 
 
 
