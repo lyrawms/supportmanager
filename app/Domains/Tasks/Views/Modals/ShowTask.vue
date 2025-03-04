@@ -46,8 +46,9 @@
                                    class="flex w-min rounded-2xl px-2 py-1">
                                     {{ currentType.title }}</p>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBoxType :currentAssignedType="currentType" :taskUuid="task.uuid"
-                                              @updateTaskType="assignNewType"/>
+                                    <ComboBoxSubject :currentAssignedSubject="currentType" :taskUuid="task.uuid"
+                                                     subject="type"
+                                                     @updateTaskType="assignNewType"/>
                                 </p>
                                 <p v-else-if="!currentType" class="text-stone-500 my-1"> None</p>
                             </div>
@@ -55,12 +56,14 @@
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
                             <div>
                                 <a @click="handleUserClick" class="cursor-pointer underline">Assignee</a>
-                                <p v-if="currentUser &&!showComboBoxUser" class="text-stone-500">{{ currentUser.name }}</p>
+                                <p v-if="currentUser &&!showComboBoxUser" class="text-stone-500">{{
+                                        currentUser.name
+                                    }}</p>
                                 <p v-else-if="showComboBoxUser">
-                                    <ComboBoxUser :currentAssignedUser="currentUser" :taskUuid="task.uuid"
-                                              @updateTaskUser="assignNewUser"/>
+                                    <ComboBoxSubject :currentAssignedSubject="currentUser" :taskUuid="task.uuid "
+                                                     @updateTaskUser="assignNewUser" subject="user"/>
                                 </p>
-                                    <p v-else-if="!currentUser" class="text-stone-500"> None</p>
+                                <p v-else-if="!currentUser" class="text-stone-500"> None</p>
 
                             </div>
                             <div>
@@ -103,20 +106,38 @@
 
 
 <script>
-import {Modal, ModalLink} from '@inertiaui/modal-vue'
 import Dialog from "@/Components/Overlays/Dialog.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import {DialogTitle} from "@headlessui/vue";
 import CheckboxGroup from "@/Components/Forms/CheckboxGroup.vue";
-import CheckboxField from "@/Components/Forms/CheckboxField.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import Checkbox from "@/Components/Forms/Checkbox.vue";
-import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
-import ComboBoxType from "../Components/ComboBoxType.vue";
-import ComboBoxUser from "../Components/ComboBoxUser.vue";
+import ComboBoxSubject from "../Components/ComboBoxSubject.vue";
 
 export default {
+    name: "ShowTask",
+    components: {
+        ComboBoxSubject,
+        Dialog,
+        PrimaryButton,
+        DialogTitle,
+        CheckboxGroup,
+    },
+    props: {
+        task: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data: () => ({
+        valueOfCheckbox: false,
+        showComboBoxType: false,
+        showComboBoxUser: false,
+        currentType: {},
+        currentUser: {},
+        newType: {},
+        newUser: {},
+    }),
     methods: {
         handleTypeClick() {
             this.toggleComboBoxType();
@@ -199,38 +220,7 @@ export default {
             this.newUser = user;
         }
     },
-    components: {
-        ComboBoxUser,
-        ComboBoxType,
-        Modal,
-        ModalLink,
-        Dialog,
-        PrimaryButton,
-        DialogTitle,
-        CheckboxGroup,
-        CheckboxField,
-        InputLabel,
-        Checkbox,
-        InputDescription,
-    },
-    props: {
-        task: {
-            type: Object,
-            required: true
-        }
-    },
-    data: () => ({
-        valueOfCheckbox: false,
-        showComboBoxType: false,
-        showComboBoxUser: false,
-        currentType: {},
-        currentUser: {},
-        newType: {},
-        newUser: {},
-        froalaConfig: {
-            editable: true,
-        },
-    }),
+
     mounted() {
         this.currentType = this.task.type;
         this.currentUser = this.task.assignee;
