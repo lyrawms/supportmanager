@@ -16,10 +16,10 @@ class IndexTasksViewModel extends ViewModel
         $this->taskService = new TaskService;
     }
 
-    public function toArray(): array
+    public function toArray(String $category = null): array
     {
         return [
-            'tasks' => $this->taskService->getAllTasks()->toArray(),
+            'tasks' => $this->taskService->getAllTasks($category)->toArray(),
         ];
     }
 }

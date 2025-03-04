@@ -21,9 +21,16 @@ class TaskService
         $this->taskRepository = new TaskRepository();
     }
 
-    public function getAllTasks(): LengthAwarePaginator
+    public function getAllTasks($category): LengthAwarePaginator
     {
-        return $this->taskRepository->getAll();
+        if ($category === 'Your') {
+            return $this->taskRepository->getAllTasksForUser(auth()->id());
+        } elseif ($category === 'Team') {
+            return $this->taskRepository->getAllTasksForTeam(auth()->user()->toArray()['current_team_id']);
+        } else {
+            return $this->taskRepository->getAll();
+        }
+
     }
 
     public function getTaskWithRelationships(String $uuid): Task
