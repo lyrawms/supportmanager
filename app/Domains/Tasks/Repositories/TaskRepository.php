@@ -16,6 +16,22 @@ class TaskRepository
             ->paginate(10);
     }
 
+    public function getAllTasksForUser($uuid): LengthAwarePaginator
+    {
+        return Task::orderBy('deadline', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->where('assignee_id', $uuid)
+            ->paginate(10);
+    }
+
+    public function getAllTasksForTeam($id): LengthAwarePaginator
+    {
+//        dit moet nog gemaakt worden
+        return Task::orderBy('deadline', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->where('assignee_id', $id)
+            ->paginate(10);    }
+
     public function getTaskWithRelationships(String $uuid): Task
     {
         return Task::with('creator')

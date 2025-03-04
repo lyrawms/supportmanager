@@ -54,7 +54,7 @@
                         </div>
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
                             <div>
-                                <a @click="handleUserClick" class="cursor-pointer underline">User</a>
+                                <a @click="handleUserClick" class="cursor-pointer underline">Assignee</a>
                                 <p v-if="currentUser &&!showComboBoxUser" class="text-stone-500">{{ currentUser.name }}</p>
                                 <p v-else-if="showComboBoxUser">
                                     <ComboBoxUser :currentAssignedUser="currentUser" :taskUuid="task.uuid"
