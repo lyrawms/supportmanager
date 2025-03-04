@@ -3,6 +3,7 @@
 namespace App\Domains\Tasks\Services;
 
 use App\Domains\Tasks\Repositories\TypeRepository;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use PhpParser\Node\Expr\Cast\Object_;
@@ -34,6 +35,13 @@ class TypeService
         } else {
             return $this->typeRepository->getAllTypes();
         }
+    }
+
+    public function saveType(array $typeData): string
+    {
+        $creator = User::findOrFail(auth()->id());
+
+        return $this->typeRepository->saveType($typeData, $creator);
     }
 
 

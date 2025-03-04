@@ -3,6 +3,7 @@
 namespace App\Domains\Tasks\Repositories;
 
 use App\Domains\Tasks\Database\Models\Type;
+use App\Domains\Users\Database\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -36,5 +37,16 @@ class TypeRepository
     public function getAllTypes(): LengthAwarePaginator
     {
         return Type::orderBy('color', 'desc')->paginate(50);
+    }
+
+    public function saveType(array $typeData, User $creator): string
+    {
+        $type = new Type();
+        $type->title = $typeData['title'];
+        $type->color = $typeData['color'];
+        $type->creator()->associate($creator);
+        $type->save();
+
+        return $type->uuid;
     }
 }

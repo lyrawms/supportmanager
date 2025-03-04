@@ -6,6 +6,7 @@ use App\Domains\Tasks\Controllers\FetchAllTypesSearchController;
 use App\Domains\Tasks\Controllers\FetchShortListTypeController;
 use App\Domains\Tasks\Controllers\IndexTaskController;
 use App\Domains\Tasks\Controllers\SaveTaskController;
+use App\Domains\Tasks\Controllers\SaveTypeController;
 use App\Domains\Tasks\Controllers\ShowTaskController;
 use App\Domains\Tasks\Controllers\UpdateTaskTypeController;
 use App\Domains\Tasks\Controllers\UpdateTaskUserController;
@@ -28,6 +29,10 @@ Route::middleware(['auth', 'verified'])->get('/tasks/show', ShowTaskController::
 
 Route::middleware(['auth', 'verified'])->get('/types/create', CreateTypeController::class)
     ->name('types.create');
+
+Route::middleware(['auth', 'verified'])->post('/types/create', SaveTypeController::class)
+    ->name('types.create');
+
 
 
 

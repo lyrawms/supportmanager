@@ -1,12 +1,12 @@
 <template>
-    <Dialog width="4xl" v-slot="{ close }">
+    <Dialog width="lg">
         <div class="mt-3 text-center sm:mt-0 sm:text-left">
-            <DialogTitle as="h3" class="text-2xl font-semibold text-stone-900 mb-6">Create Task</DialogTitle>
+            <DialogTitle as="h3" class="text-2xl font-semibold text-stone-900 mb-6">Create Type</DialogTitle>
             <div class="flex mt-8">
                 <form @submit.prevent="createType" class="w-full flex">
 
-                    <div class="w-full flex space-y-6">
-                        <div class="w-1/2">
+                    <div class="w-full space-y-6">
+                        <div class="">
                             <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
                             <input v-model="title" id="title" type="text" placeholder="Enter a title"
                                    class="mt-1 p-2 border border-gray-300 rounded-md w-full"
@@ -15,15 +15,14 @@
                                     errors.title[0]
                                 }}</span>
                         </div>
-                        <div class="w-1/2">
+                        <div class="">
                             <label for="color" class="block text-sm font-medium text-gray-700">Color:</label>
 
-                            <ColorPicker v-model:pureColor="pureColor" v-model:gradientColor="gradientColor" class="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                            <ColorPicker v-model:pureColor="pureColor" format="hex" class="mt-1 p-2 border border-gray-300 rounded-md w-full"
                                           required id="color"/>
                             <span v-if="errors?.color" class="text-red-600 text-sm">{{
                                     errors.color[0]
                                 }}</span>
-                            <p>{{ pureColor}}</p>
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="submit"
@@ -58,10 +57,8 @@ export default {
     },
     data: () => ({
         title: '',
-        color: '',
         errors: {},
         pureColor: '#ff0000',
-        gradientColor: '',
     }),
     methods: {
         createType() {
@@ -77,7 +74,7 @@ export default {
                 credentials: 'include',
                 body: JSON.stringify({
                     title: this.title,
-                    color: this.color,
+                    color: this.pureColor,
                 }),
             })
                 .then(response => response.json())
