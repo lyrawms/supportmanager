@@ -7,6 +7,8 @@ import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy';
 import {renderApp} from '@inertiaui/modal-vue'
 import momentPlugin from "./plugins/moment";
+import Vue3ColorPicker from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,6 +18,7 @@ createInertiaApp({
         return createApp({render: renderApp(App, props)})
             .use(plugin)
             .use(momentPlugin)
+            .use(Vue3ColorPicker)
             .use(ZiggyVue)
             .mount(el);
     },

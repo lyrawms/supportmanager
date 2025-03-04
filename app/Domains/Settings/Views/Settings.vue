@@ -23,7 +23,7 @@
                                              class="pointer-events-none col-start-1 row-start-1 ml-3 self-center text-stone-400"/>
 
                         </div>
-                        <primary-button color="amber" modal :href="route('tasks.create')" class="w-[30%]">
+                        <primary-button color="amber" modal :href="route('types.create')" class="w-[30%]">
                             <FontAwesomeIcon :icon="faSearch" class="me-2"/>
                             Create type
                         </primary-button>
@@ -106,7 +106,6 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.dataTypes = data.types;
-                    console.log(data);
                 })
                 .catch(error => {
                     console.error("Error fetching types:", error);
@@ -122,7 +121,6 @@ export default {
     },
     mounted() {
         this.dataTypes = this.types;
-        console.log(this.types);
     }
 }
 </script>
