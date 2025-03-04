@@ -19,7 +19,7 @@ class TaskFactory extends Factory
             'created_at' => $createdAt = Carbon::parse($this->faker->dateTimeBetween('-1 year', 'now'))->copy(),
             'updated_at' => now(),
             'finished_at' => $this->faker->optional()->dateTime(),
-            'sla' => $sla = $this->faker->randomDigitNotNull(),
+            'sla' => $sla = $this->faker->randomDigitNotNull(), // will be overridden in the seeder
             'status' => $this->faker->randomElement(['open', 'in_progress', 'completed']),
             'deadline' => $createdAt->copy()->addDays($sla),
             'creator_id' => User::factory(),
