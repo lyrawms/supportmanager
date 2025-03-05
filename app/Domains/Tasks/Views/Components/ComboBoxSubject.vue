@@ -78,9 +78,6 @@ export default {
             default: null,
             required: false
         },
-        taskUuid: {
-            required: true
-        },
         subject: {
             required: true,
             type: String,
@@ -116,7 +113,6 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("hoi" + data.users ?? data.types)
                     this.subjects = data.users ?? data.types;
                 })
                 .catch(error => {

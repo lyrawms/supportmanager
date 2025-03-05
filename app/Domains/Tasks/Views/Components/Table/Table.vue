@@ -75,7 +75,7 @@
                                 {{ task.title }}
                             </td>
                             <td class="px-3 py-4 text-sm whitespace-nowrap text-stone-500">
-                                Type
+                                <Type  :type="task.type" />
                             </td>
                             <td class="px-3 py-4 text-sm whitespace-nowrap text-stone-500">
                                 Prio
@@ -106,10 +106,11 @@
 import {ref} from "vue";
 import {Link} from '@inertiajs/vue3';
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import Type from "../Type.vue";
 
 export default {
     name: "Table",
-    components: {PrimaryButton, Link},
+    components: {Type, PrimaryButton, Link},
     props: {
         tasks: {
             type: Array,
@@ -125,7 +126,6 @@ export default {
         indeterminate() {
             return this.selectedTasks.length > 0 && this.selectedTasks.length < this.tasks.length;
         }
-
-    }
+    },
 };
 </script>

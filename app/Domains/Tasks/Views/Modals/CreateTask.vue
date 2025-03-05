@@ -36,12 +36,16 @@
                         </div>
 
                         <div>
-                            <label for="sla" class="block text-sm font-medium text-gray-700">SLA:</label>
-                            <input v-model="sla" id="sla" type="number" placeholder="8"
-                                   class="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                                   required/>
-                            <span v-if="errors?.sla" class="text-red-600 text-sm">{{
-                                    errors.sla[0]
+                            <a @click="handleTypeClick" class="cursor-pointer underline">Type</a>
+                            <Type v-if="currentType && !showComboBoxType" :type="currentType"/>
+                            <p v-else-if="showComboBoxType">
+                                <ComboBoxSubject :currentAssignedSubject="{}"
+                                                 subject="type"
+                                                 @updateTaskType="assignNewType"/>
+                            </p>
+                            <p v-else-if="!currentType" class="text-stone-500 my-1"> None</p>
+                            <span v-if="errors?.type" class="text-red-600 text-sm">{{
+                                    errors.type[0]
                                 }}</span>
                         </div>
                         <div class="flex justify-end mt-6">
@@ -63,9 +67,13 @@ import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import {DialogTitle} from "@headlessui/vue";
 import CheckboxGroup from "@/Components/Forms/CheckboxGroup.vue";
 import Editor from "@tinymce/tinymce-vue";
+import ComboBoxSubject from "../Components/ComboBoxSubject.vue";
+import Type from "../Components/Type.vue";
 
 export default {
     components: {
+        Type,
+        ComboBoxSubject,
         Dialog,
         PrimaryButton,
         DialogTitle,
@@ -77,10 +85,17 @@ export default {
         description: '',
         intercomLink: '',
         sla: '',
-        errors: {}
+        type: {},
+        errors: {},
+        currentType: null,
+        showComboBoxType: false
     }),
     methods: {
         createTask() {
+            this.errors = {};
+            if (!this.currentType || !this.currentType.uuid) {
+                this.errors.type = ['Type is required.'];
+            }
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             fetch('/tasks/create', {
                 method: 'POST',
@@ -95,7 +110,7 @@ export default {
                     title: this.title,
                     description: this.description,
                     intercomLink: this.intercomLink,
-                    sla: this.sla,
+                    type: this.currentType.uuid,
                 }),
             })
                 .then(response => response.json())
@@ -112,6 +127,15 @@ export default {
                     console.error("Error creating task", error);
                     this.errors = error;
                 });
+        },
+        handleTypeClick() {
+            this.toggleComboBoxType();
+        },
+        assignNewType(newType) {
+            this.currentType = newType;
+        },
+        toggleComboBoxType() {
+            this.showComboBoxType = !this.showComboBoxType;
         },
     }
 }

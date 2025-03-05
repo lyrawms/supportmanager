@@ -30,13 +30,13 @@
                     </div>
                     <div class="flex justify-center flex-wrap py-4">
                         <div v-for="type in dataTypes.data" :key="type.uuid" class="m-1.5 flex grow">
-                            <a
-                                :style="{ color: getMostReadableColor(type.color) ,backgroundColor: type.color }"
-                                @click="handleTypeClick(type)"
-                                class="rounded-2xl px-2 py-1 grow text-center">
-                                {{ type.title }}</a>
+                            <a>
+                                <Type :type="type"/>
+                            </a>
+
                         </div>
-                        <p v-if="(dataTypes.data) && dataTypes.data.length === 0" class="font-extralight">No types found</p>
+                        <p v-if="(dataTypes.data) && dataTypes.data.length === 0" class="font-extralight">No types
+                            found</p>
                     </div>
                     <div v-if="!query"
                          class="px-4 py-3 pt-6 flex items-center justify-center sm:px-6 border-t border-stone-200">
@@ -68,11 +68,12 @@ import tinycolor from "tinycolor2";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Link} from "@inertiajs/vue3";
+import Type from "../../Tasks/Views/Components/Type.vue";
 
 
 export default {
     name: "Settings",
-    components: {Link, AppLayout, FontAwesomeIcon, PrimaryButton},
+    components: {Type, Link, AppLayout, FontAwesomeIcon, PrimaryButton},
     props: {
         types: {
             type: Object,
