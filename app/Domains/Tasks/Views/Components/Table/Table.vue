@@ -74,7 +74,7 @@
                             <td :class="['py-4 pr-3 text-sm font-medium whitespace-nowrap', selectedTasks.includes(task.id) ? 'text-amber-600' : 'text-stone-900']">
                                 {{ task.title }}
                             </td>
-                            <td class="px-3 py-4 text-sm whitespace-nowrap text-stone-500">
+                            <td class="px-3 py-4 text-sm whitespace-nowrap">
                                 <Type  :type="task.type" />
                             </td>
                             <td class="px-3 py-4 text-sm whitespace-nowrap text-stone-500">
