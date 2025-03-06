@@ -18,6 +18,7 @@ class TypeFactory extends Factory
             'title' => $this->faker->unique()->word(),
             'color' => $this->faker->hexColor(),
             'creator_id' => User::factory(),
+            'sla' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

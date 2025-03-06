@@ -14,9 +14,9 @@ class SaveTaskController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|string',
-            'description' => 'string',
+            'description' => 'nullable|string',
             'intercomLink' => 'nullable|url',
-            'sla' => 'required|integer',
+            'type' => 'required|uuid',
         ]);
 
         $taskService = new TaskService();

@@ -4,6 +4,7 @@ namespace App\Domains\Tasks\Services;
 
 use App\Domains\Tasks\Controllers\ShowTaskController;
 use App\Domains\Tasks\Database\Models\Task;
+use App\Domains\Tasks\Database\Models\Type;
 use App\Domains\Tasks\Repositories\TaskRepository;
 use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
 use App\Domains\Users\Database\Models\User;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Scalar\String_;
 
 class TaskService
 {
@@ -33,25 +35,36 @@ class TaskService
 
     }
 
-    public function getTaskWithRelationships(String $uuid): Task
+    public function getTaskWithRelationships(string $uuid): Task
     {
         return $this->taskRepository->getTaskWithRelationships($uuid);
     }
 
-    public function updateTaskType(String $taskUuid, String $typeUuid)
+    public function updateTaskType(string $taskUuid, string $typeUuid)
     {
-        return $this->taskRepository->updateTaskType($taskUuid, $typeUuid);
+        $task = Task::where('uuid', $taskUuid)->firstOrFail();
+        $type = Type::where('uuid', $typeUuid)->firstOrFail();
+        $deadline = $this->calcDeadline($type->sla, $task->created_at);
+        return $this->taskRepository->updateTaskType($task, $type, $deadline);
     }
 
-    public function updateTaskUser(String $taskUuid, String $userUuid)
+    public function updateTaskUser(string $taskUuid, string $userUuid)
     {
-        return $this->taskRepository->updateTaskUser($taskUuid, $userUuid);
+        $task = Task::where('uuid', $taskUuid)->firstOrFail();
+        $user = User::where('uuid', $userUuid)->firstOrFail();
+        return $this->taskRepository->updateTaskUser($task, $user);
     }
 
-    public function saveTask(Array $taskData): String
+    public function saveTask(array $taskData): string
     {
         $creator = User::findOrFail(auth()->id());
-        $deadline = Carbon::now()->addDays($taskData['sla'])->format('Y-m-d H:i:s');
-        return $this->taskRepository->saveTask($taskData, $creator, $deadline);
+        $type = Type::where('uuid', $taskData['type'])->firstOrFail();
+        $deadline = $this->calcDeadline($type->sla, Carbon::now());
+        return $this->taskRepository->saveTask($taskData, $creator, $deadline, $type);
+    }
+
+    public function calcDeadline(int $typeSla, string $created_at): string
+    {
+        return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
 }

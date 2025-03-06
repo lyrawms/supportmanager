@@ -12,6 +12,7 @@ class TaskRepository
     public function getAll(): LengthAwarePaginator
     {
         return Task::orderBy('deadline', 'asc')
+            ->with('type')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
@@ -20,6 +21,7 @@ class TaskRepository
     {
         return Task::orderBy('deadline', 'asc')
             ->orderBy('created_at', 'desc')
+            ->with('type')
             ->where('assignee_id', $uuid)
             ->paginate(10);
     }
@@ -29,10 +31,12 @@ class TaskRepository
 //        dit moet nog gemaakt worden
         return Task::orderBy('deadline', 'asc')
             ->orderBy('created_at', 'desc')
+            ->with('type')
             ->where('assignee_id', $id)
-            ->paginate(10);    }
+            ->paginate(10);
+    }
 
-    public function getTaskWithRelationships(String $uuid): Task
+    public function getTaskWithRelationships(string $uuid): Task
     {
         return Task::with('creator')
             ->with('type')
@@ -41,34 +45,32 @@ class TaskRepository
             ->firstOrFail();
     }
 
-    public function updateTaskType(String $taskUuid, String $typeUuid)
+    public function updateTaskType(Task $task, Type $type, string $deadline)
     {
-        $task = Task::where('uuid', $taskUuid)->firstOrFail();
-        $type = Type::where('uuid', $typeUuid)->firstOrFail();
+        $task->sla = $type->sla;
+        $task->deadline = $deadline;
         $task->type()->associate($type);
         $task->save();
         return $type;
     }
 
-    public function updateTaskUser(String $taskUuid, String $userUuid)
+    public function updateTaskUser(Task $task, User $user)
     {
-        $task = Task::where('uuid', $taskUuid)->firstOrFail();
-        $user = User::where('uuid', $userUuid)->firstOrFail();
         $task->assignee()->associate($user);
         $task->save();
         return $user;
     }
 
-    public function saveTask(Array $taskData, User $creator, $deadline): String
+    public function saveTask(array $taskData, User $creator, string $deadline, Type $type): string
     {
         $task = new Task();
         $task->title = $taskData['title'];
         $task->description = $taskData['description'];
         $task->intercom_link = $taskData['intercomLink'];
-        $task->sla = $taskData['sla'];
-        $task->creator()->associate($creator);
+        $task->sla = $type->sla;
         $task->deadline = $deadline;
-
+        $task->type()->associate($type);
+        $task->creator()->associate($creator);
         $task->save();
         return $task->uuid;
     }

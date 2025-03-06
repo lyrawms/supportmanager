@@ -37,14 +37,14 @@
 
         <template #default>
             <div v-if="tasks.data[0]">
-                <TasksTable :tasks="tasks.data" :category="selected"/>
+                <Table :tasks="tasks.data"/>
                 <div
                     class="bg-stone-50 rounded-b-lg px-4 py-3 flex items-center justify-center sm:px-6 border-t border-stone-200">
                     <nav class="relative flex justify-center">
                         <template v-for="link in tasks.links" :key="link.label">
                             <Link
                                 preserve-scroll
-                                :href="link.url ?? ''"
+                                :href="link.url + `&category=${categoryFromUrl}` ?? ''"
                                 v-html="link.label"
                                 class="flex items-center justify-center px-3 py-2 text-sm rounded-lg text-amber-600"
                                 :class="{ 'bg-amber-300': link.active, '!text-amber-600/50': !link.url }"
@@ -66,13 +66,14 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {faGear, faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {default as TasksTable} from "../Components/Table/Table.vue";
+import Table from "../Components/Table/Table.vue";
 import {Link} from "@inertiajs/vue3";
 import {Tab, TabGroup, TabList, TabPanel, TabPanels} from "@headlessui/vue";
 
 export default {
     name: "IndexTasks",
     components: {
+        Table,
         TabPanel,
         TabPanels,
         Tab,
@@ -81,7 +82,6 @@ export default {
         FontAwesomeIcon,
         PrimaryButton,
         AppLayout,
-        TasksTable,
         Link,
     },
     props: {
@@ -90,13 +90,6 @@ export default {
             required: true,
         },
     },
-    methods: {
-        getCategoryFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const category = params.get("category") || this.categories[0]; // Default to first category
-            return this.categories.indexOf(category) !== -1 ? this.categories.indexOf(category) : 0;
-        }
-    },
     data: () => ({
         faPlus,
         faSearch,
@@ -104,7 +97,15 @@ export default {
         faCheck,
         categories: ['Your', 'Team', 'Company'],
         selectedIndex: -1,
+        categoryFromUrl: '',
     }),
+    methods: {
+        getCategoryFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            this.categoryFromUrl = params.get("category") || this.categories[0];
+            return this.categories.indexOf(this.categoryFromUrl) !== -1 ? this.categories.indexOf(this.categoryFromUrl) : 0;
+        }
+    },
     mounted() {
         this.selectedIndex = this.getCategoryFromUrl();
     }

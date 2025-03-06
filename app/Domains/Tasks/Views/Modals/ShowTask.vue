@@ -2,7 +2,10 @@
     <Dialog width="7xl">
 
         <div class="mt-3 text-center sm:mt-0 sm:text-left">
-            <DialogTitle as="h3" class="text-base font-semibold text-stone-900 p-4">{{ task.title }}</DialogTitle>
+            <DialogTitle as="h3" class="text-base font-semibold text-stone-900 p-4">{{
+                    task.title
+                }}
+            </DialogTitle>
             <div class="flex mt-8">
                 <div v-if="task.description" class="w-3/5 p-4" v-html="task.description"></div>
                 <p v-else class="w-3/5 p-4"> No description added</p>
@@ -12,7 +15,7 @@
                             <div>
                                 <p>Deadline</p>
                                 <p class="text-stone-500">{{
-                                        $moment(task.created_at).isAfter($moment().subtract(1, 'week')) ? $moment(task.created_at).calendar() : $moment(task.created_at).format('DD/MM/YYYY')
+                                        $moment(deadline).isAfter($moment().subtract(1, 'week')) ? $moment(deadline).calendar() : $moment(deadline).format('DD/MM/YYYY')
                                     }}</p>
                             </div>
                             <div>
@@ -24,7 +27,7 @@
                             </div>
                             <div>
                                 <p>SLA</p>
-                                <p class=" text-stone-500">{{ task.sla }} Days</p>
+                                <p class=" text-stone-500">{{ sla }} Days</p>
                             </div>
                         </div>
                         <div class="p-4 shadow-lg rounded-2xl bg-white space-y-1">
@@ -41,13 +44,11 @@
                             </div>
                             <div class="space-y-1">
                                 <a @click="handleTypeClick" class="cursor-pointer underline">Type</a>
-                                <p v-if="currentType && !showComboBoxType"
-                                   :style="{ color: getMostReadableColor(currentType.color) ,backgroundColor: currentType.color }"
-                                   class="flex w-min rounded-2xl px-2 py-1">
-                                    {{ currentType.title }}</p>
+                                <Type v-if="currentType && !showComboBoxType" :type="currentType"/>
                                 <p v-else-if="showComboBoxType">
-                                    <ComboBoxType :currentAssignedType="currentType" :taskUuid="task.uuid"
-                                              @updateTaskType="assignNewType"/>
+                                    <ComboBoxSubject :currentAssignedSubject="currentType"
+                                                     subject="type"
+                                                     @updateTaskType="assignNewType"/>
                                 </p>
                                 <p v-else-if="!currentType" class="text-stone-500 my-1"> None</p>
                             </div>
@@ -55,17 +56,21 @@
                         <div class="p-4 bg-white shadow-lg rounded-2xl space-y-1">
                             <div>
                                 <a @click="handleUserClick" class="cursor-pointer underline">Assignee</a>
-                                <p v-if="currentUser &&!showComboBoxUser" class="text-stone-500">{{ currentUser.name }}</p>
+                                <p v-if="currentAssignee && !showComboBoxUser" class="text-stone-500">{{
+                                        currentAssignee.name
+                                    }}</p>
                                 <p v-else-if="showComboBoxUser">
-                                    <ComboBoxUser :currentAssignedUser="currentUser" :taskUuid="task.uuid"
-                                              @updateTaskUser="assignNewUser"/>
+                                    <ComboBoxSubject :currentAssignedSubject="currentAssignee"
+                                                     @updateTaskUser="assignNewUser" subject="user"/>
                                 </p>
-                                    <p v-else-if="!currentUser" class="text-stone-500"> None</p>
+                                <p v-else-if="!currentAssignee" class="text-stone-500"> None</p>
 
                             </div>
                             <div>
                                 <p>Creator</p>
-                                <p v-if="task.creator_id" class="text-stone-500">{{ task.creator?.name }}</p>
+                                <p v-if="task.creator_id" class="text-stone-500">{{
+                                        task.creator?.name
+                                    }}</p>
                                 <p v-else class="text-stone-500"> None</p>
                             </div>
                         </div>
@@ -103,20 +108,44 @@
 
 
 <script>
-import {Modal, ModalLink} from '@inertiaui/modal-vue'
 import Dialog from "@/Components/Overlays/Dialog.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import {DialogTitle} from "@headlessui/vue";
 import CheckboxGroup from "@/Components/Forms/CheckboxGroup.vue";
-import CheckboxField from "@/Components/Forms/CheckboxField.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import Checkbox from "@/Components/Forms/Checkbox.vue";
-import InputDescription from "@/Components/Forms/InputDescription.vue";
 import tinycolor from "tinycolor2";
-import ComboBoxType from "../Components/ComboBoxType.vue";
-import ComboBoxUser from "../Components/ComboBoxUser.vue";
+import ComboBoxSubject from "../Components/ComboBoxSubject.vue";
+import Type from "../Components/Type.vue";
+import dayjs from "dayjs";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
+    name: "ShowTask",
+    components: {
+        Type,
+        ComboBoxSubject,
+        Dialog,
+        PrimaryButton,
+        DialogTitle,
+        CheckboxGroup,
+    },
+    props: {
+        task: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data: () => ({
+        valueOfCheckbox: false,
+        showComboBoxType: false,
+        showComboBoxUser: false,
+        currentType: {},
+        currentAssignee: {},
+        deadline: null,
+        sla: null,
+        newType: {},
+        newUser: {},
+    }),
     methods: {
         handleTypeClick() {
             this.toggleComboBoxType();
@@ -126,20 +155,26 @@ export default {
             this.toggleComboBoxUser();
             this.updateTaskUser(this.newUser);
         },
-        getMostReadableColor(color) {
-            return tinycolor.mostReadable(color, [], {includeFallbackColors: true});
-        },
         toggleComboBoxType() {
             this.showComboBoxType = !this.showComboBoxType;
         },
         toggleComboBoxUser() {
             this.showComboBoxUser = !this.showComboBoxUser;
         },
+        updateTaskTypePageData(type) {
+            this.currentType = type;
+            this.sla = type.sla;
+            this.deadline = dayjs(this.task.created_at).add(type.sla, "day").format("YYYY-MM-DD HH:mm:ss");
+        },
+        updateTaskUserPageData(user) {
+            this.currentAssignee = user;
+            console.log("User:", this.currentAssignee);
+        },
 
         updateTaskType(type) {
             if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                this.currentType = this.newType
+                this.updateTaskTypePageData(type);
                 fetch('/task/update-type', {
                     method: 'POST',
                     headers: {
@@ -165,9 +200,9 @@ export default {
             }
         },
         updateTaskUser(user) {
-            if (!this.showComboBoxUser && (user.uuid && user.uuid !== (this.currentUser ? this.currentUser.uuid : null))) {
+            if (!this.showComboBoxUser && (user.uuid && user.uuid !== (this.currentAssignee ? this.currentAssignee.uuid : null))) {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                this.currentUser = this.newUser
+                this.updateTaskUserPageData(user);
                 fetch('/task/update-user', {
                     method: 'POST',
                     headers: {
@@ -197,44 +232,17 @@ export default {
         },
         assignNewUser(user) {
             this.newUser = user;
-        }
-    },
-    components: {
-        ComboBoxUser,
-        ComboBoxType,
-        Modal,
-        ModalLink,
-        Dialog,
-        PrimaryButton,
-        DialogTitle,
-        CheckboxGroup,
-        CheckboxField,
-        InputLabel,
-        Checkbox,
-        InputDescription,
-    },
-    props: {
-        task: {
-            type: Object,
-            required: true
-        }
-    },
-    data: () => ({
-        valueOfCheckbox: false,
-        showComboBoxType: false,
-        showComboBoxUser: false,
-        currentType: {},
-        currentUser: {},
-        newType: {},
-        newUser: {},
-        froalaConfig: {
-            editable: true,
         },
-    }),
+
+    },
     mounted() {
         this.currentType = this.task.type;
-        this.currentUser = this.task.assignee;
+        this.currentAssignee = this.task.assignee;
+        this.deadline = this.task.deadline;
+        this.sla = this.task.sla;
+        console.log(this.currentAssignee);
     }
+
 
 }
 </script>

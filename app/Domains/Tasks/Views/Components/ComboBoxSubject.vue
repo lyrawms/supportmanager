@@ -6,7 +6,7 @@
                     class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
                 >
                     <ComboboxInput
-                        :displayValue="selected ? (user) => user.name : () => ''"
+                        :displayValue="selected ? (subjectI) => subjectI.title ?? subjectI.name : () => ''"
                         class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 focus:ring-0"
                         @change="handleInput"
 
@@ -25,16 +25,16 @@
                     class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
                 >
                     <div
-                        v-if="users.length === 0 && query !== ''"
+                        v-if="subjects.length === 0 && query !== ''"
                         class="cursor-default select-none px-4 py-2 text-gray-700"
                     >
                         Nothing found.
                     </div>
 
                     <ComboboxOption
-                        v-for="user in users"
-                        :key="user.uuid"
-                        :value="user"
+                        v-for="subjectL in subjects"
+                        :key="subjectL.uuid"
+                        :value="subjectL"
                         v-slot="{selected, active}"
                     >
 
@@ -49,7 +49,7 @@
                     class="block truncate"
                     :class="{ 'font-medium': selected, 'font-normal': !selected }"
                 >
-                  {{ user.name }}
+                  {{ subjectL.title ?? subjectL.name }}
                 </span>
                             <span
                                 v-if="selected"
@@ -71,18 +71,19 @@
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
 
 export default {
-    name: "ComboBoxUser",
+    name: "ComboBoxSubject",
     props: {
-        currentAssignedUser: {
-            user: Object,
+        currentAssignedSubject: {
+            type: Object,
             default: null,
             required: false
         },
-        taskUuid: {
-            required: true
-        }
+        subject: {
+            required: true,
+            type: String,
+        },
     },
-    emits: ['updateTaskUser'],
+    emits: [`updateTaskUser`, 'updateTaskType'],
 
     components: {
         ComboboxButton,
@@ -93,16 +94,16 @@ export default {
     },
     data: () => ({
         selected: null,
-        users: [],
+        subjects: [],
         query: "",
         debounceTimer: null,
         firstFetchCheck: false,
-
+        subjectUppercase: ''
 
     }),
     methods: {
-        fetchUsers() {
-            fetch(`/users/short-list?query=${this.query}&currentAssignedUser=${this.currentAssignedUser ? this.currentAssignedUser.uuid : null}`, {
+        fetchSubjects() {
+            fetch(`/${this.subject}s/short-list?query=${this.query}&currentAssigned${this.subjectUppercase}=${this.currentAssignedSubject ? this.currentAssignedSubject.uuid : null}`, {
                 method: "GET",
                 headers: {
                     "Accept": "application/json",
@@ -112,38 +113,42 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
-                    this.users = data.users;
+                    this.subjects = data.users ?? data.types;
                 })
                 .catch(error => {
-                    console.error("Error fetching users:", error);
+                    console.error("Error fetching subjects:", error);
                 });
         },
         handleInput(event) {
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
                 this.query = event.target.value;
-                this.fetchUsers();
+                this.fetchSubjects();
             }, 800);
-        },
-        firstFetch() {
-            this.fetchUsers();
         },
         handleButtonClick() {
             this.firstFetchCheck = !this.firstFetchCheck;
             if (this.firstFetchCheck) {
-                this.fetchUsers();
+                this.fetchSubjects();
             }
         }
     },
     mounted() {
-        if (this.currentAssignedUser && this.query === "") {
-            this.selected = this.currentAssignedUser;
+        if (this.currentAssignedSubject && this.query === "") {
+            this.selected = this.currentAssignedSubject;
         }
+        this.subjectUppercase = this.subject.charAt(0).toUpperCase() + this.subject.slice(1)
     },
     watch: {
         selected() {
-            if (this.selected !== this.currentAssignedUser) {
-                this.$emit('updateTaskUser', this.selected)
+            if (this.subject === 'type') {
+                if (this.selected !== this.currentAssignedSubject) {
+                    this.$emit(`updateTaskType`, this.selected)
+                }
+            } else if (this.subject === 'user') {
+                if (this.selected !== this.currentAssignedSubject) {
+                    this.$emit(`updateTaskUser`, this.selected)
+                }
             }
         }
     }

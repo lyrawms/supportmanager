@@ -15,9 +15,8 @@ class Type extends Model
 
     protected $fillable = [
         'title',
-        'description',
         'color',
-        'creator_id'
+        'sla',
     ];
 
     public function tasks()
