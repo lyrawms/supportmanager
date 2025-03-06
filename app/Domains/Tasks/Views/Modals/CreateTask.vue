@@ -3,7 +3,7 @@
         <div class="mt-3 text-center sm:mt-0 sm:text-left">
             <DialogTitle as="h3" class="text-2xl font-semibold text-stone-900 mb-6">Create Task</DialogTitle>
             <div class="flex mt-8">
-                <form @submit.prevent="createTask" class="w-full flex">
+                <form @submit.prevent="createTask(close)" class="w-full flex">
                     <div class="w-[60%] pr-4">
                         <Editor api-key="wp8m69hyu1ls1lnsuv1n80fthykysrbv6juuafklqvvsfql2"
                                 v-model="description"
@@ -91,7 +91,7 @@ export default {
         showComboBoxType: false
     }),
     methods: {
-        createTask() {
+        createTask(closure) {
             this.errors = {};
             if (!this.currentType || !this.currentType.uuid) {
                 this.errors.type = ['Type is required.'];
@@ -120,6 +120,7 @@ export default {
                         console.error("Error creating task", data.errors);
                     } else if (data) {
                         console.log("Task created", data);
+                        closure()
                     }
 
                 })

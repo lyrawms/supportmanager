@@ -1,9 +1,11 @@
 <template>
-    <Dialog width="lg">
+    <Dialog width="lg" v-slot="{
+            close,
+        }">
         <div class="mt-3 text-center sm:mt-0 sm:text-left">
             <DialogTitle as="h3" class="text-2xl font-semibold text-stone-900 mb-6">Create Type</DialogTitle>
             <div class="flex mt-8">
-                <form @submit.prevent="createType" class="w-full flex">
+                <form @submit.prevent="createType(close)" class="w-full flex">
 
                     <div class="w-full space-y-6">
                         <div class="">
@@ -16,10 +18,20 @@
                                 }}</span>
                         </div>
                         <div class="">
+                            <label for="sla" class="block text-sm font-medium text-gray-700">SLA:</label>
+                            <input v-model="sla" id="sla" type="text" placeholder="4 days"
+                                   class="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                                   required/>
+                            <span v-if="errors?.sla" class="text-red-600 text-sm">{{
+                                    errors.sla[0]
+                                }}</span>
+                        </div>
+                        <div class="">
                             <label for="color" class="block text-sm font-medium text-gray-700">Color:</label>
 
-                            <ColorPicker v-model:pureColor="pureColor" format="hex" class="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                                          required id="color"/>
+                            <ColorPicker v-model:pureColor="pureColor" format="hex"
+                                         class="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                                         required id="color"/>
                             <span v-if="errors?.color" class="text-red-600 text-sm">{{
                                     errors.color[0]
                                 }}</span>
@@ -59,9 +71,10 @@ export default {
         title: '',
         errors: {},
         pureColor: '#ff0000',
+        sla: null,
     }),
     methods: {
-        createType() {
+        createType(closure) {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             fetch('/types/create', {
                 method: 'POST',
@@ -74,6 +87,7 @@ export default {
                 credentials: 'include',
                 body: JSON.stringify({
                     title: this.title,
+                    sla: this.sla,
                     color: this.pureColor,
                 }),
             })
@@ -84,8 +98,9 @@ export default {
                         console.error("Error creating type", data.errors);
                     } else if (data) {
                         console.log("Type created", data);
-                    }
 
+                        closure();
+                    }
                 })
                 .catch(error => {
                     console.error("Error creating type", error);

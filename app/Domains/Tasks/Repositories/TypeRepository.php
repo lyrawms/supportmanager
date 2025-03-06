@@ -43,6 +43,7 @@ class TypeRepository
     {
         $type = new Type();
         $type->title = $typeData['title'];
+        $type->sla = $typeData['sla'];
         $type->color = $typeData['color'];
         $type->creator()->associate($creator);
         $type->save();
