@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {Head, Link, router} from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Elements/Banner.vue';
@@ -106,11 +106,13 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('tasks.index', {category : 'Company'})" :active="route().current('tasks.index')">
+                                <NavLink :href="route('tasks.index', {category : 'Company'})"
+                                         :active="route().current('tasks.index')">
                                     Tasks
                                 </NavLink>
                                 <NavLink :href="route('settings')" :active="route().current('settings')">
-                                Settings</NavLink>
+                                    Settings
+                                </NavLink>
                             </div>
                         </div>
 
@@ -124,7 +126,8 @@ const logout = () => {
                                 <input type="search" name="search"
                                        class="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-stone-900 outline outline-1 -outline-offset-1 outline-stone-300 placeholder:text-stone-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-amber-600 sm:text-sm/6"
                                        placeholder="Search">
-                                <font-awesome-icon :icon="faSearch" class="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-stone-400"/>
+                                <font-awesome-icon :icon="faSearch"
+                                                   class="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-stone-400"/>
 
                             </div>
                         </div>

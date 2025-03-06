@@ -74,4 +74,12 @@ class TaskRepository
         $task->save();
         return $task->uuid;
     }
+
+    public function updateTaskStatusFinished(Task $task, string $status): string
+    {
+        $task->status = 'finished';
+        $task->finished_at = now();
+        $task->save();
+        return $task->uuid;
+    }
 }

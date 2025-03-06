@@ -67,4 +67,17 @@ class TaskService
     {
         return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
+
+    public function updateTaskStatus(string $taskUuid, string $status)
+    {
+        $task = Task::where('uuid', $taskUuid)->firstOrFail();
+
+        $statusMethods = [
+            'finished' => 'updateTaskStatusFinished',
+        ];
+
+        $method = $statusMethods[$status] ?? 'updateTaskStatus';
+
+        return $this->taskRepository->$method($task, $status);
+    }
 }

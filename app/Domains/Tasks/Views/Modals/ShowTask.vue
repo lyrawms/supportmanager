@@ -10,6 +10,9 @@
                 <div v-if="task.description" class="w-3/5 p-4" v-html="task.description"></div>
                 <p v-else class="w-3/5 p-4"> No description added</p>
                 <div class="w-2/5 rounded-2xl">
+                    <div class="mb-4">
+                        <Status :status="task.status"/>
+                    </div>
                     <div class=" bg-amber-200 p-4 rounded-2xl space-y-6">
                         <div class="border-stone-200 bg-white shadow-lg rounded-2xl p-4 space-y-2">
                             <div>
@@ -19,9 +22,9 @@
                                     }}</p>
                             </div>
                             <div>
-                                <p>Completed at</p>
-                                <p v-if="task.completed_at" class=" text-stone-500">{{
-                                        $moment(task.created_at).isAfter($moment().subtract(1, 'week')) ? $moment(task.created_at).calendar() : $moment(task.created_at).format('DD/MM/YYYY')
+                                <p>Finished at</p>
+                                <p v-if="task.finished_at" class=" text-stone-500">{{
+                                        $moment(task.finished_at).isAfter($moment().subtract(1, 'week')) ? $moment(task.finished_at).calendar() : $moment(task.finished_at).format('DD/MM/YYYY')
                                     }}</p>
                                 <p v-else class=" text-stone-500">Not completed yet</p>
                             </div>
@@ -92,17 +95,10 @@
         </div>
 
         <template #cta>
-
+            <FinishButton :uuid="task.uuid"/>
         </template>
 
-        <!--<template #secondary>
-            <checkbox-group>
-                <checkbox-field>
-                    <input-label>Create another issue</input-label>
-                    <Checkbox name="discoverability" v-model="valueOfCheckbox" color="amber" />
-                </checkbox-field>
-            </checkbox-group>
-        </template>-->
+
     </Dialog>
 </template>
 
@@ -117,10 +113,14 @@ import ComboBoxSubject from "../Components/ComboBoxSubject.vue";
 import Type from "../Components/Type.vue";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
+import Status from "../Components/Status.vue";
+import FinishButton from "../Components/FinishButton.vue";
 
 export default {
     name: "ShowTask",
     components: {
+        FinishButton,
+        Status,
         Type,
         ComboBoxSubject,
         Dialog,
@@ -240,7 +240,7 @@ export default {
         this.currentAssignee = this.task.assignee;
         this.deadline = this.task.deadline;
         this.sla = this.task.sla;
-        console.log(this.currentAssignee);
+
     }
 
 
