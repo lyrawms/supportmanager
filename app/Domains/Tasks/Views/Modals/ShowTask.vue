@@ -9,7 +9,7 @@
             <div class="flex mt-8">
                 <div v-if="task.description" class="w-3/5 p-4" v-html="task.description"></div>
                 <p v-else class="w-3/5 p-4"> No description added</p>
-                <div class="w-2/5 rounded-2xl">
+                <div class="w-3/5 rounded-2xl">
                     <div class="mb-4">
                         <Status :status="task.status"/>
                     </div>
@@ -95,7 +95,12 @@
         </div>
 
         <template #cta>
-            <FinishButton :uuid="task.uuid"/>
+            <primary-button :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished'} )" modal color="green">
+                Finish
+            </primary-button>
+            <primary-button :href="route('tasks.delete', {uuid:task.uuid } )" modal color="red">
+                Delete
+            </primary-button>
         </template>
 
 
@@ -114,12 +119,10 @@ import Type from "../Components/Type.vue";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import Status from "../Components/Status.vue";
-import FinishButton from "../Components/FinishButton.vue";
 
 export default {
     name: "ShowTask",
     components: {
-        FinishButton,
         Status,
         Type,
         ComboBoxSubject,

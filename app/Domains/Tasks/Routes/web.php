@@ -2,6 +2,7 @@
 
 use App\Domains\Tasks\Controllers\CreateTaskController;
 use App\Domains\Tasks\Controllers\CreateTypeController;
+use App\Domains\Tasks\Controllers\DeleteTaskController;
 use App\Domains\Tasks\Controllers\FetchAllTypesSearchController;
 use App\Domains\Tasks\Controllers\FetchShortListTypeController;
 use App\Domains\Tasks\Controllers\IndexTaskController;
@@ -21,6 +22,9 @@ Route::middleware(['auth', 'verified'])->get('/tasks/index', IndexTaskController
 
 Route::middleware(['auth', 'verified'])->get('/tasks/create', CreateTaskController::class)
     ->name('tasks.create');
+
+Route::middleware(['auth', 'verified'])->get('/tasks/delete', DeleteTaskController::class)
+    ->name('tasks.delete');
 
 Route::middleware(['auth', 'verified'])->post('/tasks/create', SaveTaskController::class)
     ->name('tasks.create');

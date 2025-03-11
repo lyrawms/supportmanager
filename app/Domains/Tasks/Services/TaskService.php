@@ -80,4 +80,11 @@ class TaskService
 
         return $this->taskRepository->$method($task, $status);
     }
+
+    public function delete(string $taskUuid)
+    {
+        $task = Task::where('uuid', $taskUuid)->firstOrFail();
+        $this->taskRepository->updateTaskStatus($task, 'deleted');
+        return $this->taskRepository->delete($task);
+    }
 }

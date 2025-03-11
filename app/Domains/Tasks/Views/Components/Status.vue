@@ -1,6 +1,6 @@
 <template>
     <p
-        class="w-min rounded-4xl text-white text-md px-3 py-2"
+        class="w-max rounded-4xl text-white text-md px-3 py-2"
         :class="color">
         {{ status }}</p>
 </template>
@@ -19,11 +19,11 @@ export default {
     }),
     mounted() {
         switch (this.status) {
-            case 'finished':
+            case 'Finished':
                 return this.color = 'bg-green-500';
-            case 'in_progress':
+            case 'In Progress':
                 return this.color = 'bg-yellow-500';
-            case 'open':
+            case 'Open':
                 return this.color = 'bg-blue-500';
             case 'deleted':
                 return this.color = 'bg-red-500';

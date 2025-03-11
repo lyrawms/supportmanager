@@ -12,6 +12,7 @@ class TaskRepository
     public function getAll(): LengthAwarePaginator
     {
         return Task::orderBy('deadline', 'asc')
+            ->where('status', '!=', 'finished')
             ->with('type')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -21,6 +22,7 @@ class TaskRepository
     {
         return Task::orderBy('deadline', 'asc')
             ->orderBy('created_at', 'desc')
+            ->where('status', '!=', 'finished')
             ->with('type')
             ->where('assignee_id', $uuid)
             ->paginate(10);
@@ -81,5 +83,16 @@ class TaskRepository
         $task->finished_at = now();
         $task->save();
         return $task->uuid;
+    }
+    public function updateTaskStatus(Task $task, string $status): string
+    {
+        $task->status = $status;
+        $task->save();
+        return $task->uuid;
+    }
+
+    public function delete(Task $task): string
+    {
+        return $task->delete();
     }
 }
