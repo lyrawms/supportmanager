@@ -13,7 +13,7 @@ class UpdateTaskTypeController  extends Controller
         $taskService = new TaskService();
         $taskUuid = $request->input('taskUuid');
         $typeUuid = $request->input('typeUuid');
-
-        return $taskService->updateTaskType($taskUuid, $typeUuid);
+        $taskService->updateTaskType($taskUuid, $typeUuid);
+        return back()->withSuccess("Type Successfully Updated");
     }
 }

@@ -45,6 +45,7 @@ class TaskService
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $type = Type::where('uuid', $typeUuid)->firstOrFail();
         $deadline = $this->calcDeadline($type->sla, $task->created_at);
+        toast_success('Task type updated');
         return $this->taskRepository->updateTaskType($task, $type, $deadline);
     }
 

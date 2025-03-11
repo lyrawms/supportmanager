@@ -53,8 +53,8 @@
                         </nav>
                     </div>
                 </div>
-                <div class="w-[50%]">
-                    meneer
+                <div class="w-[50%] flex items-center justify-center">
+                    <AddToSlackButton class="m-4"/>
                 </div>
             </div>
         </template>
@@ -69,11 +69,12 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import {faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Link} from "@inertiajs/vue3";
 import Type from "../../Tasks/Views/Components/Type.vue";
+import AddToSlackButton from "./AddToSlackButton.vue";
 
 
 export default {
     name: "Settings",
-    components: {Type, Link, AppLayout, FontAwesomeIcon, PrimaryButton},
+    components: {AddToSlackButton, Type, Link, AppLayout, FontAwesomeIcon, PrimaryButton},
     props: {
         types: {
             type: Object,
