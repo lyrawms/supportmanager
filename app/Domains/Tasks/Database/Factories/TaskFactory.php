@@ -20,7 +20,7 @@ class TaskFactory extends Factory
             'updated_at' => now(),
             'finished_at' => $this->faker->optional()->dateTime(),
             'sla' => $sla = $this->faker->randomDigitNotNull(), // will be overridden in the seeder
-            'status' => $this->faker->randomElement(['open', 'in_progress', 'completed']),
+            'status' => $this->faker->randomElement(['Open', 'Finished', 'In Progress']),
             'deadline' => $createdAt->copy()->addDays($sla),
             'creator_id' => User::factory(),
         ];

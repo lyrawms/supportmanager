@@ -36,6 +36,7 @@
                             <th scope="col"
                                 class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-stone-900">Name
                             </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Status</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Type
                             </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Prio
@@ -75,7 +76,10 @@
                                 {{ task.title }}
                             </td>
                             <td class="px-3 py-4 text-sm whitespace-nowrap">
-                                <Type  :type="task.type" />
+                                <Status :status="task.status"/>
+                            </td>
+                            <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                <Type :type="task.type"/>
                             </td>
                             <td class="px-3 py-4 text-sm whitespace-nowrap text-stone-500">
                                 Prio
@@ -89,9 +93,11 @@
                                 </primary-button>
                             </td>
                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
-                                <a href="#" class="text-amber-600 hover:text-amber-900">
-                                    Done
-                                </a>
+                                <primary-button
+                                    :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished'} )" modal
+                                    color="green">
+                                    Finish
+                                </primary-button>
                             </td>
                         </tr>
                         </tbody>
@@ -107,10 +113,11 @@ import {ref} from "vue";
 import {Link} from '@inertiajs/vue3';
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Type from "../Type.vue";
+import Status from "../Status.vue";
 
 export default {
     name: "Table",
-    components: {Type, PrimaryButton, Link},
+    components: {Status, Type, PrimaryButton, Link},
     props: {
         tasks: {
             type: Array,
