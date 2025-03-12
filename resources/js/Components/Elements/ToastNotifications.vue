@@ -7,23 +7,28 @@
             @click="toastAgain()"
 
         >
-            <FontAwesomeIcon :icon="reToasted ? faBellSlash : faBell" class="h-5 w-5" />
+            <FontAwesomeIcon :icon="reToasted ? faBellSlash : faBell" class="h-5 w-5"/>
         </button>
+        <div v-else
+             class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+            <FontAwesomeIcon :icon="faBell" class="h-5 w-5"/>
+
+        </div>
+
     </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-import { toast } from 'vue3-toastify'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBell, faBellSlash } from '@fortawesome/free-solid-svg-icons'
+import {ref, watch, computed} from 'vue'
+import {usePage} from '@inertiajs/vue3'
+import {toast} from 'vue3-toastify'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+import {faBell, faBellSlash} from '@fortawesome/free-solid-svg-icons'
 
 const toasts = computed(() => usePage().props.flash.toasts)
 const reToasted = ref(false)
 
 function fireToast(notification, sticky = false) {
-    console.log("letsget toastyyy")
     toast(notification.message, {
         position: toast.POSITION.TOP_RIGHT,
         toastId: notification.id,
@@ -53,6 +58,13 @@ watch(
             fireToasts()
         }
     },
-    { deep: true, immediate: true }
+    {deep: true, immediate: true}
 )
+watch(
+    () => usePage().props.flash.toasts, // Pass a getter function to watch
+    (newToasts, oldToasts) => {
+        console.log("hoi", newToasts); // Correct console.log usage
+    },
+    { deep: true } // Add deep watch if needed.
+);
 </script>

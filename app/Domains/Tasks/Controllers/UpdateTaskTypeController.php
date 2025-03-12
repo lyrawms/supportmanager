@@ -3,6 +3,7 @@
 namespace App\Domains\Tasks\Controllers;
 
 use App\Domains\Tasks\Services\TaskService;
+use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTaskTypeController  extends Controller
 {
-    public function __invoke(Request $request, TaskService $taskService)
+    public function __invoke(Request $request, TaskService $taskService, ShowTaskViewModel $showTaskViewModel)
     {
         $taskUuid = $request->input('taskUuid');
         $typeUuid = $request->input('typeUuid');
@@ -19,7 +20,8 @@ class UpdateTaskTypeController  extends Controller
         try {
             $taskService->updateTaskType($taskUuid, $typeUuid);
             toast_success('Task type updated');
-            return Inertia::render('Tasks/Modal/Show');
+//            return redirect()->back()->with('toasts', toast_success('Task type updated'));
+            return Inertia::render($showTaskViewModel->component, $showTaskViewModel->toArray($taskUuid));
         } catch (Exception $e) {
             toast_error($e->getMessage());
             return Inertia::render('Tasks/Modals/Show', ['errors' => [$e->getMessage()]])->toResponse($request)->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
