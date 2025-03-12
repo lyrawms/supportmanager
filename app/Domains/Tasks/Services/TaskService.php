@@ -9,10 +9,12 @@ use App\Domains\Tasks\Repositories\TaskRepository;
 use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
 use App\Domains\Users\Database\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 use PhpParser\Node\Scalar\String_;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class TaskService
 {
@@ -40,16 +42,23 @@ class TaskService
         return $this->taskRepository->getTaskWithRelationships($uuid);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function updateTaskType(string $taskUuid, string $typeUuid)
     {
-        $task = Task::where('uuid', $taskUuid)->firstOrFail();
-        $type = Type::where('uuid', $typeUuid)->firstOrFail();
-        $deadline = $this->calcDeadline($type->sla, $task->created_at);
-        toast_success('Task type updated');
-        return $this->taskRepository->updateTaskType($task, $type, $deadline);
+        try {
+            $task = Task::where('uuid', $taskUuid)->firstOrFail();
+            $type = Type::where('uuid', $typeUuid)->firstOrFail();
+            $deadline = $this->calcDeadline($type->sla, $task->created_at);
+            return $this->taskRepository->updateTaskType($task, $type, $deadline);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
-    public function updateTaskUser(string $taskUuid, string $userUuid)
+    public function updateTaskUser(string $taskUuid, string $userUuid): string
     {
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $user = User::where('uuid', $userUuid)->firstOrFail();

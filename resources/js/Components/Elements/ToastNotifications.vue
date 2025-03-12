@@ -19,12 +19,13 @@ import { toast } from 'vue3-toastify'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faBell, faBellSlash } from '@fortawesome/free-solid-svg-icons'
 
-const toasts = computed(() => usePage()?.props?.flash?.toasts || [])
+const toasts = computed(() => usePage().props.flash.toasts)
 const reToasted = ref(false)
-console.log("Flash Toasts:", usePage().props.flash.toasts)
 
 function fireToast(notification, sticky = false) {
+    console.log("letsget toastyyy")
     toast(notification.message, {
+        position: toast.POSITION.TOP_RIGHT,
         toastId: notification.id,
         type: notification.type,
         newestOnTop: true,
@@ -47,13 +48,11 @@ function toastAgain() {
 watch(
     toasts,
     (newToasts) => {
-        console.log("New toasts received:", newToasts) // Debugging
-
         if (newToasts?.length) {
             reToasted.value = false
             fireToasts()
         }
     },
-    { deep: true }
+    { deep: true, immediate: true }
 )
 </script>

@@ -47,20 +47,23 @@ class TaskRepository
             ->firstOrFail();
     }
 
-    public function updateTaskType(Task $task, Type $type, string $deadline)
+    /**
+     * @throws \Exception
+     */
+    public function updateTaskType(Task $task, Type $type, string $deadline): string
     {
         $task->sla = $type->sla;
         $task->deadline = $deadline;
         $task->type()->associate($type);
         $task->save();
-        return $type;
+        return $type->uuid;
     }
 
-    public function updateTaskUser(Task $task, User $user)
+    public function updateTaskUser(Task $task, User $user): string
     {
         $task->assignee()->associate($user);
         $task->save();
-        return $user;
+        return $user->uuid;
     }
 
     public function saveTask(array $taskData, User $creator, string $deadline, Type $type): string

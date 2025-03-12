@@ -177,7 +177,6 @@ export default {
 
         updateTaskType(type) {
             if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 this.updateTaskTypePageData(type);
                 Inertia.post(
                     '/task/update-type',
