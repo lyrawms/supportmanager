@@ -10,7 +10,6 @@ import {renderApp} from '@inertiaui/modal-vue'
 import momentPlugin from "./plugins/moment";
 import Vue3ColorPicker from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
-import Vue3Toastify from "vue3-toastify";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -22,7 +21,6 @@ createInertiaApp({
             .use(momentPlugin)
             .use(Vue3ColorPicker)
             .use(ZiggyVue)
-            .use(Vue3Toastify)
             .mount(el);
     },
     progress: {

@@ -178,14 +178,13 @@ export default {
         updateTaskType(type) {
             if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
                 this.updateTaskTypePageData(type);
-                Inertia.post(
+                this.$inertia.post(
                     '/task/update-type',
                     {
                         taskUuid: this.task.uuid,
                         typeUuid: type.uuid,
                     },
                     {
-                        only: ['flash'], // Reload only flash messages
                         preserveScroll: true, // Prevents page scroll reset
                         onSuccess: () => {
                             console.log("Task type updated successfully");

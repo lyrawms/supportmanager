@@ -10,7 +10,6 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {faGear, faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
-import ToastNotifications from "@/Components/Elements/ToastNotifications.vue";
 
 defineProps({
     title: String,
@@ -165,7 +164,9 @@ const logout = () => {
                             <button type="button"
                                     class="relative shrink-0 rounded-full bg-white p-1 text-stone-400 hover:text-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
                                 <span class="absolute -inset-1.5"></span>
-                                <ToastNotifications/>
+                             <div>
+                                 {{ $page.props.flash.toasts }}
+                             </div>
                             </button>
 
                             <!-- Profile dropdown -->

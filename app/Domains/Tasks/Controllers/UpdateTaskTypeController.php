@@ -17,14 +17,7 @@ class UpdateTaskTypeController  extends Controller
         $taskUuid = $request->input('taskUuid');
         $typeUuid = $request->input('typeUuid');
 
-        try {
-            $taskService->updateTaskType($taskUuid, $typeUuid);
-            toast_success('Task type updated');
-//            return redirect()->back()->with('toasts', toast_success('Task type updated'));
-            return Inertia::render($showTaskViewModel->component, $showTaskViewModel->toArray($taskUuid));
-        } catch (Exception $e) {
-            toast_error($e->getMessage());
-            return Inertia::render('Tasks/Modals/Show', ['errors' => [$e->getMessage()]])->toResponse($request)->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $taskService->updateTaskType($taskUuid, $typeUuid);
+        return redirect(route('tasks.index'));
     }
 }
