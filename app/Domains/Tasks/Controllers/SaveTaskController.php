@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 
 class SaveTaskController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, TaskService $taskService)
     {
         $validatedData = $request->validate([
             'title' => 'required|string',
@@ -18,11 +18,7 @@ class SaveTaskController extends Controller
             'intercomLink' => 'nullable|url',
             'type' => 'required|uuid',
         ]);
-
-        $taskService = new TaskService();
-
-        return response()->json([
-            'uuid' => $taskService->saveTask($validatedData),
-        ]);
+        $taskService->saveTask($validatedData);
+        return redirect(route('tasks.index', ['category' => 'Company']));
     }
 }

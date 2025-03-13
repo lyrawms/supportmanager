@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return back()->with([
                         'toasts' => [
                             'type' => 'error',
-                            'message' => 'The page has expired due to inactivity. Please refresh and try again.',
+                            'message' => $exception->getMessage(),
                         ],
                 ]);
         });
