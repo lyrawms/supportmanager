@@ -15,7 +15,7 @@ class UpdateTaskTypeController  extends Controller
     public function __invoke(Request $request, TaskService $taskService, ShowTaskViewModel $showTaskViewModel)
     {
         $taskUuid = $request->input('taskUuid');
-        $typeUuid = $request->input('typeaUuid');
+        $typeUuid = $request->input('typeUuid');
         $category = $request->input('category');
 
         $taskService->updateTaskType($taskUuid, $typeUuid);
