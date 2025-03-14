@@ -44,7 +44,8 @@ const logout = () => {
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="left" width="60">
+                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="left" width="60">absolute
+                                    -inset-1.5
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
@@ -163,12 +164,9 @@ const logout = () => {
                             <button type="button"
                                     class="relative shrink-0 rounded-full bg-white p-1 text-stone-400 hover:text-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
                                 <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">View notifications</span>
-                                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                     stroke="currentColor" aria-hidden="true" data-slot="icon">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/>
-                                </svg>
+                             <div>
+                                 {{ $page.props.flash.toasts }}
+                             </div>
                             </button>
 
                             <!-- Profile dropdown -->
@@ -178,7 +176,7 @@ const logout = () => {
                                         <button type="button"
                                                 class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
                                                 id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                            <img class="size-8 rounded-full"
+                                            <img class="size-10 rounded-full"
                                                  :src="$page.props.auth.user.profile_photo_url"
                                                  :alt="$page.props.auth.user.name">
                                         </button>
@@ -250,6 +248,13 @@ const logout = () => {
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('tasks.index')" :active="route().current('tasks.index')">
+                            Tasks
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('settings')" :active="route().current('settings')">
+                            Settings
+                        </ResponsiveNavLink>
+
                     </div>
 
                     <!-- Responsive Settings Options -->

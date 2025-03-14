@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('finished_at')->nullable();
             $table->softDeletes();
             $table->integer('sla');
-            $table->string('status')->default('open');
+            $table->string('status')->default('Open');
             $table->timestamp('deadline');
             $table->foreignId('creator_id')->constrained('users');
         });

@@ -8,11 +8,14 @@ use Illuminate\Http\Request;
 
 class UpdateTaskUserController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, TaskService $taskService)
     {
-        $taskService = new TaskService();
         $taskUuid = $request->input('taskUuid');
         $userUuid = $request->input('userUuid');
-        return $taskService->updateTaskUser($taskUuid, $userUuid);
+        $category = $request->input('category');
+
+        $taskService->updateTaskUser($taskUuid, $userUuid);
+        return redirect(route('tasks.index', ["category" => $category]));
+
     }
 }

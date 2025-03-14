@@ -19,7 +19,7 @@
                                 <div class="sm:flex sm:flex-row-reverse justify-self-end gap-2">
                                     <slot name="cta" v-bind="{ close }"></slot>
                                     <PrimaryButton @click="close">
-                                        Cancel
+                                        Close
                                     </PrimaryButton>
                                 </div>
                             </div>

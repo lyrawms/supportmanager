@@ -119,6 +119,7 @@ import Type from "../Components/Type.vue";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import Status from "../Components/Status.vue";
+import {Inertia} from "@inertiajs/inertia";
 
 export default {
     name: "ShowTask",
@@ -176,59 +177,50 @@ export default {
 
         updateTaskType(type) {
             if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 this.updateTaskTypePageData(type);
-                fetch('/task/update-type', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
+                this.$inertia.post(
+                    '/task/update-type',
+                    {
                         taskUuid: this.task.uuid,
                         typeUuid: type.uuid,
-                    }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Task type updated:", data);
-
-                    })
-                    .catch(error => {
-                        console.error("Error updating task type:", error);
-                    });
+                        category: this.getCompanyParam(),
+                    },
+                    {
+                        preserveScroll: true, // Prevents page scroll reset
+                        onSuccess: () => {
+                            console.log("Task type updated successfully");
+                        },
+                        onError: (error) => {
+                            console.error("Error updating task type:", error);
+                        }
+                    }
+                );
             }
         },
         updateTaskUser(user) {
             if (!this.showComboBoxUser && (user.uuid && user.uuid !== (this.currentAssignee ? this.currentAssignee.uuid : null))) {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 this.updateTaskUserPageData(user);
-                fetch('/task/update-user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
+                this.$inertia.post(
+                    '/task/update-user',
+                    {
                         taskUuid: this.task.uuid,
                         userUuid: user.uuid,
-                    }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Task user updated:", data);
-
-                    })
-                    .catch(error => {
-                        console.error("Error updating task user:", error);
-                    });
+                        category: this.getCompanyParam(),
+                    },
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            console.log("Task user updated successfully");
+                        },
+                        onError: (error) => {
+                            console.error("Error updating task user:", error);
+                        }
+                    }
+                );
             }
+        },
+        getCompanyParam() {
+            return new URLSearchParams(window.location.search).get("category") || "Company";
         },
         assignNewType(type) {
             this.newType = type;

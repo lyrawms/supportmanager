@@ -95,39 +95,27 @@ export default {
             this.errors = {};
             if (!this.currentType || !this.currentType.uuid) {
                 this.errors.type = ['Type is required.'];
-            }
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            fetch('/tasks/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    title: this.title,
-                    description: this.description,
-                    intercomLink: this.intercomLink,
-                    type: this.currentType.uuid,
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.errors) {
-                        this.errors = data.errors;
-                        console.error("Error creating task", data.errors);
-                    } else if (data) {
-                        console.log("Task created", data);
-                        closure()
+            } else {
+                this.$inertia.post(
+                    '/tasks/create',
+                    {
+                        title: this.title,
+                        description: this.description,
+                        intercomLink: this.intercomLink,
+                        type: this.currentType.uuid,
+                    },
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            closure();
+                        },
+                        onError: (errors) => {
+                            this.errors = errors;
+                        }
                     }
+                )
 
-                })
-                .catch(error => {
-                    console.error("Error creating task", error);
-                    this.errors = error;
-                });
+            }
         },
         handleTypeClick() {
             this.toggleComboBoxType();
