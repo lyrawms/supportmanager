@@ -2,27 +2,23 @@
 
 namespace App\Domains\Tasks\Services;
 
-use App\Domains\Tasks\Controllers\ShowTaskController;
+use App\Domains\Slack\Services\SlackService;
 use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Database\Models\Type;
 use App\Domains\Tasks\Repositories\TaskRepository;
-use App\Domains\Tasks\ViewModels\ShowTaskViewModel;
 use App\Domains\Users\Database\Models\User;
 use Carbon\Carbon;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Http;
-use PhpParser\Node\Scalar\String_;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class TaskService
 {
     protected TaskRepository $taskRepository;
+    protected SlackService $slackService;
 
     public function __construct()
     {
         $this->taskRepository = new TaskRepository();
+        $this->slackService = new SlackService();
     }
 
     public function getAllTasks($category): LengthAwarePaginator
@@ -39,6 +35,7 @@ class TaskService
 
     public function getTaskWithRelationships(string $uuid): Task
     {
+
         return $this->taskRepository->getTaskWithRelationships($uuid);
     }
 
@@ -60,8 +57,10 @@ class TaskService
 
     public function updateTaskUser(string $taskUuid, string $userUuid): string
     {
+
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $user = User::where('uuid', $userUuid)->firstOrFail();
+        $this->slackService->sendSlackMessage('A task has been assigned to', ['U07PEU0NB3M'], route('tasks.show', ['task' => $task->uuid]), $task);
         return $this->taskRepository->updateTaskUser($task, $user);
     }
 

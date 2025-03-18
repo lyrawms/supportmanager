@@ -23,20 +23,4 @@ class AppServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../Domains/Tasks/Database/Migrations');
         $this->loadMigrationsFrom(__DIR__ . '/../Domains/Users/Database/Migrations');
     }
-
-    private function registerMacros()
-    {
-        RedirectResponse::macro(
-            'withSuccess',
-            function (string $message) {
-                return toast_success($message);
-            }
-        );
-        RedirectResponse::macro(
-            'withError',
-            function (string $message) {
-                return toast_error($message);
-            }
-        );
-    }
 }
