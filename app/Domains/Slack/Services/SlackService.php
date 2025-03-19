@@ -10,20 +10,31 @@ use Illuminate\Support\Facades\Notification;
 
 class SlackService
 {
-    public function sendSlackMessage(string $message, array $taggedUsers, string $taskUrl, Task $task): void
+    private $slackWebhookUrl;
+
+    public function __construct()
     {
-        Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-            ->notify(new SlackNotification($this->toArray($message, $taggedUsers, $taskUrl, $task)));
+        $this->slackWebhookUrl = env('SLACK_WEBHOOK_URL');
+    }
+
+    public function sendSlackMessage(
+        string  $message,
+        array  $taggedUsers = [],
+        string $url = '',
+        ?Task   $task = null
+    ): void
+    {
+        Notification::route('slack', $this->slackWebhookUrl)
+            ->notify(new SlackNotification($this->toArray($message, $taggedUsers, $url, $task)));
 
     }
 
-    public function toArray($message, $taggedUsers, $taskUrl, $task)
+    public function toArray($message, $taggedUsers, $url, ?Task $task = null)
     {
-
         return [
             'message' => $message,
             'taggedUsers' => $this->getTaggedUsersString($taggedUsers),
-            'taskUrl' => $taskUrl,
+            'taskUrl' => $url,
             'task' => $task
         ];
     }

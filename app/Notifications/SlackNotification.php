@@ -13,8 +13,6 @@ class SlackNotification extends Notification
     use Queueable;
 
     protected $data;
-    public $id = 'U07PEU0NB3M';
-    public $id2 = 'U05R3JF6AH5';
 
     /**
      * Create a new notification instance.
@@ -38,10 +36,10 @@ class SlackNotification extends Notification
      * Get the mail representation of the notification.
      * @throws \JsonException
      */
-    public function toSlack(object $notifiable): SlackMessage
+    public function toSlack(): SlackMessage
     {
         return (new SlackMessage)
-            ->content("*{$this->data['message']}:* \n {$this->data['taggedUsers']} \n\n *Title*: \n {$this->data['task']['title']}\n\n *Deadline*: \n {$this->data['task']['deadline']}");
+            ->content($this->createContent());
 
     }
 
@@ -50,11 +48,14 @@ class SlackNotification extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    public function createContent(): string
     {
-        return [
-            //
-        ];
+        $content = "*{$this->data['message']}* \n {$this->data['taggedUsers']}";
+        if (isset($this->data['task'])) {
+            $content .= "\n\n *Title*: \n {$this->data['task']['title']}\n\n *Deadline*: \n {$this->data['task']['deadline']}";
+        }
+        return $content;
+
     }
 
 

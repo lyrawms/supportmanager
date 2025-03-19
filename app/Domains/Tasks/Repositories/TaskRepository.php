@@ -87,6 +87,7 @@ class TaskRepository
         $task->save();
         return $task->uuid;
     }
+
     public function updateTaskStatus(Task $task, string $status): string
     {
         $task->status = $status;
@@ -97,5 +98,14 @@ class TaskRepository
     public function delete(Task $task): string
     {
         return $task->delete();
+    }
+
+    public function getTasksWithDeadlineCheck($timestamp)
+    {
+        return Task::orderBy('deadline', 'desc')
+            ->where('deadline', '<', $timestamp)
+            ->whereNotIn('status', ['Finished', 'Deleted'])
+            ->with('assignee')
+            ->get();
     }
 }

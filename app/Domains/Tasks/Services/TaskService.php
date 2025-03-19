@@ -7,6 +7,7 @@ use App\Domains\Tasks\Database\Models\Task;
 use App\Domains\Tasks\Database\Models\Type;
 use App\Domains\Tasks\Repositories\TaskRepository;
 use App\Domains\Users\Database\Models\User;
+use App\Domains\Users\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -15,10 +16,13 @@ class TaskService
     protected TaskRepository $taskRepository;
     protected SlackService $slackService;
 
+    protected UserService $userService;
+
     public function __construct()
     {
         $this->taskRepository = new TaskRepository();
         $this->slackService = new SlackService();
+        $this->userService = new UserService();
     }
 
     public function getAllTasks($category): LengthAwarePaginator
@@ -60,7 +64,7 @@ class TaskService
 
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $user = User::where('uuid', $userUuid)->firstOrFail();
-        $this->slackService->sendSlackMessage('A task has been assigned to', ['U07PEU0NB3M'], route('tasks.show', ['task' => $task->uuid]), $task);
+        $this->slackService->sendSlackMessage('A task has been assigned to:', ['U07PEU0NB3M'], route('tasks.show', ['task' => $task->uuid]), $task);
         return $this->taskRepository->updateTaskUser($task, $user);
     }
 
@@ -68,7 +72,10 @@ class TaskService
     {
         $creator = User::findOrFail(auth()->id());
         $type = Type::where('uuid', $taskData['type'])->firstOrFail();
+
         $deadline = $this->calcDeadline($type->sla, Carbon::now());
+        $this->slackService->sendSlackMessage('A new task has been created', []);
+
         return $this->taskRepository->saveTask($taskData, $creator, $deadline, $type);
     }
 
@@ -95,5 +102,27 @@ class TaskService
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $this->taskRepository->updateTaskStatus($task, 'deleted');
         return $this->taskRepository->delete($task);
+    }
+
+    public function checkDeadline($timestamp)
+    {
+        $tasks = $this->taskRepository->getTasksWithDeadlineCheck($timestamp);
+        if (!empty($tasks)) {
+            foreach ($tasks as $task) {
+                $assignees = [];
+                if ($task->assignee?->slack_id) {
+                    $assignees[] = $task->assignee->slack_id;
+                }
+                $this->slackService->sendSlackMessage(
+                    'Task is past its deadline',
+                    $assignees,
+                    route('tasks.show', ['task' => $task->uuid]),
+                    $task);
+            }
+            return 1;
+
+        }
+        return null;
+
     }
 }
