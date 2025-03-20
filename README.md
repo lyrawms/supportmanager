@@ -47,12 +47,22 @@ stored in `Domains/{domainName}/Routes` instead of the default `routes/web.php`.
    ```sh
    php artisan migrate --seed
    ```
-   
+
 6. Run the application:
    ```sh
    npm run dev
    ```
-   I am using valet for testing and running the application locally. But you can also use the following command in another terminal to run the application.
+
+   and in another terminal run the following command for schedule:
+
+    ```sh
+    php artisan schedule:work
+   ```
+
+   I am using valet for testing and running the application locally. But you can also use the following command in
+   another
+   terminal to run the application.
+
    ```sh
    php artisan serve
    ```

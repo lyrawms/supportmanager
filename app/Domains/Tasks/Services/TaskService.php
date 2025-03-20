@@ -64,8 +64,9 @@ class TaskService
 
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $user = User::where('uuid', $userUuid)->firstOrFail();
-        $this->slackService->sendSlackMessage('A task has been assigned to:', ['U07PEU0NB3M'], route('tasks.show', ['task' => $task->uuid]), $task);
-        return $this->taskRepository->updateTaskUser($task, $user);
+        $updatedTask =  $this->taskRepository->updateTaskUser($task, $user);
+        $this->slackService->sendSlackMessage($this->slackService->toArray("A new user has been assigned to a task", [$this->slackService->prepareSlackData($updatedTask)]));
+        return $user->uuid;
     }
 
     public function saveTask(array $taskData): string
@@ -81,6 +82,7 @@ class TaskService
 
     public function calcDeadline(int $typeSla, string $created_at): string
     {
+
         return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
 
@@ -96,7 +98,6 @@ class TaskService
 
         return $this->taskRepository->$method($task, $status);
     }
-
     public function delete(string $taskUuid)
     {
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
@@ -104,25 +105,21 @@ class TaskService
         return $this->taskRepository->delete($task);
     }
 
-    public function checkDeadline($timestamp)
+    public function checkDeadline(string $message, $date = null)
     {
-        $tasks = $this->taskRepository->getTasksWithDeadlineCheck($timestamp);
-        if (!empty($tasks)) {
-            foreach ($tasks as $task) {
-                $assignees = [];
-                if ($task->assignee?->slack_id) {
-                    $assignees[] = $task->assignee->slack_id;
-                }
-                $this->slackService->sendSlackMessage(
-                    'Task is past its deadline',
-                    $assignees,
-                    route('tasks.show', ['task' => $task->uuid]),
-                    $task);
-            }
-            return 1;
-
+        if ($date) {
+            $tasks = $this->taskRepository->getUnfinishedTasksAfterDate($date);
+        } else {
+            $tasks = $this->taskRepository->getUnfinishedTasksAfterDeadline();
         }
-        return null;
 
+
+        if (!empty($tasks)) {
+            $data = [];
+            foreach ($tasks as $task) {
+                $data[] = $this->slackService->prepareSlackData($task);
+            }
+            $this->slackService->sendSlackMessage($this->slackService->toArray($message, $data));
+        }
     }
 }

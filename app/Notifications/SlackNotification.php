@@ -39,23 +39,40 @@ class SlackNotification extends Notification
     public function toSlack(): SlackMessage
     {
         return (new SlackMessage)
-            ->content($this->createContent());
-
+            ->content($this->listOrSingleContent());
     }
+
+    public function listOrSingleContent(): string
+    {
+        if (count($this->data['data']) > 1) {
+            return $this->createContentList();
+        } else {
+            return $this->createContent();
+        }
+    }
+
 
     /**
      * Get the array representation of the notification.
      *
-     * @return array<string, mixed>
+     * @return string
      */
     public function createContent(): string
     {
-        $content = "*{$this->data['message']}* \n {$this->data['taggedUsers']}";
+        $content = "*{$this->data['message']}* \n {$this->data['assignee']}";
         if (isset($this->data['task'])) {
             $content .= "\n\n *Title*: \n {$this->data['task']['title']}\n\n *Deadline*: \n {$this->data['task']['deadline']}";
         }
         return $content;
+    }
 
+    public function createContentList(): string
+    {
+        $content = "*{$this->data['message']}*";
+        foreach ($this->data['data'] as $messageData) {
+            $content .= " \n{$messageData['assignee']}\n\n *Title*: \n _{$messageData['task']['title']}_\n\n *Deadline*: \n _{$messageData['task']['deadline']}_\n\n\n";
+        }
+        return $content;
     }
 
 

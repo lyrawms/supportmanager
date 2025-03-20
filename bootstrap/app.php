@@ -37,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ]);
         });
     })->withSchedule(function (Schedule $schedule) {
-        $schedule->command('task:deadline-check')->everyMinute();
+        $schedule->command('task:deadline-check')->daily();
+        $schedule->command('task:deadline-1day-check')->daily();
     })
     ->create();

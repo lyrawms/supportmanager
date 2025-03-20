@@ -3,13 +3,11 @@
 namespace App\Domains\Tasks\Controllers;
 
 use App\Domains\Tasks\Services\TaskService;
-use App\Http\Controllers\Controller;
 
-class CheckDeadlineController extends Controller
+class CheckDeadline1DayController
 {
-
     public function __invoke(TaskService $taskService)
     {
-        $taskService->checkDeadline('These tasks are past their deadline!');
+        $taskService->checkDeadline('The deadline of these tasks are in 1 day!', now()->addDay()->toDateString());
     }
 }

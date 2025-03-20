@@ -59,11 +59,11 @@ class TaskRepository
         return $type->uuid;
     }
 
-    public function updateTaskUser(Task $task, User $user): string
+    public function updateTaskUser(Task $task, User $user): Task
     {
         $task->assignee()->associate($user);
         $task->save();
-        return $user->uuid;
+        return $task;
     }
 
     public function saveTask(array $taskData, User $creator, string $deadline, Type $type): string
@@ -100,10 +100,19 @@ class TaskRepository
         return $task->delete();
     }
 
-    public function getTasksWithDeadlineCheck($timestamp)
+    public function getUnfinishedTasksAfterDeadline()
     {
         return Task::orderBy('deadline', 'desc')
-            ->where('deadline', '<', $timestamp)
+            ->where('deadline', '<', now())
+            ->whereNotIn('status', ['Finished', 'Deleted'])
+            ->with('assignee')
+            ->get();
+    }
+
+    public function getUnfinishedTasksAfterDate($date)
+    {
+        return Task::orderBy('deadline', 'desc')
+            ->where('deadline', 'like', '%' . $date . '%')
             ->whereNotIn('status', ['Finished', 'Deleted'])
             ->with('assignee')
             ->get();
