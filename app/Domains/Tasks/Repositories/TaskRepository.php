@@ -50,23 +50,23 @@ class TaskRepository
     /**
      * @throws \Exception
      */
-    public function updateTaskType(Task $task, Type $type, string $deadline): string
+    public function updateTaskType(Task $task, Type $type, string $deadline): Task
     {
         $task->sla = $type->sla;
         $task->deadline = $deadline;
         $task->type()->associate($type);
         $task->save();
-        return $type->uuid;
+        return $task->refresh();
     }
 
     public function updateTaskUser(Task $task, User $user): Task
     {
         $task->assignee()->associate($user);
         $task->save();
-        return $task;
+        return $task->refresh();
     }
 
-    public function saveTask(array $taskData, User $creator, string $deadline, Type $type): string
+    public function saveTask(array $taskData, User $creator, string $deadline, Type $type): Task
     {
         $task = new Task();
         $task->title = $taskData['title'];
@@ -77,22 +77,22 @@ class TaskRepository
         $task->type()->associate($type);
         $task->creator()->associate($creator);
         $task->save();
-        return $task->uuid;
+        return $task->refresh();
     }
 
-    public function updateTaskStatusFinished(Task $task, string $status): string
+    public function updateTaskStatusFinished(Task $task, string $status): Task
     {
         $task->status = 'finished';
         $task->finished_at = now();
         $task->save();
-        return $task->uuid;
+        return $task->refresh();
     }
 
-    public function updateTaskStatus(Task $task, string $status): string
+    public function updateTaskStatus(Task $task, string $status): Task
     {
         $task->status = $status;
         $task->save();
-        return $task->uuid;
+        return $task->refresh();
     }
 
     public function delete(Task $task): string

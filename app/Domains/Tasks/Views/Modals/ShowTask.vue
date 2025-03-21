@@ -95,10 +95,10 @@
         </div>
 
         <template #cta>
-            <primary-button :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished'} )" modal color="green">
+            <primary-button :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished', category:getCategoryFromUrl() } )" link color="green">
                 Finish
             </primary-button>
-            <primary-button :href="route('tasks.delete', {uuid:task.uuid } )" modal color="red">
+            <primary-button @click="close" :href="route('tasks.delete', {uuid:task.uuid, category:getCategoryFromUrl() } )" link color="red">
                 Delete
             </primary-button>
         </template>
@@ -113,17 +113,17 @@ import Dialog from "@/Components/Overlays/Dialog.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import {DialogTitle} from "@headlessui/vue";
 import CheckboxGroup from "@/Components/Forms/CheckboxGroup.vue";
-import tinycolor from "tinycolor2";
 import ComboBoxSubject from "../Components/ComboBoxSubject.vue";
 import Type from "../Components/Type.vue";
 import dayjs from "dayjs";
-import cloneDeep from "lodash/cloneDeep";
 import Status from "../Components/Status.vue";
-import {Inertia} from "@inertiajs/inertia";
+import { Link } from '@inertiajs/vue3';
+
 
 export default {
     name: "ShowTask",
     components: {
+        Link,
         Status,
         Type,
         ComboBoxSubject,
@@ -151,6 +151,10 @@ export default {
         newUser: {},
     }),
     methods: {
+        getCategoryFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("category") || 'Company';
+        },
         handleTypeClick() {
             this.toggleComboBoxType();
             this.updateTaskType(this.newType);

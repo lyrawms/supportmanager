@@ -59,9 +59,13 @@ class SlackNotification extends Notification
      */
     public function createContent(): string
     {
-        $content = "*{$this->data['message']}* \n {$this->data['assignee']}";
-        if (isset($this->data['task'])) {
-            $content .= "\n\n *Title*: \n {$this->data['task']['title']}\n\n *Deadline*: \n {$this->data['task']['deadline']}";
+        $data = $this->data['data'][0];
+        $content = "*{$this->data['message']}* \n";
+        if (isset($data['assignee'])) {
+            $content .= "{$data['assignee']}";
+        }
+        if (isset($data['task'])) {
+            $content .= "\n\n *Title*: \n _{$data['task']['title']}_\n\n *Deadline*: \n _{$data['task']['deadline']}_";
         }
         return $content;
     }

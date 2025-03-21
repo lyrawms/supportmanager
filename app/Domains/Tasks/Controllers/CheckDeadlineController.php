@@ -10,6 +10,6 @@ class CheckDeadlineController extends Controller
 
     public function __invoke(TaskService $taskService)
     {
-        $taskService->checkDeadline('These tasks are past their deadline!');
+        $taskService->checkDeadline('THESE TASKS ARE PAST THEIR DEADLINE:');
     }
 }

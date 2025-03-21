@@ -8,6 +8,6 @@ class CheckDeadline1DayController
 {
     public function __invoke(TaskService $taskService)
     {
-        $taskService->checkDeadline('The deadline of these tasks are in 1 day!', now()->addDay()->toDateString());
+        $taskService->checkDeadline('THE DEADLINE OF THESE TASKS ARE IN 1 DAY:', now()->addDay()->toDateString());
     }
 }

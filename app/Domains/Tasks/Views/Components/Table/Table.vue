@@ -36,7 +36,8 @@
                             <th scope="col"
                                 class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-stone-900">Name
                             </th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Status</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Status
+                            </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Type
                             </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Prio
@@ -94,7 +95,8 @@
                             </td>
                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
                                 <primary-button
-                                    :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished'} )" modal
+                                    :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished', category:getCategoryFromUrl()} )"
+                                    link
                                     color="green">
                                     Finish
                                 </primary-button>
@@ -124,15 +126,19 @@ export default {
             required: true
         }
     },
-    data() {
-        return {
-            selectedTasks: ref([]),
-        }
-    },
+    data: () => ({
+        selectedTasks: ref([]),
+    }),
     computed: {
         indeterminate() {
             return this.selectedTasks.length > 0 && this.selectedTasks.length < this.tasks.length;
-        }
+        },
     },
+    methods: {
+        getCategoryFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("category") || 'Company';
+        }
+    }
 };
 </script>

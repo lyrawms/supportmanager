@@ -9,13 +9,13 @@ use App\Domains\Tasks\Repositories\TaskRepository;
 use App\Domains\Users\Database\Models\User;
 use App\Domains\Users\Services\UserService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskService
 {
     protected TaskRepository $taskRepository;
     protected SlackService $slackService;
-
     protected UserService $userService;
 
     public function __construct()
@@ -34,50 +34,73 @@ class TaskService
         } else {
             return $this->taskRepository->getAll();
         }
-
     }
 
     public function getTaskWithRelationships(string $uuid): Task
     {
-
         return $this->taskRepository->getTaskWithRelationships($uuid);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateTaskType(string $taskUuid, string $typeUuid)
     {
-        try {
-            $task = Task::where('uuid', $taskUuid)->firstOrFail();
-            $type = Type::where('uuid', $typeUuid)->firstOrFail();
-            $deadline = $this->calcDeadline($type->sla, $task->created_at);
-            return $this->taskRepository->updateTaskType($task, $type, $deadline);
+        $task = Task::where('uuiid', $taskUuid)->firstOrFail();
+        $type = Type::where('uuid', $typeUuid)->firstOrFail();
+        $deadline = $this->calcDeadline($type->sla, $task->created_at);
 
-        } catch (\Exception $e) {
-            throw $e;
+        $updatedTask = $this->taskRepository->updateTaskType($task, $type, $deadline);
+
+        if ($updatedTask->wasChanged('type_id')) {
+            return $updatedTask->type_id;
         }
+        throw new Exception('Task type could not be updated', 500);
     }
 
+    /**
+     * @throws Exception
+     */
     public function updateTaskUser(string $taskUuid, string $userUuid): string
     {
-
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $user = User::where('uuid', $userUuid)->firstOrFail();
-        $updatedTask =  $this->taskRepository->updateTaskUser($task, $user);
-        $this->slackService->sendSlackMessage($this->slackService->toArray("A new user has been assigned to a task", [$this->slackService->prepareSlackData($updatedTask)]));
-        return $user->uuid;
+
+        $updatedTask = $this->taskRepository->updateTaskUser($task, $user);
+
+        if ($updatedTask->wasChanged('assignee_id')) {
+            $this->slackService->sendSlackMessage(
+                $this->slackService->toArray(
+                    "A TASK HAS BEEN ASSIGNED TO YOU:",
+                    [$this->slackService->prepareSlackData($updatedTask)]
+                ));
+            return $user->uuid;
+        }
+        throw new Exception('User could not be assigned to task', 500);
     }
 
+    /**
+     * @throws Exception
+     */
     public function saveTask(array $taskData): string
     {
         $creator = User::findOrFail(auth()->id());
         $type = Type::where('uuid', $taskData['type'])->firstOrFail();
-
         $deadline = $this->calcDeadline($type->sla, Carbon::now());
-        $this->slackService->sendSlackMessage('A new task has been created', []);
 
-        return $this->taskRepository->saveTask($taskData, $creator, $deadline, $type);
+        $newTask = $this->taskRepository->saveTask($taskData, $creator, $deadline, $type);
+
+        if ($newTask instanceof Task) {
+            $this->slackService->sendSlackMessage(
+                $this->slackService->toArray(
+                    "A NEW TASK HAS BEEN CREATED:",
+                    [$this->slackService->prepareSlackData($newTask)]
+                )
+            );
+            return $newTask->uuid;
+        }
+        throw new Exception('Task could not be created', 500);
+
     }
 
     public function calcDeadline(int $typeSla, string $created_at): string
@@ -86,6 +109,9 @@ class TaskService
         return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
 
+    /**
+     * @throws Exception
+     */
     public function updateTaskStatus(string $taskUuid, string $status)
     {
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
@@ -93,11 +119,16 @@ class TaskService
         $statusMethods = [
             'finished' => 'updateTaskStatusFinished',
         ];
-
         $method = $statusMethods[$status] ?? 'updateTaskStatus';
 
-        return $this->taskRepository->$method($task, $status);
+        $updatedTask = $this->taskRepository->$method($task, $status);
+
+        if ($updatedTask->wasChanged('status')) {
+            return $updatedTask->status;
+        }
+        throw new Exception('Task status could not be updated', 500);
     }
+
     public function delete(string $taskUuid)
     {
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
@@ -114,7 +145,7 @@ class TaskService
         }
 
 
-        if (!empty($tasks)) {
+        if (count($tasks) > 0) {
             $data = [];
             foreach ($tasks as $task) {
                 $data[] = $this->slackService->prepareSlackData($task);

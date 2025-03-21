@@ -103,6 +103,7 @@ export default {
                         description: this.description,
                         intercomLink: this.intercomLink,
                         type: this.currentType.uuid,
+                        category: this.getCategoryFromUrl(),
                     },
                     {
                         preserveScroll: true,
@@ -126,6 +127,10 @@ export default {
         toggleComboBoxType() {
             this.showComboBoxType = !this.showComboBoxType;
         },
+        getCategoryFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("category") || 'Company';
+        }
     }
 }
 </script>
