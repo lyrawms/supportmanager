@@ -1,7 +1,8 @@
 <template>
     <div class="flex items-center flex-col w-full">
-        <p v-if="$page.props.auth.user.slack_id">
-            slack has been added
+        <p v-if="$page.props.auth.user.slack_id"
+           class="text-[#4A154B]  text-lg font-semibold shadow-md">
+            Slack has been added
         </p>
         <a href="https://slack.com/oauth/v2/authorize?scope=users%3Aread&amp;user_scope=&amp;redirect_uri=https%3A%2F%2Fsupportmanager.test%2Fslack&amp;client_id=4665641663857.8587257481812"
            style="align-items:center;color:#fff;background-color:#4A154B;border:0;border-radius:56px;display:inline-flex;font-family:Lato, sans-serif;font-size:18px;font-weight:600;height:56px;justify-content:center;text-decoration:none;width:276px">
