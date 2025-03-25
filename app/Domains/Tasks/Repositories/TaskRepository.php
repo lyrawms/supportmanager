@@ -83,7 +83,7 @@ class TaskRepository
 
     public function updateTaskStatusFinished(Task $task, string $status): Task
     {
-        $task->status = 'finished';
+        $task->status = 'Finished';
         $task->finished_at = now();
         $task->save();
         return $task->refresh();
