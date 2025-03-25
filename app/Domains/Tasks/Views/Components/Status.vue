@@ -25,7 +25,7 @@ export default {
                 return this.color = 'bg-yellow-500';
             case 'Open':
                 return this.color = 'bg-blue-500';
-            case 'deleted':
+            case 'Deleted':
                 return this.color = 'bg-red-500';
             default:
                 return this.color = 'bg-gray-500';

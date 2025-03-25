@@ -11,6 +11,7 @@ class TaskRepository
 {
     public function getAll(): LengthAwarePaginator
     {
+        // fetches all tasks where the status is not finished, with the type and order by deadline ascending paginated by 10
         return Task::orderBy('deadline', 'asc')
             ->where('status', '!=', 'finished')
             ->with('type')
@@ -20,6 +21,7 @@ class TaskRepository
 
     public function getAllTasksForUser($uuid): LengthAwarePaginator
     {
+        //
         return Task::orderBy('deadline', 'asc')
             ->orderBy('created_at', 'desc')
             ->where('status', '!=', 'finished')
@@ -41,6 +43,7 @@ class TaskRepository
 
     public function getTaskWithRelationships(string $uuid): Task
     {
+        // fetches the task with the creator, type and assignee where the uuid is equal to the given uuid
         return Task::with('creator')
             ->with('type')
             ->with('assignee')
@@ -53,6 +56,7 @@ class TaskRepository
      */
     public function updateTaskType(Task $task, Type $type, string $deadline): Task
     {
+        // update the task
         $task->sla = $type->sla;
         $task->deadline = $deadline;
         $task->type()->associate($type);
@@ -62,6 +66,7 @@ class TaskRepository
 
     public function updateTaskUser(Task $task, User $user): Task
     {
+        // update the task assignee
         $task->assignee()->associate($user);
         $task->save();
         return $task->refresh();
@@ -69,6 +74,7 @@ class TaskRepository
 
     public function saveTask(array $taskData, User $creator, string $deadline, Type $type): Task
     {
+        // create a new task
         $task = new Task();
         $task->title = $taskData['title'];
         $task->description = $taskData['description'];
@@ -83,6 +89,7 @@ class TaskRepository
 
     public function updateTaskStatusFinished(Task $task, string $status): Task
     {
+        // update the task status to finished
         $task->status = 'Finished';
         $task->finished_at = now();
         $task->save();
@@ -91,6 +98,7 @@ class TaskRepository
 
     public function updateTaskStatus(Task $task, string $status): Task
     {
+        // update the task status
         $task->status = $status;
         $task->save();
         return $task->refresh();
@@ -98,11 +106,13 @@ class TaskRepository
 
     public function delete(Task $task): string
     {
+        // delete the task
         return $task->delete();
     }
 
     public function getUnfinishedTasksAfterDeadline()
     {
+        // fetch all tasks where the deadline is in the past and the status is not finished or deleted with assignee
         return Task::orderBy('deadline', 'desc')
             ->where('deadline', '<', now())
             ->whereNotIn('status', ['Finished', 'Deleted'])
@@ -112,8 +122,9 @@ class TaskRepository
 
     public function getUnfinishedTasksAfterDate($date)
     {
+        //
         return Task::orderBy('deadline', 'desc')
-            ->where('deadline', 'like', '%' . $date . '%')
+            ->where('deadline', '>', $date)
             ->whereNotIn('status', ['Finished', 'Deleted'])
             ->with('assignee')
             ->get();
