@@ -90,29 +90,26 @@ export default {
     }),
 
     methods: {
-        getMostReadableColor(color) {
-            return tinycolor.mostReadable(color, [], {includeFallbackColors: true});
-        },
-        handleTypeClick(type) {
-            console.log(type);
-        },
         fetchTypes() {
-            fetch(`/types/index-search?query=${this.query}`, {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                },
-                credentials: "include",
-            })
-                .then(response => response.json())
-                .then(data => {
-                    this.dataTypes = data.types;
+            if (this.query !== '') {
+                fetch(`/types/index-search?query=${this.query}`, {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                    credentials: "include",
                 })
-                .catch(error => {
-                    console.error("Error fetching types:", error);
-                });
-
+                    .then(response => response.json())
+                    .then(data => {
+                        this.dataTypes = data.types;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching types:", error);
+                    });
+            } else {
+                this.dataTypes = this.types;
+            }
         },
         handleSearchInput() {
             clearTimeout(this.debounceTimer);

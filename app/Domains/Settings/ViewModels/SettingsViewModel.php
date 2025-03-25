@@ -19,7 +19,7 @@ class SettingsViewModel extends ViewModel
     public function toArray(): array
     {
         return [
-            'types' => $this->typeService->fetchAllTypesSearch()->toArray(),
+            'types' => $this->typeService->fetchAllTypes()->toArray(),
         ];
     }
 }
