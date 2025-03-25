@@ -18,7 +18,9 @@ class SaveTaskController extends Controller
             'intercomLink' => 'nullable|url',
             'type' => 'required|uuid',
         ]);
+        $category = $request->category;
+
         $taskService->saveTask($validatedData);
-        return redirect(route('tasks.index', ['category' => 'Company']));
+        return redirect(route('tasks.index', ['category' => $category]));
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
+use Illuminate\Console\Scheduling\Schedule;
 use Symfony\Component\HttpFoundation\Response;
 use Inertia\Inertia;
 
@@ -30,7 +31,13 @@ return Application::configure(basePath: dirname(__DIR__))
                         'toasts' => [
                             'type' => 'error',
                             'message' => $exception->getMessage(),
+                            'file' => $exception->getFile(),
+                            'line' => $exception->getLine(),
                         ],
                 ]);
         });
-    })->create();
+    })->withSchedule(function (Schedule $schedule) {
+        $schedule->command('task:deadline-check')->daily();
+        $schedule->command('task:deadline-1day-check')->daily();
+    })
+    ->create();

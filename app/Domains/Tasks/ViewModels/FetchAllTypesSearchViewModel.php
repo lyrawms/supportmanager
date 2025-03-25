@@ -14,7 +14,7 @@ class FetchAllTypesSearchViewModel
     }
 
 
-    public function toArray($query = null): array
+    public function toArray(string $query): array
     {
         return [
             'types' => $this->typeService->fetchAllTypesSearch($query)->toArray(),

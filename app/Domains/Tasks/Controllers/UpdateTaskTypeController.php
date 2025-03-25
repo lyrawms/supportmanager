@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTaskTypeController  extends Controller
 {
+    /**
+     * @throws Exception
+     */
     public function __invoke(Request $request, TaskService $taskService, ShowTaskViewModel $showTaskViewModel)
     {
         $taskUuid = $request->input('taskUuid');

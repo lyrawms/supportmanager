@@ -8,11 +8,17 @@ use Illuminate\Http\Request;
 
 class updateTaskStatusController extends Controller
 {
+    /**
+     * @throws \Exception
+     */
     public function __invoke(Request $request)
     {
         $taskService = new TaskService();
         $taskUuid = $request->uuid;
         $status = $request->status;
-        return $taskService->updateTaskStatus($taskUuid, $status);
+        $category = $request->category;
+
+        $taskService->updateTaskStatus($taskUuid, $status);
+        return redirect(route('tasks.index', ["category" => $category]));
     }
 }

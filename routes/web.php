@@ -29,4 +29,5 @@ Route::middleware([
 require __DIR__ . '/../app/Domains/Tasks/Routes/web.php';
 require __DIR__ . '/../app/Domains/Settings/Routes/web.php';
 require __DIR__ . '/../app/Domains/Users/Routes/web.php';
+require __DIR__ . '/../app/Domains/Slack/Routes/web.php';
 

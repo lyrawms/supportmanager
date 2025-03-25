@@ -23,4 +23,11 @@ class UserRepository
             ->limit(5)
             ->get();
     }
+
+    public function updateSlackId(User $user, string $slackId): User
+    {
+        $user->slack_id = $slackId;
+        $user->save();
+        return $user->refresh();
+    }
 }

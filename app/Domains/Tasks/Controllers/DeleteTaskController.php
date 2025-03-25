@@ -12,6 +12,9 @@ class DeleteTaskController extends Controller
     {
         $taskService = new TaskService();
         $taskUuid = $request->uuid;
-        return $taskService->delete($taskUuid);
+        $category = $request->category;
+        $taskService->delete($taskUuid);
+
+        return redirect()->route('tasks.index', ['category' => $category]);
     }
 }

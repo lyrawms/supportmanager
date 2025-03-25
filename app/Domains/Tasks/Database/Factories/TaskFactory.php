@@ -16,7 +16,7 @@ class TaskFactory extends Factory
             'title' => $this->faker->sentence(),
             'description' => $this->faker->optional()->paragraph(),
             'intercom_link' => $this->faker->optional()->url(),
-            'created_at' => $createdAt = Carbon::parse($this->faker->dateTimeBetween('-1 year', 'now'))->copy(),
+            'created_at' => $createdAt = now(),
             'updated_at' => now(),
             'finished_at' => $this->faker->optional()->dateTime(),
             'sla' => $sla = $this->faker->randomDigitNotNull(), // will be overridden in the seeder

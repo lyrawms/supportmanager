@@ -26,15 +26,14 @@ class TypeService
         }
     }
 
-    public function fetchAllTypesSearch(string $query = null): LengthAwarePaginator | \Illuminate\Support\Collection
+    public function fetchAllTypesSearch(string $query): \Illuminate\Support\Collection
     {
-        if (!empty($query)) {
-            return collect([
-                'data' => $this->typeRepository->getAllTypesSearch($query)
-            ]);
-        } else {
-            return $this->typeRepository->getAllTypes();
-        }
+        return collect(['data' => $this->typeRepository->getAllTypesSearch($query)]);
+    }
+
+    public function fetchAllTypes(): LengthAwarePaginator
+    {
+        return $this->typeRepository->getAllTypes();
     }
 
     public function saveType(array $typeData): string

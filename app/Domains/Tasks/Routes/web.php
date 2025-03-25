@@ -47,19 +47,19 @@ Route::middleware(['auth', 'verified'])->post('/types/create', SaveTypeControlle
 
 
 
-Route::middleware(['auth:sanctum'])->get('/types/short-list', FetchShortListTypeController::class)
+Route::middleware(['auth', 'verified'])->get('/types/short-list', FetchShortListTypeController::class)
     ->name('types.small-list');
 
-Route::middleware(['auth:sanctum'])->get('/types/index-search', FetchAllTypesSearchController::class)
+Route::middleware(['auth', 'verified'])->get('/types/index-search', FetchAllTypesSearchController::class)
     ->name('types.index-search');
 
 
-Route::middleware(['auth:sanctum'])->get('/users/short-list', FetchShortListUserController::class)
+Route::middleware(['auth', 'verified'])->get('/users/short-list', FetchShortListUserController::class)
     ->name('users.index');
 
 
 
-Route::middleware(['auth:sanctum'])->post('/task/update-type', UpdateTaskTypeController::class)
+Route::middleware(['auth', 'verified'])->post('/task/update-type', UpdateTaskTypeController::class)
     ->name('task.update-type');
 
 Route::middleware(['auth:sanctum'])->post('/task/update-user', UpdateTaskUserController::class)
