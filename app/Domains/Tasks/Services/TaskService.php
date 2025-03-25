@@ -67,11 +67,15 @@ class TaskService
         $user = User::where('uuid', $userUuid)->firstOrFail();
 
         $updatedTask = $this->taskRepository->updateTaskUser($task, $user);
+        $message = "A TASK HAS BEEN ASSIGNED TO: {$user->name}";
+        if ($user->slack_id) {
+            $message = "A TASK HAS BEEN ASSIGNED TO YOU:";
+        }
 
         if ($updatedTask->wasChanged('assignee_id')) {
             $this->slackService->sendSlackMessage(
                 $this->slackService->toArray(
-                    "A TASK HAS BEEN ASSIGNED TO YOU:",
+                    $message,
                     [$this->slackService->prepareSlackData($updatedTask)]
                 ));
             return $user->uuid;

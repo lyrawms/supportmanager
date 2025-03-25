@@ -33,6 +33,7 @@ class TaskRepository
 //        dit moet nog gemaakt worden
         return Task::orderBy('deadline', 'asc')
             ->orderBy('created_at', 'desc')
+            ->where('status', '!=', 'finished')
             ->with('type')
             ->where('assignee_id', $id)
             ->paginate(10);
