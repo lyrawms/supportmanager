@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Notification;
 class SlackService
 {
     private  $slackWebhookUrl;
-    private UserRepository $userRepository;
+    protected UserRepository $userRepository;
 
     public function __construct()
     {
