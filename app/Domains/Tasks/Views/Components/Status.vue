@@ -18,6 +18,7 @@ export default {
         color: ''
     }),
     mounted() {
+        // change the styling to the given status
         switch (this.status) {
             case 'Finished':
                 return this.color = 'bg-green-500';
@@ -25,7 +26,7 @@ export default {
                 return this.color = 'bg-yellow-500';
             case 'Open':
                 return this.color = 'bg-blue-500';
-            case 'deleted':
+            case 'Deleted':
                 return this.color = 'bg-red-500';
             default:
                 return this.color = 'bg-gray-500';

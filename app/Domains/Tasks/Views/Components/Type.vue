@@ -16,6 +16,7 @@ export default {
         },
     }, methods: {
         getMostReadableColor(color) {
+            // get the most readable color for the given color
             return tinycolor.mostReadable(color, [], {includeFallbackColors: true});
         },
     }

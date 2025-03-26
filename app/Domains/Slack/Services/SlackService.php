@@ -27,7 +27,7 @@ class SlackService
 
     public function sendSlackMessage(array $data): void
     {
-
+        // Send a slack message
         Notification::route('slack', $this->slackWebhookUrl)
             ->notify(new SlackNotification($data));
 

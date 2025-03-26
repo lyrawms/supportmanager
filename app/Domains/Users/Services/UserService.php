@@ -15,6 +15,7 @@ class UserService
 
     public function getSmallListOfUsers(?string $query, ?string $currentAssignedUser): Collection
     {
+        // If the query is not empty, return the users that match the query, otherwise return the default users
         if (!empty($query)) {
             return $this->userRepository->getUsersBySearch($query, $currentAssignedUser);
         } else {

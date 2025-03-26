@@ -27,6 +27,7 @@ class TaskService
 
     public function getAllTasks($category): LengthAwarePaginator
     {
+        // checks the category and fetches the corresponding tasks
         if ($category === 'Your') {
             return $this->taskRepository->getAllTasksForUser(auth()->id());
         } elseif ($category === 'Team') {
@@ -46,12 +47,17 @@ class TaskService
      */
     public function updateTaskType(string $taskUuid, string $typeUuid)
     {
+        // fetches the task and type
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $type = Type::where('uuid', $typeUuid)->firstOrFail();
+
+        // calculates the deadline
         $deadline = $this->calcDeadline($type->sla, $task->created_at);
 
+        // updates the task type, and deadline
         $updatedTask = $this->taskRepository->updateTaskType($task, $type, $deadline);
 
+        // if the task_id has not changed it sends a exception
         if ($updatedTask->wasChanged('type_id')) {
             return $updatedTask->type_id;
         }
@@ -63,15 +69,22 @@ class TaskService
      */
     public function updateTaskUser(string $taskUuid, string $userUuid): string
     {
+        // fetches the task and user
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
         $user = User::where('uuid', $userUuid)->firstOrFail();
 
+        // updates the task user
         $updatedTask = $this->taskRepository->updateTaskUser($task, $user);
+
+        //setting the default message
         $message = "A TASK HAS BEEN ASSIGNED TO: {$user->name}";
+
+        // if the user has a slack_id, it creates a new slack message
         if ($user->slack_id) {
             $message = "A TASK HAS BEEN ASSIGNED TO YOU:";
         }
 
+        // if the task has indeed been updated, it sends a slack message, if not a exceotion is thrown
         if ($updatedTask->wasChanged('assignee_id')) {
             $this->slackService->sendSlackMessage(
                 $this->slackService->toArray(
@@ -88,12 +101,17 @@ class TaskService
      */
     public function saveTask(array $taskData): string
     {
+        // fetches the creator and type
         $creator = User::findOrFail(auth()->id());
         $type = Type::where('uuid', $taskData['type'])->firstOrFail();
+
+        // calculates the deadline
         $deadline = $this->calcDeadline($type->sla, Carbon::now());
 
+        // saves the task to the database
         $newTask = $this->taskRepository->saveTask($taskData, $creator, $deadline, $type);
 
+        // if the task has been created and is a correct instance of Task it sends a slack message, otherwise a exception is thrown
         if ($newTask instanceof Task) {
             $this->slackService->sendSlackMessage(
                 $this->slackService->toArray(
@@ -109,7 +127,7 @@ class TaskService
 
     public function calcDeadline(int $typeSla, string $created_at): string
     {
-
+        // adds the typeSla days to the created_at date and creates the deadline
         return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
 
@@ -118,15 +136,21 @@ class TaskService
      */
     public function updateTaskStatus(string $taskUuid, string $status)
     {
+        // fetches the task
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
 
+        // associates the status with the corresponding method
         $statusMethods = [
             'finished' => 'updateTaskStatusFinished',
         ];
+
+        // if the status is not in the array, it uses the default method
         $method = $statusMethods[$status] ?? 'updateTaskStatus';
 
+        // updates the task status
         $updatedTask = $this->taskRepository->$method($task, $status);
 
+        // if the status has been updated, it returns the new status, otherwise a exception is thrown
         if ($updatedTask->wasChanged('status')) {
             return $updatedTask->status;
         }
@@ -135,20 +159,26 @@ class TaskService
 
     public function delete(string $taskUuid)
     {
+        // fetches the task
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
-        $this->taskRepository->updateTaskStatus($task, 'deleted');
+
+        // change the status to deleted
+        $this->taskRepository->updateTaskStatus($task, 'Deleted');
+
+        // softdeletes the task
         return $this->taskRepository->delete($task);
     }
 
     public function checkDeadline(string $message, $date = null)
     {
+        // checks is the date attribute is given, and executes the corresponding fetch method
         if ($date) {
             $tasks = $this->taskRepository->getUnfinishedTasksAfterDate($date);
         } else {
             $tasks = $this->taskRepository->getUnfinishedTasksAfterDeadline();
         }
 
-
+        // if there are tasks, it sends a slack message
         if (count($tasks) > 0) {
             $data = [];
             foreach ($tasks as $task) {
