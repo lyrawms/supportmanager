@@ -83,6 +83,7 @@ export default {
             type: String,
         },
     },
+    // if you plan to use this component for another sort of subject, you need to add the emit name to the emits array,
     emits: [`updateTaskUser`, 'updateTaskType'],
 
     components: {
@@ -103,6 +104,7 @@ export default {
     }),
     methods: {
         fetchSubjects() {
+            // fetch the subjects from the server
             fetch(`/${this.subject}s/short-list?query=${this.query}&currentAssigned${this.subjectUppercase}=${this.currentAssignedSubject ? this.currentAssignedSubject.uuid : null}`, {
                 method: "GET",
                 headers: {
@@ -113,6 +115,7 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
+                    // if you plan to use this component for another sort of subject, you need to add the subject to the subjectbinding below
                     this.subjects = data.users ?? data.types;
                 })
                 .catch(error => {
@@ -120,6 +123,7 @@ export default {
                 });
         },
         handleInput(event) {
+            // when the input is changed, the subjects are fetched with a debounce
             clearTimeout(this.debounceTimer);
             this.debounceTimer = setTimeout(() => {
                 this.query = event.target.value;
@@ -127,6 +131,7 @@ export default {
             }, 800);
         },
         handleButtonClick() {
+            // when the button is clicked, the subjects are fetched
             this.firstFetchCheck = !this.firstFetchCheck;
             if (this.firstFetchCheck) {
                 this.fetchSubjects();
@@ -134,13 +139,16 @@ export default {
         }
     },
     mounted() {
+        // if the currentAssignedSubject is set and query is empty set the selected to the currentAssignedSubject
         if (this.currentAssignedSubject && this.query === "") {
             this.selected = this.currentAssignedSubject;
         }
+        // create the name of the subject with the first letter uppercase
         this.subjectUppercase = this.subject.charAt(0).toUpperCase() + this.subject.slice(1)
     },
     watch: {
         selected() {
+            // if you plan to use this component for another sort of subject, you need to add the emit name to the watch
             if (this.subject === 'type') {
                 if (this.selected !== this.currentAssignedSubject) {
                     this.$emit(`updateTaskType`, this.selected)

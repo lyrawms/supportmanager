@@ -14,16 +14,16 @@
                                    class="mt-1 p-2 border border-gray-300 rounded-md w-full"
                                    required/>
                             <span v-if="errors?.title" class="text-red-600 text-sm">{{
-                                    errors.title[0]
+                                    errors.title
                                 }}</span>
                         </div>
                         <div class="">
                             <label for="sla" class="block text-sm font-medium text-gray-700">SLA:</label>
-                            <input v-model="sla" id="sla" type="text" placeholder="4 days"
+                            <input v-model="sla" id="sla" type="number" placeholder="4 days"
                                    class="mt-1 p-2 border border-gray-300 rounded-md w-full"
                                    required/>
                             <span v-if="errors?.sla" class="text-red-600 text-sm">{{
-                                    errors.sla[0]
+                                    errors.sla
                                 }}</span>
                         </div>
                         <div class="">
@@ -33,8 +33,11 @@
                                          class="mt-1 p-2 border border-gray-300 rounded-md w-full"
                                          required id="color"/>
                             <span v-if="errors?.color" class="text-red-600 text-sm">{{
-                                    errors.color[0]
+                                    errors.color
                                 }}</span>
+                        </div>
+                        <div>
+                            {{ errors}}
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="submit"
@@ -75,37 +78,25 @@ export default {
     }),
     methods: {
         createType(closure) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            fetch('/types/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                credentials: 'include',
-                body: JSON.stringify({
+            // clear errors
+            this.errors = {};
+            // send the request
+            this.$inertia.post('/types/create', {
                     title: this.title,
                     sla: this.sla,
                     color: this.pureColor,
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.errors) {
-                        this.errors = data.errors;
-                        console.error("Error creating type", data.errors);
-                    } else if (data) {
-                        console.log("Type created", data);
-
+                }, {
+                    preserveState: true,
+                    onSuccess: () => {
+                        // close the modal
                         closure();
+                    },
+                    onError: (errors) => {
+                        // bind the errors
+                        this.errors = errors;
                     }
-                })
-                .catch(error => {
-                    console.error("Error creating type", error);
-                    this.errors = error;
-                });
+                }
+            )
         },
     }
 }

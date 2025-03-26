@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class SaveTypeController
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, TypeService $typeService)
     {
         $validatedData = $request->validate([
             'title' => 'required|string|unique:types,title',
@@ -15,10 +15,11 @@ class SaveTypeController
             'color' => 'required|hex_color|unique:types,color',
         ]);
 
-        $typeService = new TypeService();
+        $typeService->saveType($validatedData);
 
-        return response()->json([
-            'uuid' => $typeService->saveType($validatedData),
-        ]);
+        return redirect(route('settings'));
+
+
+
     }
 }

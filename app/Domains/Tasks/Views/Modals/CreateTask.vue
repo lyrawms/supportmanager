@@ -12,16 +12,16 @@
                             min_height: 300,
                                 }"></Editor>
                         <span v-if="errors.description"
-                              class="text-red-600 text-sm">{{ errors.description[0] }}</span>
+                              class="text-red-600 text-sm">{{ errors.description }}</span>
                     </div>
                     <div class="w-[40%] space-y-6">
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
                             <input v-model="title" id="title" type="text" placeholder="Enter a title"
                                    class="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                                   required/>
+                                   />
                             <span v-if="errors?.title" class="text-red-600 text-sm">{{
-                                    errors.title[0]
+                                    errors.title
                                 }}</span>
                         </div>
                         <div>
@@ -31,7 +31,7 @@
                                    placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                                    class="mt-1 p-2 border border-gray-300 rounded-md w-full"/>
                             <span v-if="errors?.intercomLink" class="text-red-600 text-sm">{{
-                                    errors.intercomLink[0]
+                                    errors.intercomLink
                                 }}</span>
                         </div>
 
@@ -92,10 +92,13 @@ export default {
     }),
     methods: {
         createTask(closure) {
+            // reset errors
             this.errors = {};
+            // check if the type is selected
             if (!this.currentType || !this.currentType.uuid) {
                 this.errors.type = ['Type is required.'];
             } else {
+                // send the request
                 this.$inertia.post(
                     '/tasks/create',
                     {
@@ -108,10 +111,13 @@ export default {
                     {
                         preserveScroll: true,
                         onSuccess: () => {
+                            // close the modal
                             closure();
                         },
                         onError: (errors) => {
+                            // bind the errors
                             this.errors = errors;
+                            console.log(errors)
                         }
                     }
                 )
@@ -122,12 +128,16 @@ export default {
             this.toggleComboBoxType();
         },
         assignNewType(newType) {
+            // assign the new type
             this.currentType = newType;
         },
         toggleComboBoxType() {
+            // open or close the type combobox
+
             this.showComboBoxType = !this.showComboBoxType;
         },
         getCategoryFromUrl() {
+            // get the table category from the url
             const params = new URLSearchParams(window.location.search);
             return params.get("category") || 'Company';
         }

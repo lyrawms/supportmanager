@@ -122,9 +122,9 @@ class TaskRepository
 
     public function getUnfinishedTasksAfterDate($date)
     {
-        //
+        // fetch all tasks where the deadline is past the given date and the status is not finished or deleted with assignee
         return Task::orderBy('deadline', 'desc')
-            ->where('deadline', '>', $date)
+            ->where('deadline', '<', $date)
             ->whereNotIn('status', ['Finished', 'Deleted'])
             ->with('assignee')
             ->get();

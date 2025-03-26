@@ -18,6 +18,7 @@ export default {
         color: ''
     }),
     mounted() {
+        // change the styling to the given status
         switch (this.status) {
             case 'Finished':
                 return this.color = 'bg-green-500';

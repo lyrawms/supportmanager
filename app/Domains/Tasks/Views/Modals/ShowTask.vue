@@ -152,6 +152,7 @@ export default {
     }),
     methods: {
         getCategoryFromUrl() {
+            // get the table category from the url
             const params = new URLSearchParams(window.location.search);
             return params.get("category") || 'Company';
         },
@@ -164,24 +165,30 @@ export default {
             this.updateTaskUser(this.newUser);
         },
         toggleComboBoxType() {
+            // toggle the visibility of the combobox
             this.showComboBoxType = !this.showComboBoxType;
         },
         toggleComboBoxUser() {
+            // toggle the visibility of the combobox
             this.showComboBoxUser = !this.showComboBoxUser;
         },
         updateTaskTypePageData(type) {
+            // update the task type data on the page
             this.currentType = type;
             this.sla = type.sla;
             this.deadline = dayjs(this.task.created_at).add(type.sla, "day").format("YYYY-MM-DD HH:mm:ss");
         },
         updateTaskUserPageData(user) {
+            // update the task user data on the page
             this.currentAssignee = user;
-            console.log("User:", this.currentAssignee);
         },
 
         updateTaskType(type) {
+            // if the combobox type is not visible, the new type is set and is different than the current type, update the task type
             if (!this.showComboBoxType && (type.uuid && type.uuid !== (this.currentType ? this.currentType.uuid : null))) {
+                // first update the data on the page
                 this.updateTaskTypePageData(type);
+                // send the request to the server
                 this.$inertia.post(
                     '/task/update-type',
                     {
@@ -192,9 +199,11 @@ export default {
                     {
                         preserveScroll: true, // Prevents page scroll reset
                         onSuccess: () => {
+                            // log the success
                             console.log("Task type updated successfully");
                         },
                         onError: (error) => {
+                            // log the error
                             console.error("Error updating task type:", error);
                         }
                     }
@@ -202,8 +211,11 @@ export default {
             }
         },
         updateTaskUser(user) {
+            // if the combobox user is not visible, the new user is set and is different than the current user, update the task user
             if (!this.showComboBoxUser && (user.uuid && user.uuid !== (this.currentAssignee ? this.currentAssignee.uuid : null))) {
+                // first update the data on the page
                 this.updateTaskUserPageData(user);
+                // send the request to the server
                 this.$inertia.post(
                     '/task/update-user',
                     {
@@ -214,9 +226,11 @@ export default {
                     {
                         preserveScroll: true,
                         onSuccess: () => {
+                            // log the success
                             console.log("Task user updated successfully");
                         },
                         onError: (error) => {
+                            // log the error
                             console.error("Error updating task user:", error);
                         }
                     }
@@ -224,12 +238,15 @@ export default {
             }
         },
         getCompanyParam() {
+            // get the company parameter from the url
             return new URLSearchParams(window.location.search).get("category") || "Company";
         },
         assignNewType(type) {
+            // assign the new type
             this.newType = type;
         },
         assignNewUser(user) {
+            // assign the new user
             this.newUser = user;
         },
 
