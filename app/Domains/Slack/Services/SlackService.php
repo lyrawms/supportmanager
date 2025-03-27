@@ -19,10 +19,10 @@ class SlackService
     private  $slackWebhookUrl;
     protected UserRepository $userRepository;
 
-    public function __construct()
+    public function __construct(UserRepository $userRepository)
     {
         $this->slackWebhookUrl = env('SLACK_WEBHOOK_URL');
-        $this->userRepository = new UserRepository();
+        $this->userRepository = $userRepository;
     }
 
     public function sendSlackMessage(array $data): void

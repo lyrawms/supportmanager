@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 class UserService
 {
     protected UserRepository $userRepository;
-    public function __construct()
+    public function __construct(UserRepository $userRepository)
     {
-        $this->userRepository = new UserRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function getSmallListOfUsers(?string $query, ?string $currentAssignedUser): Collection

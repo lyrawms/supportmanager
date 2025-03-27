@@ -2,11 +2,22 @@
 
 namespace Tests\Feature;
 
+use App\Domains\Slack\Services\SlackService;
+use App\Domains\Tasks\Database\Models\Task;
+use App\Domains\Tasks\Database\Models\Type;
+use App\Domains\Tasks\Repositories\TaskRepository;
+use App\Domains\Tasks\Services\TaskService;
 use App\Domains\Users\Database\Models\User;
+use App\Domains\Users\Services\UserService;
+use Illuminate\Auth\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
+use JsonException;
+use Mockery;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class TaskCreateTest extends TestCase
 {
@@ -27,27 +38,113 @@ class TaskCreateTest extends TestCase
 
     public function test_user_can_acces_create_task_modal()
     {
-        $this->actingAs($this->user);
-        $response = $this->get('/tasks/create');
+        $response = $this->actingAs($this->user)->get('/tasks/create');
 
+        $response->assertInertia(fn(Assert $page) => $page
+            ->component('Tasks/Modals/CreateTask', false)
+        );
         $response->assertStatus(200);
+
     }
 
+    public function test_non_logged_in_user_cannot_acces_create_task_modal()
+    {
+        $response = $this->get('/tasks/create');
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('toasts', function ($toasts) {
+            return isset($toasts['message']) && $toasts['message'] === 'Unauthenticated.' &&
+                isset($toasts['type']) && $toasts['type'] === 'error';
+        });
+    }
+
+    /**
+     * @throws JsonException
+     */
     public function test_user_can_create_task_with_valid_data()
     {
-        $this->actingAs($this->user);
-        $response = $this->post('/tasks/create', [
-            'title' => 'Test Task',
-            'description' => 'Test Description',
+        $type = Type::factory()->create();
+
+        $taskRepository = app(TaskRepository::class);
+        $slackService = app(SlackService::class);
+        $userService = app(UserService::class);
+
+        $mockTaskService = Mockery::mock(TaskService::class, [
+            $taskRepository,
+            $slackService,
+            $userService
+        ])->makePartial();
+        $mockTaskService->shouldReceive('callSendSlackMessageMethod')->andReturnNull();
+
+        $this->app->instance(TaskService::class, $mockTaskService);
+
+        $newTask = [
+            'title' => 'Very Important',
+            'description' => 'Testie Testie',
             'intercomLink' => 'https://intercom.com',
-        ]);
-        $response->dump();
+            'type' => $type->uuid->toString(),
+        ];
+
+        $response = $this->actingAs($this->user)->post('/tasks/create', $newTask);
+        $lastProduct = Task::latest()->with('type')->first();
+
         $response->assertStatus(302);
-        $this->assertDatabaseHas('tasks', [
-            'title' => 'Test Task',
-            'description' => 'Test Description',
-            'intercom_link' => 'https://intercom.com',
-            'sla' => 5,
-        ]);
+        $this->assertEquals($lastProduct->title, $newTask['title']);
+        $this->assertEquals($lastProduct->type->uuid, $newTask['type']);
+        $response->assertSessionHasNoErrors();
+
+    }
+
+    public function test_user_cannot_create_task_with_invalid_data()
+    {
+        $newTask = [
+            'title' => '',
+            'description' => 'Testie Testie',
+            'intercomLink' => 'https://intercom.com',
+            'type' => '',
+        ];
+
+        $response = $this->actingAs($this->user)->post('/tasks/create', $newTask);
+
+
+        $response->assertStatus(302);
+        $response->assertInvalid(['title', 'type']);
+        $response->assertSessionHas('toasts', function ($toasts) {
+            return isset($toasts['message']) && isset($toasts['type']) && $toasts['type'] === 'error';
+        });
+    }
+
+    public function test_user_cannot_create_task_with_not_existing_type_uuid()
+    {
+
+        $taskRepository = app(TaskRepository::class);
+        $slackService = app(SlackService::class);
+        $userService = app(UserService::class);
+
+        $mockTaskService = Mockery::mock(TaskService::class, [
+            $taskRepository,
+            $slackService,
+            $userService
+        ])->makePartial();
+        $mockTaskService->shouldReceive('callSendSlackMessageMethod')->andReturnNull();
+
+        $this->app->instance(TaskService::class, $mockTaskService);
+
+        $newTask = [
+            'title' => 'Very important',
+            'description' => 'Testie Testie',
+            'intercomLink' => 'https://intercom.com',
+            'type' => '47475115-56ab-4022-aaaf-bde67971d8ff',
+        ];
+
+        $response = $this->actingAs($this->user)->post('/tasks/create', $newTask);
+
+
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('toasts', function ($toasts) {
+            return isset($toasts['message']) && $toasts['message'] === 'No query results for model [App\Domains\Tasks\Database\Models\Type].'
+            && isset($toasts['type']) && $toasts['type'] === 'error';
+        });
     }
 }

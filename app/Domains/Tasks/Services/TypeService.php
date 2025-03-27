@@ -12,9 +12,9 @@ class TypeService
 {
     protected TypeRepository $typeRepository;
 
-    public function __construct()
+    public function __construct(TypeRepository $typeRepository)
     {
-        $this->typeRepository = new TypeRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     public function getSmallListOfTypes(?string $query, ?string $currentAssignedType): Collection
