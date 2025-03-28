@@ -39,7 +39,7 @@ class TaskCreateTest extends TestCase
 
     }
 
-    public function test_non_authenticated_in_user_cannot_access_create_task_modal()
+    public function test_not_authenticated_user_cannot_access_create_task_modal()
     {
         $response = $this->get('/tasks/create');
 
@@ -120,7 +120,6 @@ class TaskCreateTest extends TestCase
 
         $response = $this->actingAs($this->user)->post('/tasks/create', $newTask);
 
-
         $response->assertStatus(302);
         $response->assertInvalid(['title', 'type']);
         $response->assertSessionHas('toasts', function ($toasts) {
@@ -128,7 +127,7 @@ class TaskCreateTest extends TestCase
         });
     }
 
-    public function test_user_cannot_create_task_with_not_existing_type_uuid()
+    public function test_authenticated_user_cannot_create_task_with_not_existing_type_uuid()
     {
 
         $taskRepository = app(TaskRepository::class);
