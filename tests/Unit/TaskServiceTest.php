@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 class TaskServiceTest extends TestCase
 {
 
-    protected $taskService;
+    protected TaskService $taskService;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->taskService = new TaskService();
+        $this->taskService = app(TaskService::class);
     }
 
     public function test_deadline_calculation_with_correct_data()

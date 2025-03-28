@@ -9,11 +9,7 @@ use App\Domains\Tasks\Repositories\TaskRepository;
 use App\Domains\Tasks\Services\TaskService;
 use App\Domains\Users\Database\Models\User;
 use App\Domains\Users\Services\UserService;
-use Illuminate\Auth\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\DB;
 use JsonException;
 use Mockery;
 use Tests\TestCase;
@@ -32,11 +28,7 @@ class TaskCreateTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    /**
-     * A basic feature test example.
-     */
-
-    public function test_user_can_acces_create_task_modal()
+    public function test_user_can_access_create_task_modal()
     {
         $response = $this->actingAs($this->user)->get('/tasks/create');
 
@@ -47,7 +39,7 @@ class TaskCreateTest extends TestCase
 
     }
 
-    public function test_non_logged_in_user_cannot_acces_create_task_modal()
+    public function test_non_authenticated_in_user_cannot_access_create_task_modal()
     {
         $response = $this->get('/tasks/create');
 
@@ -92,6 +84,28 @@ class TaskCreateTest extends TestCase
         $this->assertEquals($lastProduct->title, $newTask['title']);
         $this->assertEquals($lastProduct->type->uuid, $newTask['type']);
         $response->assertSessionHasNoErrors();
+    }
+
+    public function test_not_authenticated_user_cannot_create_task_with_valid_data()
+    {
+        $type = Type::factory()->create();
+
+        $newTask = [
+            'title' => 'Very Important',
+            'description' => 'Testie Testie',
+            'intercomLink' => 'https://intercom.com',
+            'type' => $type->uuid->toString(),
+        ];
+
+        $response = $this->post('/tasks/create', $newTask);
+
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('toasts', function ($toasts) {
+            return isset($toasts['message']) && $toasts['message'] === 'Unauthenticated.'
+                && isset($toasts['type']) && $toasts['type'] === 'error';
+        });
+
 
     }
 
