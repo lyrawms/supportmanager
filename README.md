@@ -66,3 +66,11 @@ stored in `Domains/{domainName}/Routes` instead of the default `routes/web.php`.
    ```sh
    php artisan serve
    ```
+   
+## Testing
+if you want to run my own written test you can excute the following commands in your terminal.
+```sh
+php artisan test --filter TaskUpdateStatusTest
+php artisan test --filter TaskServiceTest
+php artisan test --filter TaskCreateTest
+```

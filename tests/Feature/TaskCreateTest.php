@@ -28,7 +28,7 @@ class TaskCreateTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    public function test_user_can_access_create_task_modal()
+    public function test_authenticated_user_can_access_create_task_modal()
     {
         $response = $this->actingAs($this->user)->get('/tasks/create');
 
@@ -53,7 +53,7 @@ class TaskCreateTest extends TestCase
     /**
      * @throws JsonException
      */
-    public function test_user_can_create_task_with_valid_data()
+    public function test_authenticated_user_can_create_task_with_valid_data()
     {
         $type = Type::factory()->create();
 
@@ -109,7 +109,7 @@ class TaskCreateTest extends TestCase
 
     }
 
-    public function test_user_cannot_create_task_with_invalid_data()
+    public function test_authenticated_user_cannot_create_task_with_invalid_data()
     {
         $newTask = [
             'title' => '',
