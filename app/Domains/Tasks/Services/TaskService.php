@@ -125,7 +125,7 @@ class TaskService
         if ($typeSla < 1) {
             throw new Exception('Sla must be a positive number', 500);
         }
-        if (!Carbon::hasFormat($created_at,'Y-md H:i:s')) {
+        if (!Carbon::hasFormat($created_at,'Y-m-d H:i:s')) {
             throw new Exception('Date must be a valid datetime', 500);
         }
         // adds the typeSla days to the created_at date and creates the deadline
