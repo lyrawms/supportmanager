@@ -128,12 +128,20 @@ class TaskService
      */
     public function updateTaskStatus(string $taskUuid, string $status)
     {
+        $availableStatuses = [
+            'Finished',
+            'Active',
+            'Open',
+        ];
+        if (!in_array($status, $availableStatuses)) {
+            throw new Exception('This status is not allowed', 500);
+        }
         // fetches the task
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
 
         // associates the status with the corresponding method
         $statusMethods = [
-            'finished' => 'updateTaskStatusFinished',
+            'Finished' => 'updateTaskStatusFinished',
         ];
 
         // if the status is not in the array, it uses the default method

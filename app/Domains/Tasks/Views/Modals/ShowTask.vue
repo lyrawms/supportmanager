@@ -95,7 +95,7 @@
         </div>
 
         <template #cta>
-            <primary-button :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished', category:getCategoryFromUrl() } )" link color="green">
+            <primary-button :href="route('tasks.updateStatus', {uuid:task.uuid, status:'Finished', category:getCategoryFromUrl() } )" link color="green">
                 Finish
             </primary-button>
             <primary-button @click="close" :href="route('tasks.delete', {uuid:task.uuid, category:getCategoryFromUrl() } )" link color="red">
