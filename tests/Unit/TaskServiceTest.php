@@ -43,7 +43,7 @@ class TaskServiceTest extends TestCase
 
     public function test_deadline_calculation_with_invalid_date()
     {
-        $typeSla = -5;
+        $typeSla = 5;
         $date = 'superinvaliddatetime';
 
         $this->expectException(Exception::class);
