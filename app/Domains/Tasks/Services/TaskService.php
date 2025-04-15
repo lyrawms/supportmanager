@@ -117,8 +117,17 @@ class TaskService
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function calcDeadline(int $typeSla, string $created_at): string
     {
+        if ($typeSla < 1) {
+            throw new Exception('Sla must be a positive number', 500);
+        }
+        if (!Carbon::hasFormat($created_at,'Y-md H:i:s')) {
+            throw new Exception('Date must be a valid datetime', 500);
+        }
         // adds the typeSla days to the created_at date and creates the deadline
         return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
