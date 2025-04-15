@@ -8,9 +8,9 @@ class FetchAllTypesSearchViewModel
 {
     protected TypeService $typeService;
 
-    public function __construct()
+    public function __construct(TypeService $typeService)
     {
-        $this->typeService = new TypeService;
+        $this->typeService = $typeService;
     }
 
 

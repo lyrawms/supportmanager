@@ -18,11 +18,12 @@ class TaskService
     protected SlackService $slackService;
     protected UserService $userService;
 
-    public function __construct()
+    public function __construct(TaskRepository $taskRepository, SlackService $slackService, UserService $userService)
     {
-        $this->taskRepository = new TaskRepository();
-        $this->slackService = new SlackService();
-        $this->userService = new UserService();
+
+        $this->taskRepository = $taskRepository;
+        $this->slackService = $slackService;
+        $this->userService = $userService;
     }
 
     public function getAllTasks($category): LengthAwarePaginator
@@ -86,11 +87,7 @@ class TaskService
 
         // if the task has indeed been updated, it sends a slack message, if not a exceotion is thrown
         if ($updatedTask->wasChanged('assignee_id')) {
-            $this->slackService->sendSlackMessage(
-                $this->slackService->toArray(
-                    $message,
-                    [$this->slackService->prepareSlackData($updatedTask)]
-                ));
+            $this->callSendSlackMessageMethod($updatedTask, $message);
             return $user->uuid;
         }
         throw new Exception('User could not be assigned to task', 500);
@@ -113,12 +110,7 @@ class TaskService
 
         // if the task has been created and is a correct instance of Task it sends a slack message, otherwise a exception is thrown
         if ($newTask instanceof Task) {
-            $this->slackService->sendSlackMessage(
-                $this->slackService->toArray(
-                    "A NEW TASK HAS BEEN CREATED:",
-                    [$this->slackService->prepareSlackData($newTask)]
-                )
-            );
+            $this->callSendSlackMessageMethod($newTask, 'A NEW TASK HAS BEEN CREATED:');
             return $newTask->uuid;
         }
         throw new Exception('Task could not be created', 500);
@@ -186,5 +178,20 @@ class TaskService
             }
             $this->slackService->sendSlackMessage($this->slackService->toArray($message, $data));
         }
+    }
+
+    /**
+     * @param Task $task
+     * @param string $message
+     * @return void
+     */
+    public function callSendSlackMessageMethod(Task $task, string $message): void
+    {
+        $this->slackService->sendSlackMessage(
+            $this->slackService->toArray(
+                $message,
+                [$this->slackService->prepareSlackData($task)]
+            )
+        );
     }
 }

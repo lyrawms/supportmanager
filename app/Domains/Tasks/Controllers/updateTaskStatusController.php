@@ -11,9 +11,8 @@ class updateTaskStatusController extends Controller
     /**
      * @throws \Exception
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, TaskService $taskService)
     {
-        $taskService = new TaskService();
         $taskUuid = $request->uuid;
         $status = $request->status;
         $category = $request->category;

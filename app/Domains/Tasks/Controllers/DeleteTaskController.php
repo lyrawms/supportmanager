@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 
 class DeleteTaskController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, TaskService $taskService)
     {
-        $taskService = new TaskService();
         $taskUuid = $request->uuid;
         $category = $request->category;
         $taskService->delete($taskUuid);
