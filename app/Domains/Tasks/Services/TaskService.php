@@ -117,8 +117,17 @@ class TaskService
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function calcDeadline(int $typeSla, string $created_at): string
     {
+        if ($typeSla < 1) {
+            throw new Exception('Sla must be a positive number', 500);
+        }
+        if (!Carbon::hasFormat($created_at,'Y-m-d H:i:s')) {
+            throw new Exception('Date must be a valid datetime', 500);
+        }
         // adds the typeSla days to the created_at date and creates the deadline
         return Carbon::parse($created_at)->addDays($typeSla)->format('Y-m-d H:i:s');
     }
@@ -128,12 +137,20 @@ class TaskService
      */
     public function updateTaskStatus(string $taskUuid, string $status)
     {
+        $availableStatuses = [
+            'Finished',
+            'Active',
+            'Open',
+        ];
+        if (!in_array($status, $availableStatuses)) {
+            throw new Exception('This status is not allowed', 500);
+        }
         // fetches the task
         $task = Task::where('uuid', $taskUuid)->firstOrFail();
 
         // associates the status with the corresponding method
         $statusMethods = [
-            'finished' => 'updateTaskStatusFinished',
+            'Finished' => 'updateTaskStatusFinished',
         ];
 
         // if the status is not in the array, it uses the default method

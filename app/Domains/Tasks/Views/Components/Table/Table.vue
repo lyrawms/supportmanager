@@ -95,7 +95,7 @@
                             </td>
                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
                                 <primary-button
-                                    :href="route('tasks.updateStatus', {uuid:task.uuid, status:'finished', category:getCategoryFromUrl()} )"
+                                    :href="route('tasks.updateStatus', {uuid:task.uuid, status:'Finished', category:getCategoryFromUrl()} )"
                                     link
                                     color="green">
                                     Finish
