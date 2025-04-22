@@ -36,9 +36,6 @@
                                     errors.color
                                 }}</span>
                         </div>
-                        <div>
-                            {{ errors}}
-                        </div>
                         <div class="flex justify-end mt-6">
                             <button type="submit"
                                     class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700">
