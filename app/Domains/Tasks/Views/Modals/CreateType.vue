@@ -26,18 +26,22 @@
                                     errors.sla
                                 }}</span>
                         </div>
-                        <div class="">
-                            <label for="color" class="block text-sm font-medium text-gray-700">Color:</label>
-
-                            <ColorPicker v-model:pureColor="pureColor" format="hex"
-                                         class="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                                         required id="color"/>
-                            <span v-if="errors?.color" class="text-red-600 text-sm">{{
-                                    errors.color
-                                }}</span>
-                        </div>
                         <div>
-                            {{ errors}}
+                            <div>
+                                <label for="wantsColor" class="block text-sm font-medium text-gray-700">Wants
+                                    Color:</label>
+                                <checkbox v-model:checked="wantsColor"/>
+                            </div>
+                            <div v-show="wantsColor" class="">
+                                <label for="color" class="block text-sm font-medium text-gray-700">Color:</label>
+
+                                <ColorPicker v-model:pureColor="pureColor" format="hex"
+                                             class="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                                             id="color"/>
+                                <span v-if="errors?.color" class="text-red-600 text-sm">{{
+                                        errors.color
+                                    }}</span>
+                            </div>
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="submit"
@@ -59,10 +63,12 @@ import {DialogTitle} from "@headlessui/vue";
 import CheckboxGroup from "@/Components/Forms/CheckboxGroup.vue";
 import Editor from "@tinymce/tinymce-vue";
 import {ColorPicker} from "vue3-colorpicker";
+import Checkbox from "@/Components/Forms/Checkbox.vue";
 
 export default {
     name: 'CreateType',
     components: {
+        Checkbox,
         ColorPicker,
         Dialog,
         PrimaryButton,
@@ -75,6 +81,7 @@ export default {
         errors: {},
         pureColor: '#ff0000',
         sla: null,
+        wantsColor: false,
     }),
     methods: {
         createType(closure) {
@@ -84,7 +91,7 @@ export default {
             this.$inertia.post('/types/create', {
                     title: this.title,
                     sla: this.sla,
-                    color: this.pureColor,
+                    color: this.wantsColor ? this.pureColor : null,
                 }, {
                     preserveState: true,
                     onSuccess: () => {

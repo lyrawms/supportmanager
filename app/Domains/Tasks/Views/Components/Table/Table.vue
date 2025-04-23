@@ -86,7 +86,7 @@
                                 Prio
                             </td>
                             <td class="px-3 py-4 text-sm whitespace-nowrap text-stone-500">
-                                {{ task.deadline }}
+                                <Deadline :deadline="task.deadline"/>
                             </td>
                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
                                 <primary-button :href="route('tasks.show', {uuid:task.uuid} )" modal color="amber">
@@ -116,10 +116,11 @@ import {Link} from '@inertiajs/vue3';
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Type from "../Type.vue";
 import Status from "../Status.vue";
+import Deadline from "../Deadline.vue";
 
 export default {
     name: "Table",
-    components: {Status, Type, PrimaryButton, Link},
+    components: {Deadline, Status, Type, PrimaryButton, Link},
     props: {
         tasks: {
             type: Array,
