@@ -104,26 +104,26 @@ const colors = {
         :value="value"
      />
 
-    <span :data-checkbox-checked="proxyChecked" :class="[base, colors[color]]" role="checkbox" tabindex="0" data-slot="control">
-        <svg
-            class="size-4 stroke-(--checkbox-check) opacity-0 group-data-checked:opacity-100 sm:h-3.5 sm:w-3.5"
-            viewBox="0 0 14 14"
-            fill="none"
-        >
-          <path
-              class="opacity-100 group-data-indeterminate:opacity-0"
-              d="M3 8L6 11L11 3.5"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-          />
-          <path
-              class="opacity-0 group-data-indeterminate:opacity-100"
-              d="M3 7H11"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-          />
-        </svg>
-    </span>
+<!--    <span :data-checkbox-checked="proxyChecked" :class="[base, colors[color]]" role="checkbox" tabindex="0" data-slot="control">-->
+<!--        <svg-->
+<!--            class="size-4 stroke-(&#45;&#45;checkbox-check) opacity-0 group-data-checked:opacity-100 sm:h-3.5 sm:w-3.5"-->
+<!--            viewBox="0 0 14 14"-->
+<!--            fill="none"-->
+<!--        >-->
+<!--          <path-->
+<!--              class="opacity-100 group-data-indeterminate:opacity-0"-->
+<!--              d="M3 8L6 11L11 3.5"-->
+<!--              stroke-width="2"-->
+<!--              stroke-linecap="round"-->
+<!--              stroke-linejoin="round"-->
+<!--          />-->
+<!--          <path-->
+<!--              class="opacity-0 group-data-indeterminate:opacity-100"-->
+<!--              d="M3 7H11"-->
+<!--              stroke-width="2"-->
+<!--              stroke-linecap="round"-->
+<!--              stroke-linejoin="round"-->
+<!--          />-->
+<!--        </svg>-->
+<!--    </span>-->
 </template>

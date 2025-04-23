@@ -12,7 +12,7 @@ class SaveTypeController
         $validatedData = $request->validate([
             'title' => 'required|string|unique:types,title',
             'sla' => 'required|integer',
-            'color' => 'required|hex_color|unique:types,color',
+            'color' => 'hex_color|unique:types,color|nullable',
         ]);
 
         $typeService->saveType($validatedData);

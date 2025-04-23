@@ -1,6 +1,6 @@
 <template>
     <p
-       :style="{ color: getMostReadableColor(type.color) ,backgroundColor: type.color }"
+        :style="{ color: getMostReadableColor(type.color ?? '#FFFFFF') ,backgroundColor: type.color ?? '#FFFFFF', border: !type.color ? '2px solid #000000' : 'none' }"
        class="flex w-min rounded-2xl px-2 py-1">
         {{ type.title }}</p>
 </template>
