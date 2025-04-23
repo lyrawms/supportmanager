@@ -40,7 +40,7 @@ class TaskUpdateStatusTest extends TestCase
     {
         $task = Task::factory()->create();
 
-        $response = $this->actingAs($this->user)->get('/tasks/updateStatus?uuid=' . $task->uuid->toString() . '&status=finished&category=Company');
+        $response = $this->actingAs($this->user)->get('/tasks/updateStatus?uuid=' . $task->uuid->toString() . '&status=Finished&category=Company');
         $newTask = Task::latest()->first();
 
         $response->assertStatus(302);
