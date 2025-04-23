@@ -17,9 +17,7 @@
                         <div class="border-stone-200 bg-white shadow-lg rounded-2xl p-4 space-y-2">
                             <div>
                                 <p>Deadline</p>
-                                <p class="text-stone-500">{{
-                                        $moment(deadline).isAfter($moment().subtract(1, 'week')) ? $moment(deadline).calendar() : $moment(deadline).format('DD/MM/YYYY')
-                                    }}</p>
+                               <Deadline :deadline="task.deadline"/>
                             </div>
                             <div>
                                 <p>Finished at</p>
@@ -118,11 +116,13 @@ import Type from "../Components/Type.vue";
 import dayjs from "dayjs";
 import Status from "../Components/Status.vue";
 import { Link } from '@inertiajs/vue3';
+import Deadline from "../Components/Deadline.vue";
 
 
 export default {
     name: "ShowTask",
     components: {
+        Deadline,
         Link,
         Status,
         Type,
